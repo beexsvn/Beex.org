@@ -595,43 +595,49 @@ var num_extra_admins = 1;
 
                     <tr>
 
-                    	<td colspan=2><h5>Not yet a member? Then register:<br />If you haven't registered yet for Beex.org, don't worry, it's as easy as entering your e-mail and creating a password below.</h5></td>
+                    	<td colspan=2><h5>If you haven't registered yet for Beex.org, don't worry.  Enter your name, email and password below.</h5></td>
 
                     </tr>
-                    
-                     <tr>
-
-	                    <td class="label"><label>Name:</label></td>
-
-                        <td><?php echo generate_input('signup_name', 'input', true, ''); ?></td>
-
-                    </tr>
-
                     <tr>
-
-	                    <td class="label"><label>Email:</label></td>
-
-                        <td><?php echo generate_input('signup_email', 'input', true, ''); ?></td>
-
-                    </tr>
-
-
-
-                    <tr>
-
-	                    <td class="label"><label>Password:</label></td>
-
-                        <td><?php echo generate_input('signup_pass', 'password', true, ''); ?></td>
-
-                    </tr>
-
-                    <tr>
-
-	                    <td class="label"><label>Password Confirm:</label></td>
-
-                        <td><?php echo generate_input('signup_passconf', 'password', true, ''); ?></td>
-
-                    </tr>
+                     <td colspan="2">
+                        <table style="border:1px solid #aaa; width:100%; padding:5%;">
+                         
+                         <tr>
+    
+                            <td class="label"><label>Name:</label></td>
+    
+                            <td><?php echo generate_input('signup_name', 'input', true, ''); ?></td>
+    
+                        </tr>
+    
+                        <tr>
+    
+                            <td class="label"><label>Email:</label></td>
+    
+                            <td><?php echo generate_input('signup_email', 'input', true, ''); ?></td>
+    
+                        </tr>
+    
+    
+    
+                        <tr>
+    
+                            <td class="label"><label>Password:</label></td>
+    
+                            <td><?php echo generate_input('signup_pass', 'password', true, ''); ?></td>
+    
+                        </tr>
+    
+                        <tr>
+    
+                            <td class="label"><label>Password Confirm:</label></td>
+    
+                            <td><?php echo generate_input('signup_passconf', 'password', true, ''); ?></td>
+    
+                        </tr>
+                        </table>
+                       </td>
+                      </tr>
 
                     <?php 	endif; ?>
 
