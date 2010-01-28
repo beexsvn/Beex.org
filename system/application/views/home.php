@@ -45,54 +45,30 @@ $this->load->view('framework/header', $header);
 
 
     <div id="JoinCluster" class="homeform">
-
     	<h2>Join a Cluster</h2>
-
         <form style="background-color:inherit;" method="post" action="/index.php/cluster/joina/">
-
          <label>cluster ID#</label>
-
          <input type="text" name="cluster_id">
-
          <input type="submit" value="Enter">
-
         </form>
-
     </div>
-
-
-
-
 
 </div>
 
-
-
-
-
 <div id="RightColumn">
-
 	<div id="GraphicalExplanation" class="module">
-
     	<p>
-        
         <object width="599" height="296"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=8706824&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=8706824&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="599" height="296"></embed></object>
         
         <!--<object width="600" height="360" style="width:100%;">
 
         <param name="movie" value="http://www.youtube.com/v/JD-VxfcYveI&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/JD-VxfcYveI&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="600" height="360"></embed></object>-->
-
         </p>
-
     	<div id="LearnMore">
-
     		<h3 class="javapopuplink"><a href="/pieces/auxpage.php?id=learnmore">Learn More</a></h3>
-
 	        <p class="javapopuplink"><a href="/pieces/auxpage.php?id=learnnpo">Nonprofit Organizations</a> | <a href="/pieces/auxpage.php?id=learnsponsors">Sponsors</a> | <a href="/pieces/auxpage.php?id=learnpeople">Fund Raisers</a></p>
-
         </div>
-
-      	<input type="input" value="Search" id="search" class="search" style="width:88%;"/> <input type="submit" value="Go!" />
+      	<form method="POST" action="/index.php/search/"><input type="input" name="searchterm" value="Search" id="search" class="search" style="width:88%;"/> <input type="submit" value="Go!" /></form>
 
     </div>
 
