@@ -23,6 +23,8 @@ class Search extends Controller {
 	
 	function index() {
 		
+		$data = $this->data;
+		
 		if($searchterm = $this->input->post('searchterm')) {
 			
 			$searchresults = $this->MSearch->getResults($searchterm);
@@ -31,16 +33,18 @@ class Search extends Controller {
 				
 				foreach($searchresults['challenges']->result() as $sresult) {
 					
-					print_r($sresult);
-					echo "<BR><br>";
+					//print_r($sresult);
+					//echo "<BR><br>";
 					
 				}
 				
 			}
+			
+			$data['results'] = $searchresults;
+			$data['term'] = $searchterm;
+			
+			$this->load->view('searchresults', $data);
 		}
-		
-		
-		
 	}
 
 

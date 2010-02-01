@@ -171,7 +171,7 @@ $this->load->view('framework/header', $header);
                 <br />
                 <?php
 
-					if($proof_id || $owner) {
+					if(process_days_left($item->challenge_completion) <= 0 || $owner) {
                 		echo '<img src="/beex/images/buttons/view-the-proof.gif" id="blogprooftoggle" />';
 					} 
 

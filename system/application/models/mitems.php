@@ -628,7 +628,7 @@ class MItems extends Model {
 		return ($result->num_rows()) ? $result->result() : '';
 
 	}
-
+ 
 
 
 	/* Other Functions */

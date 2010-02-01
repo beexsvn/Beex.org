@@ -68,8 +68,7 @@ $this->load->view('framework/header', $header);
     		<h3 class="javapopuplink"><a href="/pieces/auxpage.php?id=learnmore">Learn More</a></h3>
 	        <p class="javapopuplink"><a href="/pieces/auxpage.php?id=learnnpo">Nonprofit Organizations</a> | <a href="/pieces/auxpage.php?id=learnsponsors">Sponsors</a> | <a href="/pieces/auxpage.php?id=learnpeople">Fund Raisers</a></p>
         </div>
-      	<form method="POST" action="/index.php/search/"><input type="input" name="searchterm" value="Search" id="search" class="search" style="width:88%;"/> <input type="submit" value="Go!" /></form>
-
+      	<form method="POST" action="/index.php/search/"><input type="input" name="searchterm" value="Search" id="search" class="search" style="width:88%;" onfocus="this.value=''"/> <input type="submit" value="Go!" /></form>
     </div>
 
 
