@@ -528,20 +528,6 @@ if($edit){
                     <?php if(@$cluster) : ?>
 
 
-
-                    <?php 		if(!$username) : ?>
-
-                    <tr>
-
-	                	<td colspan=2><h5>Not yet a member? Then register:</h5><br />If you haven't registered yet for Beex.org, don't worry, it's as easy as entering your e-mail and creating a password below.</td>
-
-                    </tr>
-
-
-
-
-                    <?php 		endif; ?>
-
                     <input type="hidden" name="from_cluster" value="1" />
 
 					<input type="hidden" name="cluster_id" value="<?php echo $cluster->theid; ?>" />
