@@ -6,8 +6,6 @@
 
 body {background-color:#E5E3E3; margin:0; padding:0; font-family:Verdana, Geneva, sans-serif;}
 
-
-
 a {color:#000; text-decoration:none; cursor:pointer;}
 a:hover {color:#666;}
 a img {border:0}
@@ -16,8 +14,6 @@ a img {border:0}
 .message a {color:#1beeee;}
 
 h2 {text-align:center;}
-
-
 
 #MainContainer {background-color:#e5e3e3; width:100%;}
 #SubContainer {background-color:#fff; width:934px; margin:0px auto; padding:0px 44px 10px;}
