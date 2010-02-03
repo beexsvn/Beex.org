@@ -455,29 +455,54 @@ class Beex {
 		echo '<div style="clear:both;"></div>';
 
 	}
+	
+	function show_replies($id, $type = 'notes') {
+		
+		$CI =& get_instance();
+		
+		if($replies = $CI->MItems->getReplies($id, $type)) {
+			
+			$output = "<div class='replies".$id."'>";
+			
+			foreach($replies as $row) {
+				
+				$data['reply'] = $row;
+				
+				$output .= $CI->load->view('pieces/reply', $data, true);
+				
+			}
+			
+			$output .= "</div>";
+	
+			return $output;
+		}
+		
+		
+	}
+	
+	function view_notes($notes, $item_id, $owner = false) {
+	
+		$CI =& get_instance();
 
+		$data['notes'] = $notes;
+		$data['owner'] = $owner;
+		$data['item_id'] = $item_id;
+		//$data['gallery'] = $gallery;
+		$CI->load->view('view_notes', $data);	
+		
+	}
 
 
 	function create_featured($result, $table) {
 
-
-
 		$i = 0;
-
-
-
+		
 		foreach($result->result() as $item) {
-
-
-
+		
 			if($table == 'challenges') {
-
 			?>
-
 				<div id="Featured<?php echo $i; ?>" class="InfoDisplay" <?php if($i != 0) echo "style='display:none;'"; ?>>
-
 					<h2>Featured Challenges</h2>
-
 					<?php $this->generate_info_display($item, 'challenges'); ?>
 			   </div>
 			<?php
@@ -485,19 +510,13 @@ class Beex {
 			elseif($table == 'clusters') {
 			?>
 				<div id="Featured<?php echo $i; ?>" class="InfoDisplay" <?php if($i != 0) echo "style='display:none;'"; ?>>
-
 					<h2>Featured Clusters</h2>
-
 				   <?php $this->generate_info_display($item, 'clusters'); ?>
-
 			   </div>
-
 			<?php
-
 			}
-
 			elseif($table == 'people') {
-				
+	
 			}
 
 			elseif($table == 'npos') {
@@ -509,22 +528,16 @@ class Beex {
 				   <?php $this->generate_info_display($item, 'npos'); ?>
 			   </div>
 			<?php
-
 			}
-
 			$i++;
-
 		}
-
+		
 		echo '<div class="featured_buttons">';
 
 		for($j = 0; $j < $i; $j++) {
 
 		?>
-
 			<div id="button<?php echo $j; ?>" class="button<?php if($j == 0) echo " on"; ?>"></div>
-
-
 
 		<?php 
 

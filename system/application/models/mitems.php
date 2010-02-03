@@ -618,15 +618,24 @@ class MItems extends Model {
 	function getNotes($challenge_id) {
 
 		$this->db->where('challenge_id', $challenge_id);
-
-
-
 		$result = $this->db->get('notes');
-
-
 
 		return ($result->num_rows()) ? $result->result() : '';
 
+	}
+	
+	function getReplies($id, $type = 'notes') {
+		
+		if($type == 'notes') {
+			$from = 'note_replies';				
+		}
+		
+		$this->db->where('note_id', $id);
+		$this->db->from($from);
+		
+		$result = $this->db->get();
+		
+		return ($result->num_rows()) ? $result->result() : '';
 	}
  
 

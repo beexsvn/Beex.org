@@ -3,11 +3,8 @@
 
 jQuery(document).ready(function(){
 	
-		
-	jQuery("#new_note").click(function() {
-		
-		jQuery("#add_note_form").show('normal');
-		
+	jQuery("#new_note").click(function() {	
+		jQuery("#edit_note_form").show();
 	});
 	
 	
@@ -15,15 +12,12 @@ jQuery(document).ready(function(){
 	/*
 	jQuery(".featured_buttons .button").click(function() {
 		
-		
 		jQuery(".featured_buttons div").removeClass('on');
 		
 		var id = jQuery(this).attr('id').substr(6);
 		
-		
 		jQuery(".featured_buttons #button" + id).addClass('on');
-		
-		
+	
 	});
 	*/
 	
@@ -59,6 +53,21 @@ jQuery(document).ready(function(){
 	
 	});
 	
+	jQuery(".edit_note_button").click(function() {
+	
+		var id = jQuery(this).attr('id').substr(9);
+		jQuery("#edit_note_form"+id).show();
+		
+	});
+	
+	jQuery(".reply_note_button").click(function() {
+	
+		var id = jQuery(this).attr('id').substr(10);
+		jQuery("#reply_note_form"+id).show();
+		
+	});
+	
+	
 	jQuery("#blogprooftoggle").click(function() {
 		
 		var toggle = 0;
@@ -81,6 +90,7 @@ jQuery(document).ready(function(){
 		
 	});
 	 
+
 	
 	// Footer business link buttons and learn more buttons
 	/*

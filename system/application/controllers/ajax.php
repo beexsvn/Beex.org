@@ -10,7 +10,7 @@ class Ajax extends Controller {
 		$this->data['data']['message'] = '';
 		$this->data['data']['item'] = '';
 	}
-	
+		
 	function get_browsers() {
 		
 		if($_POST['type'] == 'challenges') {

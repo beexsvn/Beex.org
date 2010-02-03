@@ -467,10 +467,17 @@ class challenge extends Controller {
 		$data = $this->data;
 		
 		$challenge_id = $this->uri->segment(3);
+		$note_id = $this->uri->segment(4, 'add');
 		
 		//Process special fields
 		$_POST['created'] = date("Y-m-d H:i:s");
 		$_POST['challenge_id'] = $challenge_id;
+		
+		
+		//Process Images
+		if($_FILES['note_image']['name']) {
+			$_POST['note_image'] = $this->beex->do_upload($_FILES, 'note_image', './media/notes/');					
+		}
 		
 		//Get rid of empty values
 		foreach($_POST as $key => $val) {
@@ -479,15 +486,68 @@ class challenge extends Controller {
 			}
 		}
 		
-		if($note_id = $this->MItems->add('notes', $_POST)) {
-			$this->MItems->addActivity('note', $note_id, 'challenge', $challenge_id);
+		if($note_id == 'add') {
+			if($note_id = $this->MItems->add('notes', $_POST)) {
+				$this->MItems->addActivity('note', $note_id, 'challenge', $challenge_id);
+			}
+			else {
+				$data['message'] = "We're sorry, there has been a problem processing your request.";
+			}
 		}
 		else {
-			$data['message'] = "We're sorry, there has been a problem processing your request.";
+			
+			if($this->MItems->update('notes', $note_id, $_POST)) {
+				$data['message'] = 'Update Successful';
+			}
+			else {
+				
+				$data['message'] = 'Update Failed';
+			}
+			
 		}
-		
 		redirect('challenge/view/'.$challenge_id, 'refresh');
 		
+	}
+	
+	function add_reply() {
+		
+		$data = $this->data;
+
+		$challenge_id = $this->uri->segment(3);
+		$note_id = $this->uri->segment(4);
+
+		//Process special fields
+		$_POST['created'] = date("Y-m-d H:i:s");
+		$_POST['note_id'] = $note_id;
+
+		//Get rid of empty values
+		foreach($_POST as $key => $val) {
+			if(!$val) {
+				unset($_POST[$key]);	
+			}
+		}
+
+		if('add' == 'add') {
+			if($reply_id = $this->MItems->add('note_replies', $_POST)) {
+				$this->MItems->addActivity('reply', $reply_id, 'challenge', $challenge_id);
+			}
+			else {
+				$data['message'] = "We're sorry, there has been a problem processing your request.";
+			}
+		}
+		else {
+
+			if($this->MItems->update('notes', $note_id, $_POST)) {
+				$data['message'] = 'Update Successful';
+			}
+			else {
+
+				$data['message'] = 'Update Failed';
+			}
+
+		}
+		redirect('challenge/view/'.$challenge_id, 'refresh');
+	
 	}
 	
 }

@@ -11,8 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://www.beex.org/";
-
+$config['base_url']	= "http://localhost:8888/beex";
 /*
 |--------------------------------------------------------------------------
 | Index File

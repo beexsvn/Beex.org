@@ -185,41 +185,8 @@ $this->load->view('framework/header', $header);
                <td style="width:26px;"></td>
                <td>
                 <div id="Notes">
-                	<div id="notecopy">
-                    <?php
-
-						if(@$notes) {
-                    		foreach($notes as $note) {
-								?>
-                                	<div class="note">
-                                    	<p class="created"><?php echo $note->created; ?></p>
-                                        <div class="video"><?php echo $note->note_video; ?></div>
-                                        <p class="title"><?php echo $note->title; ?></p>
-                                        <p class="copy"><?php echo $note->note; ?></p>
-                                        <p><a href="#">Reply</a></p>
-                                    </div>
-                                <?php
-							}
-						}
-
-
-
-						elseif($owner)  {
-							echo "<h3>Add your thoughts here...</h3>";
-						}
-						else {
-							echo "<h3>No posts</h3>";
-						}
-                    ?>
-
-                    <?php if($owner) : ?>
-                    <a id='new_note'>Write a New Note</a>
-                   	
-					<?php echo $this->load->view('pieces/note_form', $item, true); ?>
-
-                    <?php endif; ?>
-
-                    </div>
+                	
+					<?php echo $this->beex->view_notes($notes, $item->id, $owner); ?>
 
                 </div>
 				<div id="Proof" style="display:none;">
