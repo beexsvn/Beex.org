@@ -58,7 +58,7 @@ $(document).ready(function(){
 
  <div id="SubHeader">
 
-  <?php echo anchor("site/", '<img id="Logo" src="/images/header/logo-beat.png" />'); ?>
+  <?php echo anchor("site/", '<img id="Logo" src="<?php echo base_url(); ?>/images/header/logo-beat.png" />'); ?>
  
   <div id="UpperMenu">
 

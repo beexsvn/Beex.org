@@ -135,7 +135,7 @@ class Beex {
 		if($view == 'full') {
 			$output = "<div class='fundinfo'>
 							<div class='progressbar'>
-								<img src='/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
+								<img src='<?php echo base_url(); ?>/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
 
 							</div>
 
@@ -157,7 +157,7 @@ class Beex {
 
 							<div class='progressbar' style='float:left;'>
 
-								<img src='/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
+								<img src='<?php echo base_url(); ?>/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
 
 						</div><span style='padding:5px;'>Days Left: ".$daysleft."</span></div>";
 
@@ -231,7 +231,7 @@ class Beex {
 
 			$output .= "<div class='recently_declared'>
 						";
-			$output .= ($row->profile_pic) ? "<img src='/profiles/".$row->profile_pic."'>" : display_default_image('profile');
+			$output .= ($row->profile_pic) ? "<img src='<?php echo base_url(); ?>/profiles/".$row->profile_pic."'>" : display_default_image('profile');
 			
 			$output .= "<p>".anchor('/user/view/'.$row->user_id, ucwords($row->first_name.' '.$row->last_name))." has pledged to ".anchor('challenge/view/'.$row->id, $row->challenge_declaration)." if $".$row->challenge_goal." is raised for ".anchor('npo/view/'.$row->challenge_npo, $row->name)."</p></div>";
 
@@ -265,7 +265,7 @@ class Beex {
 
 						<?php if($item->profile_pic) : ?>
 
-							<img src="/profiles/<?php echo $item->profile_pic; ?>" />
+							<img src="<?php echo base_url(); ?>/profiles/<?php echo $item->profile_pic; ?>" />
                         
                         <?php else : ?>
                         
@@ -289,7 +289,7 @@ class Beex {
 
 						<?php echo anchor('challenge/view/'.$item->id, '<img src="/beex/images/buttons/view.gif" />'); ?>
 
-						<img class="donatebutton" id="donatebuttonbrowse<?php echo $item->id; ?>" src="/beex/images/buttons/donatesmall.gif" />
+						<img class="donatebutton" id="donatebuttonbrowse<?php echo $item->id; ?>" src="<?php echo base_url(); ?>/beex/images/buttons/donatesmall.gif" />
 
                         <script>
 
@@ -319,7 +319,7 @@ class Beex {
 
 						<?php if($item->profile_pic) : ?>
 
-							<img src="/profiles/<?php echo $item->profile_pic; ?>" />
+							<img src="<?php echo base_url(); ?>/profiles/<?php echo $item->profile_pic; ?>" />
                             
                         <?php else : ?>
                         
@@ -341,7 +341,7 @@ class Beex {
 
 						<?php echo anchor('cluster/view/'.$item->theid, '<img src="/beex/images/buttons/view.gif" />'); ?>
 
-						<img src="/beex/images/buttons/donatesmall.gif" style="display:none;" />
+						<img src="<?php echo base_url(); ?>/beex/images/buttons/donatesmall.gif" style="display:none;" />
 
 					</div>
 
@@ -365,7 +365,7 @@ class Beex {
 
 						<?php if($item->logo) : ?>
 
-							<img src="/profiles/<?php echo $item->logo; ?>" />
+							<img src="<?php echo base_url(); ?>/profiles/<?php echo $item->logo; ?>" />
 
 						<?php endif; ?>
 
@@ -381,7 +381,7 @@ class Beex {
 
 					<div class="donate">
 
-						<?php echo anchor('npo/view/'.$item->id, '<img src="/beex/images/buttons/learn-more.gif">'); ?>
+						<?php echo anchor('npo/view/'.$item->id, '<img src="<?php echo base_url(); ?>/beex/images/buttons/learn-more.gif">'); ?>
 
 					</div>
 
@@ -403,7 +403,7 @@ class Beex {
 
 					<div class='image'>
 
-						<?php echo anchor("npo/view/".$item->id, (($item->logo) ? '<img src="/media/npos/'.$item->logo.'" />' : display_default_image('profile'))); ?>
+						<?php echo anchor("npo/view/".$item->id, (($item->logo) ? '<img src="<?php echo base_url(); ?>/media/npos/'.$item->logo.'" />' : display_default_image('profile'))); ?>
                             
 						<p class="namelink"><?php echo anchor('npo/view/'.$item->id, $item->name); ?></p>
 
@@ -431,7 +431,7 @@ class Beex {
 
 						<?php if($item->profile_pic) : ?>
 
-							<?php echo anchor("user/view/".$item->user_id, '<img src="/profiles/'.$item->profile_pic.'" />'); ?>
+							<?php echo anchor("user/view/".$item->user_id, '<img src="<?php echo base_url(); ?>/profiles/'.$item->profile_pic.'" />'); ?>
 						<?php else: ?>
 							<?php echo anchor("user/view/".$item->user_id, display_default_image('profile'))?>
 						<?php endif; ?>
@@ -605,13 +605,13 @@ class Beex {
 
                         <?php elseif($image = $item->challenge_image) : ?>
 
-                            <img id="main_image" src="/media/challenges/<?php echo $image; ?>" />
+                            <img id="main_image" src="<?php echo base_url(); ?>/media/challenges/<?php echo $image; ?>" />
 
                         <?php endif; ?>
 
 						<div class="donation">
 
-                            <img class="donatebutton" id="donatebutton<?php echo $item->id; ?>" src="/beex/images/buttons/donate.gif" style="float:right; margin:20px 10px 10px;" />
+                            <img class="donatebutton" id="donatebutton<?php echo $item->id; ?>" src="<?php echo base_url(); ?>/beex/images/buttons/donate.gif" style="float:right; margin:20px 10px 10px;" />
 
 
 
@@ -679,7 +679,7 @@ class Beex {
 
 						<?php elseif($item->cluster_image) : ?>
 
-						<img src="/media/clusters/<?php echo $item->cluster_image; ?>" id="main_image" />
+						<img src="<?php echo base_url(); ?>/media/clusters/<?php echo $item->cluster_image; ?>" id="main_image" />
 
 						<?php endif; ?>
 
@@ -687,7 +687,7 @@ class Beex {
 
 						<div class="donation">
 
-							<img src="/beex/images/buttons/donate.gif" style="float:right; display:none; margin:14px 10px 10px;" />
+							<img src="<?php echo base_url(); ?>/beex/images/buttons/donate.gif" style="float:right; display:none; margin:14px 10px 10px;" />
 
 							<div class="fundinfo">
 
@@ -753,7 +753,7 @@ class Beex {
 
 						<?php elseif($item->logo) : ?>
 
-						<img src="/media/npos/<?php echo $item->logo; ?>" id="main_image" />
+						<img src="<?php echo base_url(); ?>/media/npos/<?php echo $item->logo; ?>" id="main_image" />
 
 						<?php endif; ?>
 
@@ -761,7 +761,7 @@ class Beex {
 
 						<div class="donation">
 
-							<img src="/beex/images/buttons/learn-more-long.gif" style="display:block; margin:14px auto;;" />
+							<img src="<?php echo base_url(); ?>/beex/images/buttons/learn-more-long.gif" style="display:block; margin:14px auto;;" />
 
 
 

@@ -139,7 +139,7 @@ function generate_input($name, $type, $edit, $value, $array = '', $class = '') {
 }
 
 function display_default_image($type) {
-	return '<img src="/images/imagedefault.png" style="opacity:.4;">';
+	return '<img src="<?php echo base_url(); ?>/images/imagedefault.png" style="opacity:.4;">';
 }
 
 

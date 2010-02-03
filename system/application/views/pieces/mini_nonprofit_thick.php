@@ -26,9 +26,9 @@
 
                 <?php if($npo->logo) : ?>
 
-                    <img src="/media/npos/<?php echo $npo->logo; ?>" />
+                    <img src="<?php echo base_url(); ?>/media/npos/<?php echo $npo->logo; ?>" />
 				<?php else : ?>
-                	<img src="/images/imagedefault.gif" />
+                	<img src="<?php echo base_url(); ?>/images/imagedefault.gif" />
                 <?php endif; ?>
 
             </div>
