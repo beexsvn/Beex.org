@@ -478,29 +478,17 @@ class Beex {
 
 					<h2>Featured Challenges</h2>
 
-
-
 					<?php $this->generate_info_display($item, 'challenges'); ?>
-
 			   </div>
-
 			<?php
-
 			}
-
 			elseif($table == 'clusters') {
-
 			?>
-
 				<div id="Featured<?php echo $i; ?>" class="InfoDisplay" <?php if($i != 0) echo "style='display:none;'"; ?>>
 
 					<h2>Featured Clusters</h2>
 
-
-
 				   <?php $this->generate_info_display($item, 'clusters'); ?>
-
-
 
 			   </div>
 
@@ -509,46 +497,26 @@ class Beex {
 			}
 
 			elseif($table == 'people') {
-
-
-
+				
 			}
 
-
-
 			elseif($table == 'npos') {
-
 			?>
-
 				<div id="Featured<?php echo $i; ?>" class="InfoDisplay" <?php if($i != 0) echo "style='display:none;'"; ?>>
 
 					<h2>Featured Non-Profits</h2>
 
-
-
 				   <?php $this->generate_info_display($item, 'npos'); ?>
-
-
-
 			   </div>
-
 			<?php
 
 			}
-
-
-
-
 
 			$i++;
 
 		}
 
-
-
 		echo '<div class="featured_buttons">';
-
-
 
 		for($j = 0; $j < $i; $j++) {
 
@@ -620,13 +588,9 @@ class Beex {
                            jQuery("#donatebutton<?php echo $item->id; ?>").colorbox({href:"/pieces/donate.php?challenge_id=<?php echo $item->id; ?>&challenge_name=<?php echo urlencode($item->challenge_title); ?>"});
 							
 							//jQuery("#donatebutton<?php echo $item->id; ?>").colorbox({href:"http://www.beex.org/index.php/npo/donateTo/<?php echo $item->id; ?>"});
-
                             </script>
-
                             <div class="fundinfo">
-
 							<?php echo $this->processProgressBar($table, $item->id); ?>
-
                             </div>
 
 						</div>
@@ -636,171 +600,90 @@ class Beex {
 
 
 					<td class="declaration">
-						
 						<p><span class='hl'><?php echo $pronoun; ?></span> will <span class='hl'><?php echo anchor('challenge/view/'.$item->id, $item->challenge_declaration); ?></span> if<br /><span class='hlb'>$<?php echo $item->challenge_goal; ?></span>
-
 						<br />is raised for <br />
-
 						<span class='hlb'><?php echo anchor('npo/view/'.$item->challenge_npo, $item->name); ?></span>
 
-
-
 						<div style="clear:both;"></div>
-
 					</td>
-
 			   </tr>
-
 		  </table>
 
 		<?php
 
 		}
-
 		elseif($table == 'clusters') {
 
 		?>
 
-
-
 			<table cellpadding="0" cellspacing="0" border="0">
-
 				<tr>
-
 					<td class="media">
-
 						<?php if(@$video = $item->cluster_video) : ?>
-
 						<div class="video" style="width:400px;">
-
 							<?php echo process_video_link($video); ?>
-
 						</div>
-
 						<?php elseif($item->cluster_image) : ?>
-
 						<img src="<?php echo base_url(); ?>/media/clusters/<?php echo $item->cluster_image; ?>" id="main_image" />
-
 						<?php endif; ?>
 
-
-
 						<div class="donation">
-
 							<img src="<?php echo base_url(); ?>/beex/images/buttons/donate.gif" style="float:right; display:none; margin:14px 10px 10px;" />
-
 							<div class="fundinfo">
-
                             	<?php echo $this->processProgressBar($table, $item->theid); ?>
-
 							</div>
-
 						</div>
-
 					</td>
-
-
 
 					<td class="declaration">
-
 						<p>
-
 							<span class='hlb'><?php echo anchor('cluster/view/'.$item->theid, $item->cluster_title); ?></span>
-
 							<br /><?php echo $item->cluster_blurb; ?>
-
 						</p>
 
-
-
 						<div style="clear:both;"></div>
-
 					</td>
-
 			   </tr>
-
 		   </table>
-
 		<?php
-
 		}
-
 		elseif($table == 'people') {
-
-
-
+			
 		}
-
-
 
 		elseif($table == 'npos') {
-
 		?>
-
 			<table cellpadding="0" cellspacing="0" border="0">
-
 				<tr>
-
 					<td class="media">
-
 						<?php if(@$video) : ?>
-
 						<div class="video" style="width:400px;">
-
 							<?php echo process_video_link($video); ?>
-
 						</div>
-
 						<?php elseif($item->logo) : ?>
-
 						<img src="<?php echo base_url(); ?>/media/npos/<?php echo $item->logo; ?>" id="main_image" />
-
 						<?php endif; ?>
 
-
-
 						<div class="donation">
-
 							<img src="<?php echo base_url(); ?>/beex/images/buttons/learn-more-long.gif" style="display:block; margin:14px auto;;" />
-
-
-
 						</div>
-
 					</td>
 
 
 
 					<td class="declaration">
-
 						<p>
-
 							<span class='hlb'><?php echo $item->name; ?></span>
-
 							<br /><?php echo $item->blurb; ?>
-
 						</p>
 
-
-
 						<div style="clear:both;"></div>
-
 					</td>
-
 			   </tr>
-
 		   </table>
-
 		<?php
-
 		}
-
 	}
-
-
-
 }
-
-
 
 ?>
