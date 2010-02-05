@@ -42,7 +42,7 @@ echo form_open_multipart('challenge/add_note/'.$item_id.(($edit) ? '/'.$id : '')
         <td><textarea class="videoembed" name="note_video"><?php echo ($edit) ? $note->note_video : ''; ?></textarea></td>
     </tr>
     <tr>
-    	<td colspan=2><input type="submit" value="<?php echo ($edit) ? "Edit" : "Add"; ?> Note" class="submit" /></td>
+    	<td colspan=2><input type="submit" value="<?php echo ($edit) ? "Edit" : "Add"; ?> Note" class="submit" /> <input type="button" class="cancel_button" value="Cancel"></td>
     </tr>
 </table>
 </form>

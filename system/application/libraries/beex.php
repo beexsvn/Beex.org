@@ -135,7 +135,7 @@ class Beex {
 		if($view == 'full') {
 			$output = "<div class='fundinfo'>
 							<div class='progressbar'>
-								<img src='<?php echo base_url(); ?>/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
+								<img src='".base_url()."/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
 
 							</div>
 
@@ -157,7 +157,7 @@ class Beex {
 
 							<div class='progressbar' style='float:left;'>
 
-								<img src='<?php echo base_url(); ?>/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
+								<img src='".base_url()."/beex/images/assets/progressbar_orange.gif' style='margin-left:-".(integer)((1-$percent_complete) * 264)."px;'>
 
 						</div><span style='padding:5px;'>Days Left: ".$daysleft."</span></div>";
 
@@ -231,7 +231,7 @@ class Beex {
 
 			$output .= "<div class='recently_declared'>
 						";
-			$output .= ($row->profile_pic) ? "<img src='<?php echo base_url(); ?>/profiles/".$row->profile_pic."'>" : display_default_image('profile');
+			$output .= ($row->profile_pic) ? "<img src='".base_url()."/profiles/".$row->profile_pic."'>" : display_default_image('profile');
 			
 			$output .= "<p>".anchor('/user/view/'.$row->user_id, ucwords($row->first_name.' '.$row->last_name))." has pledged to ".anchor('challenge/view/'.$row->id, $row->challenge_declaration)." if $".$row->challenge_goal." is raised for ".anchor('npo/view/'.$row->challenge_npo, $row->name)."</p></div>";
 
@@ -381,7 +381,7 @@ class Beex {
 
 					<div class="donate">
 
-						<?php echo anchor('npo/view/'.$item->id, '<img src="<?php echo base_url(); ?>/beex/images/buttons/learn-more.gif">'); ?>
+						<?php echo anchor('npo/view/'.$item->id, '<img src="'.base_url().'/beex/images/buttons/learn-more.gif">'); ?>
 
 					</div>
 
@@ -403,7 +403,7 @@ class Beex {
 
 					<div class='image'>
 
-						<?php echo anchor("npo/view/".$item->id, (($item->logo) ? '<img src="<?php echo base_url(); ?>/media/npos/'.$item->logo.'" />' : display_default_image('profile'))); ?>
+						<?php echo anchor("npo/view/".$item->id, (($item->logo) ? '<img src="'.base_url().'/media/npos/'.$item->logo.'" />' : display_default_image('profile'))); ?>
                             
 						<p class="namelink"><?php echo anchor('npo/view/'.$item->id, $item->name); ?></p>
 
@@ -431,7 +431,7 @@ class Beex {
 
 						<?php if($item->profile_pic) : ?>
 
-							<?php echo anchor("user/view/".$item->user_id, '<img src="<?php echo base_url(); ?>/profiles/'.$item->profile_pic.'" />'); ?>
+							<?php echo anchor("user/view/".$item->user_id, '<img src="'.base_url().'/profiles/'.$item->profile_pic.'" />'); ?>
 						<?php else: ?>
 							<?php echo anchor("user/view/".$item->user_id, display_default_image('profile'))?>
 						<?php endif; ?>
@@ -462,7 +462,8 @@ class Beex {
 		
 		if($replies = $CI->MItems->getReplies($id, $type)) {
 			
-			$output = "<div class='replies".$id."'>";
+			$output = "<div class='replies' id='replies_".$id."'>
+						<h4>Replies</h4>";
 			
 			foreach($replies as $row) {
 				

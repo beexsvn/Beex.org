@@ -49,6 +49,18 @@ class Ajax extends Controller {
 		}
 	}
 	
+	function delete_note($id) {
+		
+		$this->MItems->delete('notes', $id);
+		
+	}
+	
+	function delete_note($id) {
+		
+		$this->MItems->delete('note_replies', $id);
+		
+	}
+	
 }
 
 ?>

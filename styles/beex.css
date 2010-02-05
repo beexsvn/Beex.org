@@ -72,7 +72,8 @@ h2 {text-align:center;}
 #npoform table th, table th, .itemform table th {padding:8px 10px 6px; color:#000; background-color:#F9B606; text-align:left; border-bottom:2px solid #e9ac1a;}
 #npoform table td, table td, .itemform table td {padding:6px 5px; color:#444; vertical-align:top;}
 #npoform table td input, #npoform table td textarea, table td input, table td textarea, .itemform table td textarea {width:80%;}
-#npoform table td .submit, table td .submit, .itemform table td .submit {width:auto; margin:5px auto; display:block;}
+#npoform table td .submit, table td .submit, .itemform table td .submit {width:auto; margin:5px auto; display:inline;}
+#npoform table td .cancel_button, table td .cancel_button, .itemform table td .cancel_button {width:auto; margin:5px auto; display:inline;}
 
 .FormBG .itemform table {width:90%; margin:0px auto;}
 
@@ -362,7 +363,8 @@ form .short {width:20%;}
 .gallery .note .title {margin-top:0px; font-size:14px;}
 .gallery .note .created {margin-bottom:3px;}
 
-
+.replies {padding:5px; border-top:1px solid #bfffff; background-color:#bfffff;}
+.replies h4 {padding-top:0px; margin:0px;}
 
 
 

@@ -509,6 +509,7 @@ class challenge extends Controller {
 		
 	}
 	
+	
 	function add_reply() {
 		
 		$data = $this->data;
