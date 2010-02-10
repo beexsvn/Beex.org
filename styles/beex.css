@@ -467,3 +467,21 @@ form .short {width:20%;}
 .businesslinks a {color:#4e4b4c;}
 
 .businesslinks a:hover {text-decoration:underline;}
+
+/* New Homepage Styles */
+#RightColumn .homemodule {background-color:#fff;}
+#SearchForm {width:295px; position:absolute; top:10px; right:46px; background:none;}
+#SearchForm .search {width:250px; font:10px Arial, Helvetica, sans-serif;}
+.hp_tagline {font:bold 13px Verdana, Geneva, sans-serif; color:#ffa802; text-align:center;}
+.hp_tagline p {padding:0px 10px 0px;}
+.hp_tagline .right {text-align:right; font-weight:normal; margin-top:0px;}
+.hp_tagline a {color:#02929d; font-weight:bold;}
+
+.homebox {background-color:#ffffcc; width:48%; float:left; height:172px; border-top:5px solid #00ffff;}
+.homeboxleft {margin-right:4%;}
+.homebox p {padding:10px 20px; color:#4e4b4c; font:11px Verdana, Geneva, sans-serif; margin:5px 0px;}
+.homebox h3 {background-color:#F9B606; padding:9px 22px; color:#fff; text-transform:uppercase; font:19px Verdana, Geneva, sans-serif; font-weight:normal; margin:0px 0px 4px;}
+.homebox .left {float:left; margin-left:50px;}
+.homebox .right {float:right; margin-right:50px;}
+
+.see_more_link {font:10px Verdana, Geneva, sans-serif; text-transform:uppercase; margin-top:22px; text-align:center; display:block; width:288px; clear:both;}

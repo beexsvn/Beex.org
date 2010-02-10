@@ -52,14 +52,12 @@ $(document).ready(function(){
 
 <body>
 
-
-
 <div id="Header">
 
  <div id="SubHeader">
 
-  <?php echo anchor("site/", '<img id="Logo" src="<?php echo base_url(); ?>/images/header/logo-beat.png" />'); ?>
- 
+  <?php echo anchor("site/", '<img id="Logo" src="'.base_url().'/images/header/logo-beat.png" />'); ?>
+  <form id="SearchForm" method="POST" action="/index.php/search/"><input type="input" name="searchterm" value="Search..." class="search" onfocus="this.value=''"/> <input type="image" value="Go!" src="<?php echo base_url(); ?>images/buttons/search.gif" style="float:right;" /></form>
   <div id="UpperMenu">
 
   	 <?php
@@ -72,7 +70,7 @@ $(document).ready(function(){
 
 		else {
 
-			echo anchor('user/login', 'Login');
+			echo anchor('user/newuser', 'Register').' | '.anchor('user/login', 'Login');
 
 		}
 

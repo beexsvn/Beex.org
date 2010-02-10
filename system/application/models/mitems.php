@@ -642,7 +642,7 @@ class MItems extends Model {
 
 	/* Other Functions */
 
-
+ 
 
 	function getDropdownArray($table, $val, $key = 'id') {
 

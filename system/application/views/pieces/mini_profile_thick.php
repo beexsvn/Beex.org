@@ -20,7 +20,28 @@
 
         <td class="leftcol" style="width:">
 
+<?php
 
+function word_too_long($string, $maxchars = 25) {
+	
+	$len = 0;
+	
+	if($string) {
+		$words = explode(' ', $string);
+
+		foreach($words as $word) {
+			
+			if(strlen($word) > $len) {
+				$len = strlen($word);	
+			}
+		}
+	}
+	
+	return ($len > $maxchars) ? true : false;
+	
+}
+
+?>
 
             <div class='image'>
 
@@ -51,7 +72,7 @@
 
             <p><b>Why I'm here:</b> <?php echo $profile->whycare; ?></p>
 
-            <p><b>Bio:</b> <?php echo $profile->blurb; ?></p>
+            <p><b>Bio:</b> <?php echo (word_too_long($profile->blurb)) ? wordwrap($profile->blurb, 25, '<br>', true) : $profile->blurb; ?></p>
 
 
 

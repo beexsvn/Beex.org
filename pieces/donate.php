@@ -29,6 +29,7 @@ mysql_close($mydb);
 
 <style>
 
+
 .orangetitle {width:100%; padding:5px 0px; background-color:orange; text-transform:uppercase; color:#fff; margin:0px 0px 25px;}
 p {margin:5px 10px; color:#605f5f; font:12px Verdana, Geneva, sans-serif;}
 textarea {width:90%;}
@@ -36,9 +37,9 @@ textarea {width:90%;}
 
 </style>
 
-
  
-<div style="width:400px; text-align:right;">
+ 
+<div style="text-align:right;">
 
 <h2 class='orangetitle'>Donation Box</h2>
 

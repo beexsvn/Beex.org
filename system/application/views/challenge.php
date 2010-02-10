@@ -45,7 +45,7 @@ $this->load->view('framework/header', $header);
 
 
 
-</div>
+</div> 
 
 
 
@@ -176,11 +176,12 @@ $this->load->view('framework/header', $header);
 					} 
 
 				?>
-
+				<?php if($activityfeed) : ?>
                 <div id="ActivityFeed">
                    <h2>Activity Feed</h2>
                    <?php echo $activityfeed; ?>
                 </div>
+                <?php endif; ?>
                </td>
                <td style="width:26px;"></td>
                <td>

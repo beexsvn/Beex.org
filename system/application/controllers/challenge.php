@@ -523,7 +523,7 @@ class challenge extends Controller {
 
 		//Get rid of empty values
 		foreach($_POST as $key => $val) {
-			if(!$val) {
+			if(!$val) { 
 				unset($_POST[$key]);	
 			}
 		}
