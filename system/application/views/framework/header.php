@@ -23,16 +23,22 @@
 
 
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery-1.3.2.js"></script>
-
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery-popup.js"></script>
-
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery-ui-1.7.2.custom.min.js"></script>
-
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/ui.datepicker.js"></script>
-
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery.colorbox-min.js"></script>
-
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/beex.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?> scripts/ajaxupload.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?> scripts/md5-min.js"></script>
+
+<!--[if lte IE 6]>
+	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/superslight-min.js"></script>
+    <script type="text/javascript" >
+    	jQuery(document).ready(function(){
+    		jQuery("#Logo").supersleight({shim: '<?php echo base_url(); ?>/images/header/x.gif'}); 
+        });
+    </script>
+<![endif]-->
 
 <script>
 
@@ -42,7 +48,7 @@ $(document).ready(function(){
 
   });
 
-
+ 
 
 </script>
 
@@ -57,7 +63,7 @@ $(document).ready(function(){
  <div id="SubHeader">
 
   <?php echo anchor("site/", '<img id="Logo" src="'.base_url().'/images/header/logo-beat.png" />'); ?>
-  <form id="SearchForm" method="POST" action="/index.php/search/"><input type="input" name="searchterm" value="Search..." class="search" onfocus="this.value=''"/> <input type="image" value="Go!" src="<?php echo base_url(); ?>images/buttons/search.gif" style="float:right;" /></form>
+  <form id="SearchForm" method="POST" action="/index.php/search/"><input type="input" name="searchterm" value="Search..." class="search" style="float:left; margin:1px 4px 0 0;" onfocus="this.value=''"/> <input type="image" value="Go!" src="<?php echo base_url(); ?>images/buttons/search.gif"  /></form>
   <div id="UpperMenu">
 
   	 <?php

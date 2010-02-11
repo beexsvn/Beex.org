@@ -12,7 +12,7 @@ if($message) {
 	echo validation_errors();
 	echo "</span></p>";
 
-}
+} 
 
 
 
@@ -411,63 +411,6 @@ if($edit){
 <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>scripts/ajaxupload.js"></script>	
 
 
-<style type="text/css">
-	#challenge_module {
-		height: 400px;
-		width: 700px;
-	}
-	#help_column {
-		width: 150px;
-		height: 400px;
-		float: right;
-	}
-	#creation_tab {
-		padding-top: 25px;
-	}	
-	.creation_step {
-		display: none;
-	}
-	.creation_substep {
-		display: none;
-	}
-	#error_field {
-		color: red;
-		font-weight: bold;
-		font-size: 1.3em;
-	}
-	.black_overlay{
-		display: none;
-		position: absolute;
-		top: 0%;
-		left: 0%;
-		width: 100%;
-		height: 100%;
-		background-color: black;
-		z-index:1001;
-		-moz-opacity: 0.8;
-		opacity:.80;
-		filter: alpha(opacity=80);
-	}
-	.white_content {
-		display: none;
-		position: absolute;
-		top: 25%;
-		left: 25%;
-		width: 50%;
-		height: 50%;
-		padding: 16px;
-		border: 16px solid orange;
-		background-color: white;
-		z-index:1002;
-		overflow: auto;
-	}
-	.bold {
-		font-weight: bold;
-	}
-	.disabled {
-		background-color: gray;
-	}
-</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 		
@@ -613,7 +556,7 @@ SHOW_HIDE;
 					 type: "POST",
 					 url: "<?php echo base_url(); ?>index.php/ajax/create_user",
 					 dataType: "json",
-					 data: "email=" + email + "&legal_name=" + legal_name + "&password=" + MD5(password),
+					 data: "email=" + email + "&legal_name=" + legal_name + "&password=" + password,
 					 success: function(ret){
 						if(ret['success']) { // advance to the next step. 
 							$("#who_tab").hide();
@@ -700,7 +643,7 @@ SHOW_HIDE;
 				
 				 success: function(ret){
 					if(ret == 'false') {
-						$("#error_field").append("Not a valid cluster code!");
+						$("#error_field").html("Not a valid cluster code!");
 					}
 					else {
 						$("#error_field").html("");
@@ -952,20 +895,27 @@ SHOW_HIDE;
 	
 <div id="challenge_module">
 	<div id="nav_bar">
-		<span id="nav_who">Who</span> *
-		<span id="nav_what">What</span> *
-		<span id="nav_when_where">When/Where</span> *
+		<span id="nav_who">Who</span> &bull;
+		<span id="nav_what">What</span> &bull;
+		<span id="nav_when_where">When/Where</span> &bull;
 		<span id="nav_why">Why</span>
 	</div>
-	<div id="help_column">
-		Hello. This is advice on how to complete the current step.
-	</div>
+	<div id="help">
+    	<h3>Need Help???</h3>
+        <p>This column has revelent info for the creation step you're on. Check back here if you get stuck.</p>
+		<div id="help_column">
+			Hello. This is advice on how to complete the current step.
+		</div>
+        <span class="errors error_field" id="error_field"></span>
+    </div>
 	<div id="creation_tab">
 		<div id="who_tab" class="creation_step">
 			<div id="user_registered_yet">
 				<h2>Do you already have an account on BeEx?</h2>
-				<input type="button" name="already_have_account" id="already_have_account" class="account_yet" value="Yes!">
-				<input type="button" name="no_account_yet" id="no_account_yet" class="account_yet" value="Not Yet!">
+				<div class="input_buttons">
+                	<input type="button" name="already_have_account" id="already_have_account" class="account_yet" value="Yes!">
+					<input type="button" name="no_account_yet" id="no_account_yet" class="account_yet" value="Not Yet!">
+                </div>
 			</div>
 			
 			<div id="already_registered" class="creation_substep">
@@ -977,8 +927,10 @@ SHOW_HIDE;
 					<label>password</label>
 					<input type="password" name="password" id="password">
 				</div>
-				<span name="login_errors" id="login_errors"></span>
-				<input type="button" name="registered_continue" id="registered_continue" value="Continue">
+				<span class="errors" name="login_errors" id="login_errors"></span>
+				<div class="input_buttons">
+                	<input type="button" name="registered_continue" id="registered_continue" value="Continue">
+                </div>
 			</div>
 			<div id="not_registered" class="creation_substep">
 				<div class="input_wrapper">
@@ -997,9 +949,11 @@ SHOW_HIDE;
 					<label>password confirmation</label>
 					<input type="password" name="password2" id="password2">
 				</div>
-  				<span id="password_validation"></span><br />
-				<span name="registration_errors" id="registration_errors"></span>
-				<input type="button" name="register_continue" id="register_continue" value="Create Account &amp; Continue">
+  				<span class="errors" id="password_validation"></span><br />
+				<span class="errors" name="registration_errors" id="registration_errors"></span>
+				<div class="input_buttons">
+                	<input type="button" name="register_continue" id="register_continue" value="Create Account &amp; Continue">
+                </div>
 			</div>			
 		</div>
 		<div id="what_tab" class="creation_step">
@@ -1041,15 +995,20 @@ SHOW_HIDE;
 				</div>
 			</div>
 			<div class="preview_box" id="preview_box">
+            
 				<h1>Preview of Declaration</h1>
-				I will 
-				<span class="dyn_what_will_do" id="dyn_what_will_do">_____</span> 
-				if
-				$<span class="dyn_how_much_raised" id="dyn_how_much_raised">_____</span>
-				is raised for 
-				<span class="dyn_which_npo" id="dyn_which_npo">______</span>
+                <p class="text">You can see just what the challenge declaration on your challenge page will look like here, so don't be a fuckin retard!</p>
+				<span class="hl">I</span> will 
+				<span class="dyn_what_will_do hl" id="dyn_what_will_do">_____</span> 
+				if<br />
+				<span class="hlb">$<span class="dyn_how_much_raised" id="dyn_how_much_raised">_____</span></span><br />
+				is raised for <br />
+				<span class="dyn_which_npo hlb" id="dyn_which_npo">______</span>
 			</div>
-			<input type="button" name="what_continue" id="what_continue" value="Continue to next step">
+            <div class="input_buttons">
+            	<img src="<?php echo base_url(); ?>images/buttons/next.gif" name="what_continue" id="what_continue" value="Continue to next step" />
+            	<!--<input type="button" name="what_continue" id="what_continue" value="Continue to next step">-->
+            </div>
 		</div>
 		<div id="when_where_tab" class="creation_step">
 			<div class="input_wrapper">
@@ -1079,26 +1038,29 @@ SHOW_HIDE;
 			</div>
 			<div class="input_wrapper">
 				<label>zipcode</label>
-				<input type="text" name="challenge_zip" id="challenge_zip">			 
+				<input type="text" name="challenge_zip" maxlength="5" id="challenge_zip">			 
 			</div>
 			<div class="input_wrapper">
 				<label>can people attend?</label>
 				<?php echo $attend_cell; ?>
 			</div>
 			<div class="input_wrapper">
-				<label class="required">fundraising compl</label>
+				<label class="required">fundraising completed by</label>
 				<?php echo $completion_cell; ?>
 			</div>
 			<div class="input_wrapper">
-				<label>challenge compl</label>
+				<label>challenge completed on</label>
 				<?php echo $fr_cell; ?>
 			</div>
 			<div class="input_wrapper">
-				<label>proof post</label>
+				<label>proof posted on</label>
 				<?php echo $proof_cell; ?>
 			</div>
-			<input type="button" name="when_where_previous" id="when_where_previous" value="Go back to edit the previous step">
-			<input type="button" name="when_where_continue" id="when_where_continue" value="Continue to the next step!">				
+            <div class="input_buttons">
+            	<img src="<?php echo base_url(); ?>images/buttons/prev.gif" name="when_where_previous" id="when_where_previous" value="Go back to edit the previous step" />
+                <img src="<?php echo base_url(); ?>images/buttons/next.gif" name="when_where_continue" id="when_where_continue" value="Continue to the next step!" />
+								
+            </div>
 		</div>
 		<div id="why_tab" class="creation_step">
 			<div class="input_wrapper">
@@ -1122,7 +1084,7 @@ SHOW_HIDE;
 						<input type="hidden" name="colorB" value="255" />
 						<input type="hidden" name="maxH" value="300" />
 						<input type="hidden" name="filename" value="filename" />
-						<p><input type="file" name="filename" onchange="ajaxUpload(this.form,'<?php echo base_url(); ?>index.php/ajax/image_upload?filename=name&amp;maxSize=9999999999&amp;maxW=200&amp;fullPath=http://www.atwebresults.com/php_ajax_image_upload/uploads/&amp;relPath=../uploads/&amp;colorR=255&amp;colorG=255&amp;colorB=255&amp;maxH=300','upload_area','File Uploading Please Wait...&lt;br /&gt;&lt;img src=\'images/loader_light_blue.gif\' width=\'128\' height=\'15\' border=\'0\' /&gt;','&lt;img src=\'images/error.gif\' width=\'16\' height=\'16\' border=\'0\' /&gt; Error in Upload, check settings and path info in source code.'); return false;" /></p>
+						<input type="file" name="filename" onchange="ajaxUpload(this.form,'<?php echo base_url(); ?>index.php/ajax/image_upload?filename=name&amp;maxSize=9999999999&amp;maxW=200&amp;fullPath=http://www.atwebresults.com/php_ajax_image_upload/uploads/&amp;relPath=../uploads/&amp;colorR=255&amp;colorG=255&amp;colorB=255&amp;maxH=300','upload_area','File Uploading Please Wait...&lt;br /&gt;&lt;img src=\'images/loader_light_blue.gif\' width=\'128\' height=\'15\' border=\'0\' /&gt;','&lt;img src=\'images/error.gif\' width=\'16\' height=\'16\' border=\'0\' /&gt; Error in Upload, check settings and path info in source code.'); return false;" />
 					</form>					
 				</fieldset>
 				<div id="upload_area" name="upload_area">					
@@ -1139,14 +1101,20 @@ SHOW_HIDE;
 			<div class="input_wrapper">
 				<label>why do u want to perform?</label>
 				<textarea name="challenge_whycare" id="challenge_whycare"></textarea>
-			</div>			
-			<input type="button" name="why_previous" id="why_previous" value="Go back to edit the previous step">
-			<input type="button" name="why_continue" id="why_continue" value="Finish creating your challenge!">	
+			</div>
+            <div class="input_buttons">
+            	<img src="<?php echo base_url(); ?>images/buttons/prev.gif" name="why_previous" id="why_previous" value="Go back to edit the previous step" />
+                <img src="<?php echo base_url(); ?>images/buttons/finish.gif" name="why_continue" id="why_continue" value="Finish creating your challenge!" />
+				
+            </div>
 		</div>
-		<span class="error_field" id="error_field"></span>
+		
+        
+	   
 	</div>
+    
 </div>			
-
+ <div style="clear:both; float:left; padding:10px;"></div>
 
 
 
@@ -1163,8 +1131,6 @@ SHOW_HIDE;
         </div>
 
     </div>
-
-
 
 </div>
 

@@ -10,36 +10,23 @@ class Beex {
 
 		$CI =& get_instance();
 
-
-
 		$CI->load->helper('url');
-
 		$CI->load->library('session');
-
 		$CI->load->model('MItems');
-
 		$CI->config->item('base_url');
 
 	}
 
- 
+  
 
 	function do_upload($files, $filename, $uploadpath = './media/', &$error = '')
-
 	{
-
 		//$uploadpath = './media/6';
-
 		if(!file_exists($uploadpath)) {
-
 			//echo $uploadpath;
-
 			if(!mkdir($uploadpath)) {
  
-
-
 			}
-
 		}
 
 		$config['upload_path'] = $uploadpath; 
@@ -71,6 +58,20 @@ class Beex {
 
 		$CI->load->library('image_lib', $config);
 
+	}
+	
+	function scale_image($file) {
+		
+		$CI =& get_instance();
+
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $file;
+		$config['maintain_ratio'] = TRUE;
+		
+		$config['width'] = 75;
+		$config['height'] = 50;
+
+		$CI->load->library('image_lib', $config);
 	}
 
 
@@ -592,8 +593,9 @@ class Beex {
                         <?php endif; ?>
 
 						<div class="donation">
-
-                            <img class="donatebutton" id="donatebutton<?php echo $item->id; ?>" src="<?php echo base_url(); ?>/beex/images/buttons/donate.gif" style="float:right; margin:20px 10px 10px;" />
+                            
+							<?php echo $this->processProgressBar($table, $item->id); ?>
+							<img class="donatebutton" id="donatebutton<?php echo $item->id; ?>" src="<?php echo base_url(); ?>/beex/images/buttons/donate.gif" style="margin:10px 0px;" />
 
 
 
@@ -602,11 +604,7 @@ class Beex {
                            jQuery("#donatebutton<?php echo $item->id; ?>").colorbox({href:"/pieces/donate.php?challenge_id=<?php echo $item->id; ?>&challenge_name=<?php echo urlencode($item->challenge_title); ?>", width:'420', height:'400px'});
 							
 							//jQuery("#donatebutton<?php echo $item->id; ?>").colorbox({href:"http://www.beex.org/index.php/npo/donateTo/<?php echo $item->id; ?>"});
-                            </script>
-                            <div class="fundinfo">
-							<?php echo $this->processProgressBar($table, $item->id); ?>
-                            </div>
-
+                            </script>                            
 						</div>
 
 					</td>

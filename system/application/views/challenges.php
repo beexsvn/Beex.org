@@ -20,9 +20,11 @@ $this->load->view('framework/header', $header);
     	
         <?php //Put Search Bar here ?>
         
-       <div class="tabs"><a id="browse_popular" class="browser_button button">Popular</a><a id="browse_raised" class="browser_button button">Most Raised</a><a id="browse_ending" class="browser_button button">Ending Soon</a><a id="browse_new" class="browser_button button">New</a></div>
+      
     	
-        <h2 class="title">Browse Challenges</h2>
+        <h2 class="title" style="position:relative;">
+        	Browse Challenges
+        	<div class="tabs" style="float:none; position:absolute; right:0px; top:0px;"><a id="browse_popular" class="browser_button button">Popular</a><a id="browse_raised" class="browser_button button">Most Raised</a><a id="browse_ending" class="browser_button button">Ending Soon</a><a id="browse_new" class="browser_button button">New</a></div></h2>
     	
         <div class="Browser BigBrowser" id="Browser">
 	        <?php $this->beex->create_browser($browser, 'challenges'); ?>

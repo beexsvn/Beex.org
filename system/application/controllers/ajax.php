@@ -203,7 +203,7 @@ POPUP;
  
 		$user['created'] = date("Y-m-d H:i:s");
 		$user['email'] = $_POST['email'];
-		$user['password'] = $_POST['password'];
+		$user['password'] = md5($_POST['password']);
 		$user['official'] = 1;
 		
 		$this->load->library('form_validation');
@@ -237,6 +237,7 @@ POPUP;
 
 	}
 	
+	
 	function delete_note($id) {
 		
 		$this->MItems->delete('notes', $id);
@@ -247,7 +248,7 @@ POPUP;
 		
 		$this->MItems->delete('note_replies', $id);
 		
-	}
+	} 	
 	
 	// function get_browsers() {
 	// 	
