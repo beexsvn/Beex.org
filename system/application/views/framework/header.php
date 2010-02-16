@@ -69,8 +69,17 @@ $(document).ready(function(){
   	 <?php
 
 	 	if($user_id = $this->session->userdata('user_id')) {
+	?>
+    	
+        <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
 
-	 		echo anchor('user/logout', 'Logout').' &bull; '.anchor('user/view/'.$user_id, 'My Profile');
+
+		<script type="text/javascript">
+               FB.init("a8656fd483cd0ba9c14474feb455bc98", "/xd_receiver.htm");
+        </script>
+        <a href="#" onclick="FB.Connect.logout(function() {window.location='<?=base_url()?>index.php/user/logout'}); return false;" >Logout</a>
+     <?php
+	 		echo ' &bull; '.anchor('user/view/'.$user_id, 'My Profile');
 
 		}
 

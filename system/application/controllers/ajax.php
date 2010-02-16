@@ -248,7 +248,44 @@ POPUP;
 		
 		$this->MItems->delete('note_replies', $id);
 		
-	} 	
+	} 
+	
+	function cluster_validate() {
+
+		   if(!ctype_digit($_POST['cluster_code'])) {
+				   echo json_encode('false');
+				   return false;
+		   }
+
+		   $str = $_POST['cluster_code'] / 3459;
+		   if(!($this->MItems->getCluster($str)->num_rows() > 0)) {
+				   echo json_encode('false');
+				   return false;
+		   }
+		   else {
+
+				   $item =  $this->MItems->getCluster($str);
+				   $cluster = $item->row();
+				   foreach($cluster as $key=>$value) {
+						   if(substr($key,0,10) == 'cluster_ch') {
+								   $key = substr($key,11);
+								   if($key == 'address') {
+										   $key = 'address1';
+								   }
+								   $ret[$key] = $value;
+						   }
+				   }
+
+				   $challenge_info = $this->session->userdata("challenge_info");
+				   $challenge_info['cluster_id'] = $str;
+				   $this->session->set_userdata($challenge_info);
+
+				   echo json_encode($ret);
+
+				   return true;
+		   }
+
+       }
 	
 	// function get_browsers() {
 	// 	
