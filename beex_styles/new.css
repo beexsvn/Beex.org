@@ -1,0 +1,9 @@
+#Notes .button {padding:5px 12px; background-color:#efab32; color:#fff; border:1px solid #ffa200; font-size:20px; text-transform:uppercase;}
+#Notes .button:hover {background-color:#ffa200; color:#fff;}
+
+.note {padding:10px;}
+.note h3 {font-size:24px; font-family:"Helvetica", Arial, sans-serif; margin:0px 0 10px; padding:0px;}
+.note_alt {background-color:#efefef;}
+
+.note_form .row {padding:10px;}
+.note_form .row label {font-size:15px; margin-right:10px;}

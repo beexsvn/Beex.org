@@ -1,0 +1,4 @@
+
+.Admin .menu {text-align:center; background-color:#333; color:#fff; height:30px;}
+.Admin .menu a {padding:0px 20px; line-height:30px; color:#fff;}
+.Admin .menu a:hover {background-color:#666;}

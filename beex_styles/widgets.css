@@ -1,0 +1,66 @@
+
+.widget {width:362px; text-align:left; background-color:none;}
+.widget h1 {font:20px/26px 'Arial Rounded MT Bold', 'Arial Black', Arial, sans-serif; height:auto; text-align:center; -moz-border-radius: 30px 30px 0 0; border-radius:30px 30px 0px 0px; padding:10px 10px 0; margin:0px; color:#FFF; text-transform:none;}
+
+.widget_body {padding:9px 11px; background:#FFF;}
+
+.widget .feed {overflow:hidden; height:237px;}
+
+.widget #FeedContent {position:relative;}
+
+.widget .feed p {margin:0; padding:0;}
+.widget .feed .activity {font:10px verdana, arial, sans-serif; margin:0; color:#5C6771;}
+.widget .feed a.activity {font-weight:bold; display:block;}
+.widget .feed .raised_goal {margin-top:0px;}
+.widget .feed .date {font-size:9px; color:#BEC4C4;}
+.widget .feed .top_row {padding:11px 0 18px;}
+.widget .feed .top_row .activity {font-size:17px;}
+.widget .feed .row {padding:5px; border-bottom:1px solid #BEC4C4; clear:both;}
+.widget .feed .row .watermark {float:right; margin-left:16px;}
+.widget .feed .row img {max-width:500px;}
+
+.widget .feed .activity_button {cursor:pointer; color:#CC7322; font-style:italic;}
+.widget .feed .activity_button:hover {color:#FFC400;}
+
+.widget .feed .profile_image {width:60px; height:60px; float:left; margin:0px 5px 0 0; position:relative;}
+.widget .feed .top_row .profile_image {width:87px; height:87px; margin-right:10px;}
+.widget .feed .profile_image .border {position:absolute; width:100%; height:100%; top:0px; left:0px;}
+.widget .feed .profile_image .picture {position:absolute; width:92%; height:92%; z-index:0; top:4%; left:4%;}
+.widget .feed .porfile_image .picture img {width:100%; height:100%;}
+
+.widget .feed .float_left {float:left; width:248px;}
+
+
+.widget .cluster_search_cntr {clear:both; height:30px; padding:2px 0px;}
+.widget .cluster_search_cntr .form_input {float:left; margin-right:10px;}
+.widget .cluster_search_cntr .form_input .short_text_input input {width:92%;}
+.widget .cluster_search_cntr img {float:left;}
+.widget .cluster_search_cntr .beex-loading {display:none; float:left; height:30px; margin:-5px 0 0 4px;}
+.widget #view_all_challenges {float:right; font-size:10px; cursor:pointer; display:none;}
+
+.widget .rd_controls {border-top-width:2px; padding-top:5px;}
+
+.widget .bottom_links {font:8px Verdana, sans-serif; margin-top:5px; text-align:center;}
+.widget .bottom_links a {}
+.widget .bottom_links a:hover {}
+
+.widget .give_button {float:right; margin-top:2px; margin-right:10px;}
+
+
+.widget_footer {height:auto; padding-bottom:4px; text-align:center; -moz-border-radius:0 0 30px 30px; border-radius:0 0 30px 30px;}
+
+
+/* Supporting Widget Styles */
+.npo_supporting_widget .feed {height:210px;}
+
+.support_organization .statement {font:bold 9px 'Verdana', arial, sans-serif; color:#5C6771; padding:10px 0px 6px; margin:0px;}
+.support_form label {float:left; font:16px "Arial Rounded MT Bold", "Arial Black", Arial, sans-serif; margin-right:8px; margin-bottom:6px;}
+.support_form .text {-moz-border-radius:8px; border-radius:8px; height:12px; width:269px; padding:3px 5px; border:1px solid #BEC4C4; float:left; font:9px Verdana; margin-bottom:6px;}
+.support_form input.submit {float:right;}
+
+.support_form .light_gray {color:#BEC4C4; font-style:italic;}
+.support_form .dark_gray {color:#5C6771; font-style:normal;}
+
+.npo_supporting_widget .bottom_links {text-align:left; margin-top:4px; float:left;}
+
+.npo_declaration_widget .support_form .textarea {height:29px;}

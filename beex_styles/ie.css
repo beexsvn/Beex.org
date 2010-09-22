@@ -1,0 +1,42 @@
+.partner_info_cntr label {float:left;}
+.partner_info_cntr .short_text_input input {width:92%; margin-left:-15px; float:left;}
+.sub_declaration_cntr p {float:left;}
+.sub_declaration_cntr textarea {width:90%;} 
+
+#RightColumn .homemodule {height:560px;}
+.recently_declared {height:91px;}
+
+.form .input_text, .form .input_picture, .form .input_select { zoom: 1; }
+.form .input_text input {margin-top:2px;}
+
+#challenge_video, #cluster_video, #cluster_ch_video {margin-left:-9px;}
+#challenge_completion, #cluster_completion, #cluster_ch_completion {margin-left:-21px;}
+
+.israisedfor .if, .israisedfor .israised {float:left; margin:3px 3px 0 0;}
+.israisedfor .israised {margin:3px 0 0 3px}
+#challenge_goal, #cluster_goal, #cluster_ch_goal {width:85%;}
+
+#Blurb .input_textarea, .blurb_class .input_textarea {float:left;}
+
+.start_something .short_text_input {float:left;}
+#partner_errors {clear:both;}
+
+.search {border-width:0px;}
+.block {display:block;}
+.ie_none {display:none;}
+
+#Blurb .body {float:left;}
+
+.form_element label {float:left;}
+
+.declaration_class  p.declare {line-height:120%; font-size:24px;}
+
+.featured_page #LeftColumn h3 {font-size:19px;}
+.featured_buttons .next {width:45px;}
+.featured_buttons .next_text {position:absolute; left:0px; top:0px;}
+
+.start_something .form_save_cell {margin-top:10px;}
+
+#challenge_upload_button {margin-right:7px}
+
+form {margin-bottom:0;}
