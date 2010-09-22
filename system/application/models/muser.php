@@ -5,6 +5,11 @@ class MUser extends Model {
 	function MUser() {
 		parent::Model();
 		$this->load->library('session');
+		$this->load->library('facebook', array(
+		  'appId' => $this->config->item('facebook_api_key'),
+		  'secret' => $this->config->item('facebook_secret_key'),
+		  'cookie' => true,
+		));
 	}
 	
 	function checkUsername($username){
@@ -74,12 +79,72 @@ class MUser extends Model {
 		}
 	}
 	
+	function validate_fb($uid) {
+		if($result = $this->db->get_where('users', array('fb_user'=>$uid))){
+			if($result->num_rows()) {
+				return $result;
+			}
+			else {
+				return false;	
+			}
+		}		
+	}
+	
+	// Get FB: Get the users Facebook ID
+	function get_fb($id) {
+		if($result = $this->MItems->getUser($id)) {
+			if($result->num_rows()) {
+				if($fb_id = $result->row()->fb_user) {
+					return $fb_id;
+				}
+			}
+		}
+		
+		//If user isn't FB connect check if they are logged into facebook
+		$session = $this->facebook->getSession();
+			
+		$me = null;
+		// Session based API call.
+		if ($session) {
+		
+		  try {
+		    $uid = $this->facebook->getUser();
+		    $me = $this->facebook->api('/me');
+			return $me['id'];
+		  } catch (FacebookApiException $e) {
+		    //error_log($e);
+		  }
+		}
+				
+		return '';
+	}
+	
+	function part_of_cluster($id, $cluster_id) {
+		
+		$result = $this->MItems->getChallenge(array('challenges.user_id'=>$id, 'challenges.cluster_id'=>$cluster_id));
+		
+		return ($result->num_rows()) ? true : false;
+		
+	}
+	
+	function set_usersession($id, $email) {
+		
+		$userdata = array('logged_in'=>true, 'user_id'=>$id, 'username'=>$email);
+		if($email == 'zkilgore@gmail.com' ||  $email == 'devin@beex.org' || $email == 'devinbalkind@gmail.com' || $email == 'matt@beex.org') {
+			$userdata['super_user'] = true;	
+		}
+		else {
+			$userdata['super_user'] = false;
+		}
+		$this->session->set_userdata($userdata);
+		
+	}
+	
 	function login($email, $password, $retval = 'id') {
 		
 		if($result = $this->validate_user($email, $password)) {
 			$user = $result->row();
-			$userdata = array('logged_in'=>true, 'user_id'=>$user->id, 'username'=>$user->email);
-			$this->session->set_userdata($userdata);
+			$this->set_usersession($user->id, $user->email);
 			return $user->$retval;
 		}
 		else {
@@ -131,16 +196,16 @@ class MUser extends Model {
 	
 	function process_new_user($data, &$error) {
 		
-		if($data['signup_pass'] == $data['signup_passconf']) {
+		if(element('signup_pass', $data) == element('signup_passconf', $data)) {
 			
-			$user = $this->MItems->get('users', $data['signup_email'], 'email');
+			$user = $this->MItems->get('users', $data['email'], 'email');
 			
 			if($user->num_rows()) {
 				
 				$id = $user->row()->id;
 				
 				if($this->isOfficial($id)) {
-					$error = "That email has already been registered and is in use";
+					$error = "That email has already been registered and is in use. If you have forgotten your password please ".anchor('user/forgot', 'click here')." to retrieve it.";
 				}
 				else {
 					$this->update_user($id, $data);

@@ -1,9 +1,8 @@
 <?php
-$this->load->view('framework/header', $header);
+switch($type) {
+	
+	case 'teammates': 
 ?>
-
-<div id="ClusterForm" class="form">
-
 <div id="LeftColumn">
 	<div class="leftmenu">
 		<?php echo anchor('challenge/view/'.$id, "View Challenge"); ?>
@@ -11,15 +10,13 @@ $this->load->view('framework/header', $header);
 		<?php echo anchor('challenge/editor/'.$id.'/teammates', "Manage Teammates"); ?>
 	</div>
 </div>
-
 <?php
-switch($type) {
-	
-	case 'teammates': 
 		$this->load->view('add_teammates_form', $data);
 		break;
 	case 'edit':
-		$this->load->view('challenge_form', $data);
+		$data['help_copy'] = 'Fill out the form to the right to edit your challenge. Reference the Help Editor that appears below if you’re confused about a section.';
+		$data['help_title'] = 'Edit Your Challenge';
+		$this->load->view('challenge_new_form', $data);
 		break;
 	default :
 		$this->load->view('challenge_editor_home', $data);
@@ -27,5 +24,4 @@ switch($type) {
 	
 }
 
-$this->load->view('framework/footer');
 ?>

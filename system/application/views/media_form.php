@@ -1,25 +1,19 @@
 <?php
 
-
 if($message) {
 	echo "<p class='message'>".$message."<span class='val_errors'>";
 	echo validation_errors();
 	echo "</span></p>";
 }
 
-
 if($new) {
-//echo "<h2>".$title."</h2>";
-}
-
-if($new) {
-	$attributes = array('id' => 'imageform');
-	$edit = true;
+	$attributes = array('id' => 'edit_proof_form', 'class'=>'form proof_form');
+	$edit = false;
 	$edit_id = '';
 	
 }
 if($edit){
-	$attributes = array('id' => 'imageform');
+	$attributes = array('id' => 'edit_proof_form'.$item->id, 'class'=>'form proof_form');
 	$edit_id = '';
 	if($item) {
 		$edit_id = $item->id;
@@ -27,120 +21,45 @@ if($edit){
 	 
 }
 
-if($new || ($edit && !$new && $item->type == 'image')) {
-	
-	echo form_open_multipart('gallery/process/image/'.$edit_id, $attributes);
-	echo "<table border=0 cellpadding=0 cellspacing=0 class='formtable'>";
-	
-	echo "<th colspan=2>1. Add a Proof Image</td></tr>
-			<tr>";
-	
-	$name = 'item_type';
-	$value = ($new) ? $itemtype : $itemtype;
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	
-	$name = 'item_id';
-	$value = ($new) ? $itemid : $itemid;
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	$name = 'gallery_id';
-	$value = ($new) ? $galleryid : $item->gallery_id;
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	$name = 'type';
-	$value = 'image';
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	
-	$name = 'name';
-	$value = ($new) ? set_value($name) : $item->$name;
-	echo "<td>Photo Name</td><td>".generate_input($name, 'input', $edit, $value)."</td>
-			</tr>
-			<tr>";
-			
-	$name = 'file';
-	$value = ($new) ? set_value($name) : $item->link;
-	echo "<td>File</td><td>".generate_input($name, 'file', $edit, $value)."</td>
-			</tr>
-			<tr>";		
-	
-	$name = 'caption';
-	$value = ($new) ? set_value($name) : $item->$name;
-	echo "<td>Caption</td><td>".generate_input($name, 'text', $edit, $value)."</td>
-			</tr>
-			<tr>";
-	
-	if($edit){
-		$data = array('class'=>'submit');
-		echo "<td colspan=2>".form_submit($data, 'Add Image')."</td>";
-	}
-	
-	echo "</tr>
-		</table>";
-	
-	if($edit) {
-		echo "</form>";
-	}
-}
 
-if($edit){
-	$attributes = array('id' => 'videoform');
-	$edit_id = '';
-	if($item) {
-		$edit_id = $item->id;
-	}
+echo form_open_multipart('gallery/process/image/'.$edit_id, $attributes);
 	
-} 
-
-if($new || ($edit && !$new && $item->type == 'video')) {
-	echo form_open_multipart('gallery/process/video/'.$edit_id, $attributes);
-	echo "<table border=0 cellpadding=0 cellspacing=0 class='formtable'>";
-	
-	echo "<th colspan=2>2. Embed a Proof Video</td></tr>
-			<tr>";
-	
-	$name = 'item_type';
-	$value = ($new) ? $itemtype : $itemtype;
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	
-	$name = 'item_id';
-	$value = ($new) ? $itemid : $itemid;
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	$name = 'gallery_id';
-	$value = ($new) ? $galleryid : $item->gallery_id;
-	echo generate_input($name, 'hidden', $edit, $value);
-	
-	$name = 'name';
-	$value = ($new) ? set_value($name) : $item->$name;
-	echo "<td>Video Name</td><td>".generate_input($name, 'input', $edit, $value)."</td>
-			</tr>
-			<tr>";
-			
-	$name = 'link'; 
-	$value = ($new) ? set_value($name) : $item->$name;
-	echo "<td>Embed Link</td><td>".generate_input($name, 'text', $edit, $value)."</td>
-			</tr>
-			<tr>";		
-	
-	$name = 'caption';
-	$value = ($new) ? set_value($name) : $item->$name;
-	echo "<td>Cpation</td><td>".generate_input($name, 'text', $edit, $value)."</td>
-			</tr>
-			<tr>";
-			
-	if($edit){
-		$data = array('class'=>'submit');
-		echo "<td colspan=2>".form_submit($data, 'Add Video')."</td>";
-	}
-	
-	echo "</tr>
-		</table>";
-	
-	if($edit) {
-		echo "</form>";
-	}
-}
+	$hiddens = array(
+		 'item_type' => ($new) ? $itemtype : $itemtype,
+		'item_id' => ($new) ? $itemid : $itemid,
+		'gallery_id' => ($new) ? $galleryid : $item->gallery_id
+	);
+	echo form_hidden($hiddens);
 ?>
+
+<h3><?php echo ($edit) ? "EDIT" : "NEW"; ?> PROOF</h3>
+<div class="form_element">
+	<label>Title:<span class="required">*</span></label>
+	<div class="input_text"><input name="name" value="<?php echo ($edit) ? $item->name : ''; ?>" /></div>
+</div>
+<div class="form_element">
+	<label>Note:<span class="required">*</span></label>
+
+    <div class="input_textarea">
+		<img src="<?php echo base_url(); ?>images/backgrounds/text-area-top.png" />
+		<textarea id="editor_<?php if($item) echo $item->id; ?>" name="caption"><?php echo ($edit) ? $item->caption : ''; ?></textarea>
+		<img src="<?php echo base_url(); ?>images/backgrounds/text-area-bottom.png" />
+	</div>
+	
+</div>
+
+<div class="form_element">
+	<label>Add <?php echo ($edit) ? 'New' : ''; ?> Image:<br><span class="small">(4MB Max)</span></label>
+	<div class="input_picture"><input type="file" name="file" /></div>
+</div>
+<div class="form_element">
+	<label>Paste Video Link:</label>
+    <div class="input_text"><input type="text" class="videoembed" name="link" value="<?php echo ($edit) ? $item->link : ''; ?>" /></div>
+</div>
+
+<div class="proof_errors error" id="proof_errors<?php echo $edit_id; ?>"></div>
+
+<div class="buttons">
+	<input type="image" class="rollover" src="<?php echo base_url(); ?>images/buttons/reg-form-submit-off.png" />  <img class="cancel_button rollover" src="<?php echo base_url(); ?>images/buttons/cancel-off.png" />
+</div>
+</form>

@@ -1,85 +1,32 @@
 <div class="MiniProfile" id="MiniProfile">
-
-    <h2><?php echo $profile->first_name." ".$profile->last_name; ?>
-
-         <?php if($profile->user_id == @$data['user_id']) :
-
-                    echo anchor('user/edit/'.$profile->user_id, "Edit Profile", array('style'=>'float:right; font-size:10px;'));
-
-                endif;
-
-        ?>
-
-
-
-    </h2>
-
-    <table border='0' cellpadding="0" cellspacing="0">
-
-     <tr>
-
-        <td class="leftcol" style="width:">
-
-<?php
-
-function word_too_long($string, $maxchars = 25) {
+	<h2>Challenger</h2>	
+	<div class="info">
+    	<div class='image'>
+		
+			<?php echo anchor('user/view/'.$profile->user_id, (($profile->profile_pic) ? '<img src="'.base_url().'/media/profiles/'.$profile->user_id.'/cropped120_'.$profile->profile_pic.'" />' : display_default_image('profile')), array('class'=>'picture')); ?>
+			<?php echo anchor('user/view/'.$profile->user_id, '<img class="border" src="'.base_url().'images/tout-image-border.png" />'); ?>
+	    </div>
+		<p><?php echo anchor('user/view/'.$profile->user_id, $profile->first_name." ".$profile->last_name, array('class'=>'namelink')); ?></p>
+		
+		<?php if($profile->hometown) :?>
+		<p class="header">Location:</p>
+		<p class="answer"><?php echo $profile->hometown; ?></p>
+		<?php endif;?>
+		
+		<?php if($profile->website) : ?>
+		<p class="header">Website:</p>
+		<p class="answer"><?php echo link_to_long(prep_url($profile->website)); ?></p>
+		<?php endif; ?>
+	</div>
+	<img class="block" src="<?php echo base_url(); ?>images/backgrounds/left-tout-bottom-filled.png" />
 	
-	$len = 0;
 	
-	if($string) {
-		$words = explode(' ', $string);
-
-		foreach($words as $word) {
-			
-			if(strlen($word) > $len) {
-				$len = strlen($word);	
-			}
-		}
-	}
+	<div id="Buttons" class="MiniProfileButtons">
+		<div id="feed_button_challenges" class="selected"><p>Challenges</p></div>
+		<div id="feed_button_clusters" class="button"><p>Clusters</p></div>
+		<div id="feed_button_about" class="button"><p>About</p></div>
+	</div>
 	
-	return ($len > $maxchars) ? true : false;
+	<img src="<?php echo base_url(); ?>images/backgrounds/left-tout-bottom-totally-filled.png">
 	
-}
-
-?>
-
-            <div class='image'>
-
-                <?php if($profile->profile_pic) : ?>
-
-                    <img src="/profiles/<?php echo $profile->profile_pic; ?>" />
-				<?php else : ?>
-                	<?php echo display_default_image('profile'); ?>
-                <?php endif; ?>
-
-            </div>
-
-            <p>Origin</p>
-
-            <p><a><?php echo $profile->hometown; ?></a></p>
-
-
-
-            <p style="margin-top:15px;">Challenges:</p>
-
-   			<p><a>Active: (<?php echo $num_active; ?>)</a></p>
-
-			<p><a>Complete: (<?php echo $num_complete; ?>)</a></p>
-
-        </td>
-
-        <td class="rightcol">
-
-            <p><b>Why I'm here:</b> <?php echo $profile->whycare; ?></p>
-
-            <p><b>Bio:</b> <?php echo (word_too_long($profile->blurb)) ? wordwrap($profile->blurb, 25, '<br>', true) : $profile->blurb; ?></p>
-
-
-
-        </td>
-
-     </tr>
-
-    </table>
-
 </div>

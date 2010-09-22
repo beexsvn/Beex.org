@@ -1,32 +1,38 @@
 <?php
 
 $this->load->view('framework/header', $header);
+$attributes = array('id'=>'VerificationCodeForm', 'class'=>'form');
 
-
-echo "<h2>Verification Code</h2>";
+echo "<h2>Verify Yourself!</h2>";
 
 if($success) {
 	echo "<p class='message'>".$message."</p>";
 }
 else {
 
-$attributes = array('id' => 'verificationcode');
+if($message) {
+
+	echo "<p class='message'>".$message."</p>";
+
+}
+
 echo form_open('user/entercode/'.$user_id, $attributes);
-echo "<table border=0 cellpadding=0 cellspacing=0>";
-echo "<th colspan=2>Please check your email and enter your verification code found in your BEEx registration email. Alternatively you may click the link found in that email</td></tr>
-		<tr>";
-$data = array('name'=>'code', 'id'=>'code', 'size'=>25);
-echo "<td>Verification Code</td><td>".form_input($data)."</td>
-		</tr>
-		<tr>";		
-		
+?>
 
-$data = array('class'=>'submit');
-echo "<td colspan=2>".form_submit($data, 'Submit')."</td>";
+<p>Please check your email and enter your verification code found in your BEEx registration email. Alternatively you may click the link found in that email.</p>
+<?php $form_data = array('name'=>'code', 'id'=>'code', 'size'=>25); ?>
+<div class="form_element">
+	<label>Verification Code</label>
+	<div class="input_text"><?php echo form_input($form_data); ?></div>
+</div>
 
-echo "</tr>
- 	</table>
-	</form>";
+<?php $submit_data = array('class'=>'submit'); ?>
+<div>
+	<input type="image" class="rollover" src="<?php echo base_url(); ?>images/buttons/reg-form-submit-off.png" />
+</div>
+</form>
+
+<?php
 }
 
 $this->load->view('framework/footer');

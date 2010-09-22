@@ -172,21 +172,25 @@ function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = 
 	
 	if ($img_path == '' OR $img_url == '')
 	{
+		echo 'error 1<br>';
 		return FALSE;
 	}
 
 	if ( ! @is_dir($img_path))
 	{
+		echo 'error 2<br>';
 		return FALSE;
 	}
 	
 	if ( ! is_really_writable($img_path))
 	{
+		echo 'error 3<br>';
 		return FALSE;
 	}
 			
 	if ( ! extension_loaded('gd'))
 	{
+		echo 'error 4<br>';
 		return FALSE;
 	}		
 	
@@ -223,7 +227,7 @@ function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = 
 		$pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 		$str = '';
-		for ($i = 0; $i < 8; $i++)
+		for ($i = 0; $i < 6; $i++)
 		{
 			$str .= substr($pool, mt_rand(0, strlen($pool) -1), 1);
 		}
@@ -261,7 +265,7 @@ function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = 
 	$bg_color		= imagecolorallocate ($im, 255, 255, 255);
 	$border_color	= imagecolorallocate ($im, 153, 102, 102);
 	$text_color		= imagecolorallocate ($im, 204, 153, 153);
-	$grid_color		= imagecolorallocate($im, 255, 182, 182);
+	$grid_color		= imagecolorallocate($im, 255, 230, 222);
 	$shadow_color	= imagecolorallocate($im, 255, 240, 240);
 
 	// -----------------------------------
@@ -302,13 +306,13 @@ function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = 
 		
 	if ($use_font == FALSE)
 	{
-		$font_size = 5;
+		$font_size = 6;
 		$x = rand(0, $img_width/($length/3));
 		$y = 0;
 	}
 	else
 	{
-		$font_size	= 16;
+		$font_size	= 20;
 		$x = rand(0, $img_width/($length/1.5));
 		$y = $font_size+2;
 	}

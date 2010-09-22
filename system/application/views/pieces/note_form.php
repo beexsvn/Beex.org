@@ -4,49 +4,62 @@ $edit = true;
 
 //Edit or New Note?
 if($id == 'new') {
-	
 	$id = '';
 	$edit = false;
 }
 
+$item_type = $this->MItems->get_item_type($item_id);
+
 $attributes = array(
-				'class' => 'form',
+				'class' => 'form note_form',
 				'id' => 'edit_note_form'.$id,
 				'style' => 'display:none'
 				  );
 
-echo form_open_multipart('challenge/add_note/'.$item_id.(($edit) ? '/'.$id : ''), $attributes);
+echo form_open_multipart('item/add_note/'.$item_id.(($edit) ? '/'.$id : ''), $attributes);
 ?>
-<h3><?php echo ($edit) ? "Edit" : "New"; ?> Note</h3>
-<table>
-	<tr>
-    	<td>Title: </td>
-        <td><input name="title" value="<?php echo ($edit) ? $note->title : ''; ?>" /></td>
-    </tr>
-	<tr>
-    	<td>Note: </td>
-        <td><textarea name="note"><?php echo ($edit) ? $note->note : ''; ?></textarea></td>
-    </tr>
-    <tr>
-    	<td colspan="2">Select media for your post</td>
-    </tr>
-    <tr>
-    	<td>Upload <?php echo ($edit) ? 'New' : ''; ?> Image<?php echo ($edit) ? ' (Otherwise just leave blank)' : ''; ?>:</td>
-        <td><input type="file" name="note_image" /></td>
-    </tr>
-    <tr>
-    	<td colspan="2">Or</td>
-    </tr>
-    <tr>
-    	<td>Embed Video:</td>
-        <td><textarea class="videoembed" name="note_video"><?php echo ($edit) ? $note->note_video : ''; ?></textarea></td>
-    </tr>
-    <tr>
-    	<td colspan=2><input type="submit" value="<?php echo ($edit) ? "Edit" : "Add"; ?> Note" class="submit" /> <input type="button" class="cancel_button" value="Cancel"></td>
-    </tr>
-</table>
+
+
+<h3><?php echo ($edit) ? "Edit" : "Write"; ?> A Note</h3>
+<div class="form_element">
+	<label>Title:<span class="required">*</span></label>
+	<div class="input_text"><input name="title" value="<?php echo ($edit) ? $note->title : ''; ?>" /></div>
+</div>
+<div class="form_element">
+	<label>Note:<span class="required">*</span></label>
+
+    <div class="input_textarea">
+		<img src="<?php echo base_url(); ?>images/backgrounds/text-area-top.png" />
+		<textarea id="editor_<?php echo $id; ?>" name="note"><?php echo ($edit) ? $note->note : ''; ?></textarea>
+		<img src="<?php echo base_url(); ?>images/backgrounds/text-area-bottom.png" />
+	</div>
+	
+</div>
+
+<div class="form_element">
+	<label>Add <?php echo ($edit) ? 'New' : ''; ?> Image:<br><span class="small">(4MB Max)</span></label>
+	<div class="input_picture"><input type="file" name="note_image" /></div>
+</div>
+<div class="form_element">
+	<label>Paste Video Link:</label>
+    <div class="input_text"><input type="text" class="videoembed" name="note_video" <?php echo ($edit) ? $note->note_video : ''; ?> /></div>
+</div>
+
+<?php if($item_type == 'challenge') : ?>
+<div class="form_element">
+	<label>Is this proof?:</label>
+    <div class="input_radio"><input type="radio" name="proof" value="1" <?php echo ($edit && $note->proof == '1') ? 'checked="checked"' : ''; ?>> Yes <input type="radio" name="proof" value="0" <?php echo (!$edit || $note->proof == '0') ? 'checked="checked"' : ''; ?>> No</div>
+</div>
+<?php else : ?>
+<div class="form_element">
+	<label>Would you like to email the challengers this note?:</label>
+    <div class="input_radio"><input type="radio" name="email_challengers" value="1" checked="checked"> Yes <input type="radio" name="email_challengers" value="0"> No</div>
+</div>
+<?php endif; ?>
+<div class="note_errors error" id="note_errors<?php echo $id; ?>"></div>
+
+<div class="buttons">
+	<input type="image" class="rollover" src="<?php echo base_url(); ?>images/buttons/reg-form-submit-off.png" />  <img class="cancel_button rollover" src="<?php echo base_url(); ?>images/buttons/cancel-off.png" />
+</div>
+
 </form>
-<?php
-
-
-?>

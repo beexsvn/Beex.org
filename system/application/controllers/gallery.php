@@ -155,21 +155,25 @@ class Gallery extends Controller {
 			$data['message'] = "Please fill out all the required fields.";
 		}
 		else {
+		
 				
-			if($type == 'image' ) {		
+			if($type == 'image' || true) {		
 				
-				foreach($_POST as $key => $val) {
-					if(!$val) {
-						unset($_POST[$key]);	
+				if($id == 'add') {
+					foreach($_POST as $key => $val) {
+						if(!$val) {
+							unset($_POST[$key]);	
+						}
 					}
-				}
+				}	
+				unset($_POST['y'], $_POST['x']);	
 				
 				// Process Special Fields
 				if($_FILES['file']['name']) {
-					$_POST['link'] = $this->beex->do_upload($_FILES, 'file', './media/'.$_POST['item_id']);	
+					$_POST['filename'] = $this->beex->do_upload($_FILES, 'file', './media/'.$_POST['item_id']);	
 				}
 				elseif($id == 'add') {
-					$_POST['link'] = '';	
+					$_POST['filename'] = '';	
 				}
 				
 				if($id == 'add') {
@@ -185,23 +189,18 @@ class Gallery extends Controller {
 				$data['data']['galleryid'] = $_POST['gallery_id'];
 				
 				if($id == 'add') {
-					if($_POST['link']) {
-						$item_id = $_POST['item_id'];
-						$item_type = $_POST['item_type'];
+					$item_id = $_POST['item_id'];
+					$item_type = $_POST['item_type'];
 						
-						unset($_POST['item_id'], $_POST['item_type']);
-						
-						if($media_id = $this->MItems->add('media', $_POST)) {
-							$data['message'] = "Image has successfully been created.";
-							$this->MItems->addActivity('proof', $media_id, $item_type, $item_id);
-							redirect($item_type.'/view/'.$item_id, 'refresh');
-						}
-						else {
-							$data['message'] = "We're sorry, there has been a problem processing your request.";
-						}
+					unset($_POST['item_id'], $_POST['item_type']);
+					
+					if($media_id = $this->MItems->add('media', $_POST)) {
+						$data['message'] = "Media has successfully been created.";
+						$this->MItems->addActivity('proof', $media_id, $item_type, $item_id);
+						redirect($item_type.'/view/'.$item_id, 'refresh');
 					}
 					else {
-						$data['message'] = "Youre image could not be uploaded";	
+						$data['message'] = "We're sorry, there has been a problem processing your request.";
 					}
 					
 				}

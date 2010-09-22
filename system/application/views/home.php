@@ -4,166 +4,92 @@ $this->load->view('framework/header', $header);
 
 ?>
 
+<script type="text/javascript" language="javascript" src="<?php echo base_url(); ?>beex_scripts/beex_slideshow.js"></script>
 
-
+<!-- Recently Declared -->
 <div id="LeftColumn">
 
-	<h1 class="title" style="font-size:25px; margin-top:10px;">Recently Declared</h1>
+	<h1 class="recently_declared_title">Recently Declared</h1>
 
 	<div id="TodaysDeclarations">
+		<div id="DeclarationsBox">
 
 
+		<?php $this->beex->displayRecentlyDeclared(40); ?>
 
-		<?php $this->beex->displayRecentlyDeclared(6); ?>
-
-        <?php //echo anchor('challenge/start_a_challenge', "<img src='/beex/images/buttons/start-challenge.png' alt='Start Your Own Challenge' class='start_challenge' />"); ?>
-
+		</div>
     </div>
+
 	
-    <?php echo anchor('challenge', '-See More Challenges-', array('class'=>'see_more_link')); ?>
-
-<!--
-    <div id="Login">
-
-        <?php
-
-		echo render_login($username);
-
-		?>
-
-
-
-    </div>
-
-
-
-
-
-
-
-    <div id="JoinCluster" class="homeform">
-    	<h2>Join a Cluster</h2>
-        <form style="background-color:inherit;" method="post" action="/index.php/cluster/joina/">
-         <label>cluster ID#</label>
-         <input type="text" name="cluster_id">
-         <input type="submit" value="Enter">
-        </form>
-    </div>
--->
+	<div class="rd_controls controls"><img class="scrollUp" src="<?php echo base_url(); ?>images/buttons/up.png"><img class="scrollDown" src="<?php echo base_url(); ?>images/buttons/down.png"></div>
+	
 </div>
 
+
+<img src="<?php echo base_url(); ?>images/backgrounds/home-blue-bg.png" class="block">
 <div id="RightColumn">
-	<div id="GraphicalExplanation" class="module homemodule">
-    	<p>
-        <object width="599" height="296"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=8706824&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=8706824&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="599" height="296"></embed></object>
+	<div id="GraphicalExplanation" class="homemodule">
+    	<div id="HPSlideshow">
+			<div class="slide" id="Slide1">
+				<img class="tagline" src="<?php echo base_url(); ?>images/slideshow/text1.png">
+			</div>
+			<div class="slide" id="Slide2">
+				<img class="tagline" src="<?php echo base_url(); ?>images/slideshow/text2.png">
+			</div>
+			<div class="slide" id="Slide3">
+				<img class="tagline" src="<?php echo base_url(); ?>images/slideshow/text3.png">
+			</div>
+			<div class="slide" id="Slide4">
+				<img class="tagline" src="<?php echo base_url(); ?>images/slideshow/text4.png">
+			</div>
+			<div class="slide" id="Slide5">
+				<img class="img1" src="<?php echo base_url(); ?>images/slideshow/text51b.png">
+				<?php echo anchor('challenge/start_a_challenge', '<img class="img2" src="'.base_url().'images/slideshow/text52.png">'); ?>
+				<!--<img class="img3" src="<?php echo base_url(); ?>images/slideshow/text53.png">-->
+			</div>
+			<div class="slide" id="Slide6">
+				<?php echo anchor('challenge/start_a_challenge', '<img class="img1" src="'.base_url().'images/slideshow/text61.png">'); ?>
+				<?php echo anchor('cluster/start/', '<img class="img2" src="'.base_url().'images/slideshow/text62.png">'); ?>
+				<img class="img3" src="<?php echo base_url(); ?>images/slideshow/text63.png">
+			</div>
+			<div class="slide" id="Slide7">
+				<img class="img1" src="<?php echo base_url(); ?>images/slideshow/text7.png">
+			</div>
+		
+		</div>
         
-        <!--<object width="600" height="360" style="width:100%;">
-
-        <param name="movie" value="http://www.youtube.com/v/JD-VxfcYveI&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/JD-VxfcYveI&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="600" height="360"></embed></object>-->
-        </p>
-<style>
-
-</style>
-        <div class="hp_tagline">
-        	<p>BEEx.org is a place where people raise money for nonprofits by doing stuff.</p>
-            <p class="right">Questions? Visit our <a href="http://blog.beex.org">FAQ center</a>.</p>
+		<div class="hp_tagline">
+        	<p><a href="<?php echo base_url(); ?>"><b>BEEx.org</b></a> is a place where people raise money and awareness for organizations by doing stuff.
+			Organizations can <?php echo anchor('npo/newNpo', 'register here'); ?> for our free service. We take no transaction fees.</p>
 		</div>
     	
         <div class="homebox homeboxleft">
-        	<h3>Challenges</h3>
-        	<p>A challenge is something you or your friends would be willing to do if enough money is raised for a nonprofit of your choice. Browse the site to see some examples or start your own.</p>
-            <?php echo anchor('challenge', '<img src="'.base_url().'images/buttons/browse.gif" class="left">'); ?>
-            <?php echo anchor('challenge/start_a_challenge', '<img src="'.base_url().'images/buttons/start.gif" class="right">'); ?>
+        	<h3><img src="<?php echo base_url(); ?>images/glyphs/challenge-home.png">Challenges</h3>
+        	<p>Do something to raise money for the organization of your choice.
+			</p>
+            <?php echo anchor('challenge/start_a_challenge', 'Start', array('class'=>"home_button left")); ?>
+            <?php echo anchor('http://learn.beex.org/?page_id=44#What_is_a_challenge', 'Learn', array('class'=>"home_button right", 'target'=>'_blank')); ?>
         </div>
         
         <div class="homebox homeboxright">
-        	<h3>Clusters</h3>
-            <p>A cluster is a group of challenges that all share a common purpose. Clusters can be traditional events like a charity walk. They can also be a little unconventional like 100 people losing 1,000 pounds.</p>
-            <?php echo anchor('cluster', '<img src="'.base_url().'images/buttons/browse.gif" class="left">'); ?>
-            <?php echo anchor('cluster/start', '<img src="'.base_url().'images/buttons/start.gif" class="right">'); ?>
+        	<h3><img src="<?php echo base_url(); ?>images/glyphs/cluster-home.png">Clusters</h3>
+            <p>Create a group fundraising initiative.
+			</p>
+            <?php echo anchor('cluster/start', 'Start',array('class'=>"home_button left")); ?>
+            <?php echo anchor('http://learn.beex.org/?page_id=44#What_is_a_cluster', 'Learn', array('class'=>"home_button right", 'target'=>'_blank')); ?>
         </div>
-        
-        
-        <!--
-        <div id="LearnMore">
-    		<h3 class="javapopuplink"><a href="/pieces/auxpage.php?id=learnmore">Learn More</a></h3>
-	        <p class="javapopuplink"><a href="/pieces/auxpage.php?id=learnnpo">Nonprofit Organizations</a> | <a href="/pieces/auxpage.php?id=learnsponsors">Sponsors</a> | <a href="/pieces/auxpage.php?id=learnpeople">Fund Raisers</a></p>
-        </div>
-      	-->
-        
-    </div>
-
-
-<!--
-    <div id="BrowserModule" class="module">
-
-    	<div class="tabs"><a id="browse_featured" class="browser_button button">Featured</a><a id="browse_raised" class="browser_button button" >Most Raised</a><a id="browse_ending" class="browser_button button">Ending Soon</a><a id="browse_new" class="browser_button button">New</a></div>
-
-        <h2 class="title titlebg">Challenges</h1>
-
-
-
-        <div class="Browser" id="Browser">
-
-	        <?php $this->beex->create_browser($browser, 'challenges'); ?>
-
-
-
-        </div>
-    </div>
--->
+		<div style="clear:both;"></div>
+	</div>
+	<img src="<?php echo base_url(); ?>images/backgrounds/home-blue-bg-bottom.png">
+	
 </div>
-
 
 
 <div style="clear:both;"></div>
 
 
 
-<script type="text/javascript">
-
-jQuery(document).ready(function(){
-
-
-
-	jQuery(".browser_button").click(function() {
-
-		var id = $(this).attr('id').substring(7);
-
-
-
-		jQuery.ajax({
-
-			 type: "POST",
-
-			 url: "ajax/get_browsers",
-
-			 data: "type=challenges&sort="+id,
-
-			 success: function(html){
-
-				jQuery("#Browser").html(html);
-
-			 }
-
-		});
-
-
-
-	});
-
-
-
-
-
-});
-
-</script>
-
-
-
 <?php
-
 $this->load->view('framework/footer');
 
 ?>

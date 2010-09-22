@@ -1,213 +1,290 @@
 <?php
 
+$fb_user = $this->MUser->get_fb($this->session->userdata('user_id')); // whether or not we show fb connect dialog
+
 $this->load->view('framework/header', $header);
 
 ?>
 
+<?php if($fb_user) : ?>
+	
+<script language="javascript" type="text/javascript">
 
+var fb_user = '<?php echo $fb_user; ?>';
+
+function fbAddNote(el, mess, title, proof) {
+	
+	/* publish to the news feed */
+	var caption = mess;
+	var name = title;
+	var link = base_url + 'challenge/view/<?php echo $item->id; ?>';
+	<?php if($item->challenge_image) : ?>
+		var picture = true_base_url + 'media/challenges/<?php echo $item->id; ?>/sized_<?php echo $item->challenge_image; ?>';
+	<?php else : ?>
+		var picture = true_base_url + "images/defaults/challenge_default.png";
+	<?php endif; ?>
+	
+	var captionplus = '';
+	
+	if(caption.length > 110) {
+		caption = caption.substr(0, 110) + '...';
+		captionplus = " Click link to see more";
+	}
+	caption = '"' + caption + '"' + captionplus;
+	
+	var message = "I just posted a note to my BEEx.org challenge.";
+	if(proof == 1) {
+		message = "I just posted proof to my BEEx.org challenge.";
+	}
+	
+	var user_prompt = 'Would you like to share your challenge\'s note on Facebook?';
+	
+	streamPublish(message, caption, '', picture, name, link, 'Donate', link, user_prompt, 'note', el);	
+	
+	/*
+	FB.ui(
+   	{
+	     method: 'stream.publish',
+	     message: message,
+	     attachment: {
+	       name: title,
+	       caption:  caption,
+	       //description: '',
+	       href: link,
+		   media: [
+			      {
+			        type: 'image',
+			        href: link,
+			        src: picture
+			      }
+		   ],
+	     },
+	     action_links: [
+	       { text: 'Donate', href: link }
+	     ],
+	     user_message_prompt: 'Would you like to share your challenge\'s note on Facebook?'
+	   },
+	   function(response) {
+		  if (response && response.post_id) {
+	       	//successful post
+			//return true;
+	     } else {
+	       	//unsuccessful post
+			//return true;
+	     }
+		 el.submit();
+	   }
+	);
+	*/
+
+	return false;
+}
+
+<?php if($this->uri->segment(4) == 'fb_add') : ?>
+
+$(document).ready(function() {
+
+	var npo = '<?php echo $this->beex->name_that_npo($item->challenge_npo); ?>';
+					
+	/* publish to the news feed */
+	var caption = "Support {*actor*}'s fundraiser on BEEx.org!";
+	var message = 'I will ' + "<?php echo addslashes($item->challenge_declaration); ?>" + ' if $' + '<?php echo $item->challenge_goal; ?>' + ' is raised for ' + npo + '.';
+	var link = base_url + 'challenge/view/<?php echo $item->id; ?>/';
+	var name = '<?php echo addslashes($item->challenge_title); ?>';
+	var picture = "http://www.beex.org/images/defaults/challenge_default.png";
+
+	var image = '<?php echo $item->challenge_image; ?>';
+
+	if(image) {
+		picture = "http://sandbox.beex.org/media/challenges/<?php echo $item->id; ?>/sized_"+image;
+	}
+
+	var user_prompt = 'Would you like to share your challenge on Facebook?'
+	var redirect = base_url + '/challenge/view/<?php echo $item->id; ?>';
+	
+	FB.ui(
+	{
+	     method: 'stream.publish',
+	     message: message,
+	     attachment: {
+	       name: name,
+	       caption:  caption,
+	       href: link,
+		   media: [
+			      {
+			        type: 'image',
+			        href: link,
+			        src: picture
+			      }
+		   ],
+	     },
+	     action_links: [
+	       { text: 'Donate', href: link }
+	     ],
+	     user_message_prompt: 'Would you like to share your challenge on Facebook?'
+	   },
+	   function(response) {
+		  if (response && response.post_id) {
+	       //successful post
+	     } else {
+	       //unsuccessful post
+	     }
+	   }
+	);
+
+});
+
+<?php elseif($this->uri->segment(4) == 'give') : ?>
+	$.fn.ceebox.popup('<a href="<?php echo base_url(); ?>pieces/donate.php?challenge_id=<?php echo $item->item_id; ?>&challenge_name=<?php echo urlencode($item->challenge_title); ?>">Link</a>', {borderColor:'#DBE7E6', borderWidth:'18px', boxColor:"#ffffff", htmlWidth:360, htmlHeight:360, titles:false, padding:0});
+<?php endif; ?>
+
+	/* Show expand the first note in the feed */
+	$(document).ready(function() {
+		expandFirstNote();
+	});
+
+
+</script>	
+<?php endif; ?>
 
 <div id="challenge">
 
 <div id="LeftColumn">
-
-    <?php
-
-	// Display Mini Cluster
-
-	if($item->cluster_id) {
-		echo $this->pieces->miniCluster($item->cluster_id);
-	}
-	?>
-
+	
 	<?php
 	// Display MiniProfile
-
 	echo $this->pieces->miniProfile($item->user_id);
-
-	?>
-    
-    <?php 
-	// * Piece * Display Team
-		
-		echo $this->pieces->teammates($item->id); 
-
 	?>
 
     <?php
-
 	// * Piece * - MiniNPO
-
 	echo $this->pieces->miniNPO($item->challenge_npo);
-
-
 
 	?>
 
 
 
-</div> 
+</div>
 
 
 
 <div id="RightColumn">
+
 	<div id="challengeInfo">
-	    <h1 class='title'>the challenge</h1>
+	    <h1 class='awesometitle'><?php if($owner && $this->MItems->amountRaised($item->id) == 0) : echo anchor('challenge/delete/'.$item->id, 'Delete', 'class="small_button float_right" style="margin-left:5px;"'); endif; ?> <?php if($owner) : echo anchor('challenge/editor/'.$item->id.'/edit', 'Edit', 'class="small_button float_right"'); endif; ?><?php echo $item->challenge_title; ?>
+		<?php if($item->cluster_id) : ?>
+			<span class='cluster_title'>A member of the cluster <?php echo anchor('cluster/view/'.$item->cluster_id, $this->MItems->getClusterName($item->cluster_id)); ?></span>
+		<?php endif; ?>
+		</h1>
+		
+		<!-- Challenge Information Module -->
+		
         <div id="InfoDisplay" class="InfoDisplay">
-            <h2><?php echo $item->challenge_title; ?> <?php if($owner) : echo anchor('challenge/editor/'.$item->id.'/edit', '<img src="/beex/images/buttons/edit.gif" style="float:right;" />'); endif; ?></h2>
-
-			<?php $this->beex->generate_info_display($item, 'challenges'); ?>
-
-            <table class="essential">
-			 <tr>
-              <td style="width:25%;">
-           		<table class="whatwherewhen" cellspacing=0 cellpadding=0 border=0>
-
-                    <tr>
-
-                     <th>What:</th><td><?php echo $item->challenge_declaration; ?></td>
-
-					</tr>
-
-                    <tr>
-
-	               	 	<th>Where:</th><td><?php echo $item->challenge_address1."<br>".$item->challenge_city.", ".$item->challenge_state." ".$item->challenge_zip; ?></td>
-
-                    </tr>
-
-                    <tr>
-
-	                	<th>When:</th><td><?php echo $item->challenge_completion; ?></td>
-
-                    </tr>
-
-                    <tr>
-
-                    	<th>Guests:</th><td><?php echo ucwords($item->challenge_attend); ?></td>
-
-                    </tr>
-
-				</table>
-			  </td>
-              <td>
-                
-                    <p class="blurb">
-
-                    	Blurb: <?php echo $item->challenge_blurb; ?>
-
-			        </p>
-
-                    <p class="description">
-
-    	            	<b>Description:</b> <?php echo $item->challenge_description; ?>
-
-			        </p>
-                    
-                    <?php if($item->challenge_whydo) : ?>
-                    <p class="description">
-                    	<b>Why do you want to peform this challenge:</b> <?php echo $item->challenge_whydo; ?>
-                    </p>
-                    <?php endif; ?>
-                    
-                    <?php if($item->challenge_whycare) : ?>
-                    <p class="description">
-						<b>Why do you care about this nonprofit:</b> <?php echo $item->challenge_whycare; ?>
-                    </p>
-                    <?php endif; ?>
-                
-               </td>
-              </tr>
-             </table>
-
-
-
             
-            <div class='social'>
+			<?php $this->beex->generate_info_display($item, 'challenges'); ?>
+			
+			<div id="Blurb">
+				<img class="block" src="<?php echo base_url(); ?>images/backgrounds/blurb-top.png" />
+				<div class="body">
+								
+					<?php if($item->challenge_description) : ?> 
+                	<p class="description">
+	            		<?php echo nl2br($item->challenge_description); ?>
+		        	</p>
+                	<?php endif; ?>
+					
+					<?php if(isset($item->challenge_link)) : ?>
+					<p class="website">
+						<span class="label">Website:</span> <?php echo auto_link($item->challenge_link); ?>
+					</p>
+					<?php endif; ?>
+					
+					<div class="what_where">
+						<!-- Sharing here defunct <div class="sharing">
 
-            	SHARE:
-
-               	<a style="margin-left:15px;" name="fb_share" type="icon_link" href="http://www.facebook.com/sharer.php">Share on Facebook</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
-               <span style="margin-left:15px;"><script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=bfd562d7-4fbd-425d-8a09-678ae7f18fd6&amp;type=website&amp;embeds=true&amp;style=rotate&amp;post_services=email%2Cfacebook%2Ctwitter%2Cmyspace%2Cdigg%2Csms%2Cwindows_live%2Cdelicious%2Cwordpress%2Cstumbleupon%2Ccare2%2Ccurrent%2Creddit%2Cgoogle_bmarks%2Clinkedin%2Cblogger%2Cyahoo_bmarks%2Cmixx%2Ctechnorati%2Cfriendfeed%2Cybuzz%2Cpropeller%2Cnewsvine%2Cxanga&amp;headerbg=%23FF9900&amp;headerTitle=Share%20your%20Challenge%20on%20other%20Networks"></script></span>
-                <!--<img src="/beex/images/share/twitter.png" /> TWITTER-->
-				<!--<img src="/beex/images/share/email.png" /> EMAIL-->
-
-                <span style="float:right; font-weight:bold; font-size:13px;">
-
-                	<?php
-
-						if($item->challenge_link) echo link_to_long($item->challenge_link, 'Go to Website');
-
-						if($item->challenge_link && $item->challenge_rss) echo " | ";
-
-						if($item->challenge_rss) echo anchor($item->challenge_rss, 'RSS Feed');
-
-					?>
-
-                </span>
-
-            </div>
-
-
-
+							<span><script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=bfd562d7-4fbd-425d-8a09-678ae7f18fd6&amp;type=website&amp;embeds=true&amp;style=rotate&amp;post_services=email%2Cfacebook%2Ctwitter%2Cmyspace%2Cdigg%2Csms%2Cwindows_live%2Cdelicious%2Cwordpress%2Cstumbleupon%2Ccare2%2Ccurrent%2Creddit%2Cgoogle_bmarks%2Clinkedin%2Cblogger%2Cyahoo_bmarks%2Cmixx%2Ctechnorati%2Cfriendfeed%2Cybuzz%2Cpropeller%2Cnewsvine%2Cxanga&amp;headerbg=%23FFC400&amp;headerTitle=Share%20this%20Challenge%20on%20other%20Networks"></script></span>
+						</div> -->
+					<?php if($item->challenge_location || $item->challenge_address1 || $item->challenge_city || $item->challenge_state || $item->challenge_zip) :?>
+						
+							<p><span class="label">Location:</span> <?php echo ($item->challenge_location) ? $item->challenge_location : ''; ?> <?php echo (($item->challenge_address1) ? $item->challenge_address1."," : "").(($item->challenge_city) ? $item->challenge_city.", " : "").(($item->challenge_state) ? $item->challenge_state." " : "").$item->challenge_zip; ?></p>
+						
+					<?php endif; ?>
+						
+					</div>
+					
+					<div class="ie_none" style="clear:both;"></div>
+				</div>
+				
+				<img class="block" src="<?php echo base_url(); ?>images/backgrounds/blurb-bottom.png" />
+			</div>    
             <div style="clear:both;"></div>
         </div>
     </div>
-
-    <div id="TheJourney">
-    	<h2 class="title titlebg">The Journey</h2>
-        <div id="JourneyInfo" class="InfoDisplay">
-         <div id="TheBlog">
-        	<h2 id="blogprooftitle">The Blog</h2>
-        	<table cellpadding="0" cellspacing="0" border="0" style="width:100%; margin-top:18px;">
-             <tbody>
-              <tr>
-               <td style="width:184px; padding-left:16px;">
-               <img src="/beex/images/challenge/prooftop.png" />
-               	<div id="ProofCountdown">
-                    <h3>Proof Countdown</h3>
-                    <p><span class='big'><?php echo $days_left = process_days_left($item->challenge_completion); ?></span> <?php if(is_numeric($days_left)) echo "days"; ?></p>
-                    &nbsp;
-                </div>
-                <img src="/beex/images/challenge/proofbottom.png" id="ProofBottom" />
-                <br />
-                <?php
-
-					if(process_days_left($item->challenge_completion) <= 0 || $owner) {
-                		echo '<img src="/beex/images/buttons/view-the-proof.gif" id="blogprooftoggle" />';
-					} 
-
-				?>
-				<?php if($activityfeed) : ?>
-                <div id="ActivityFeed">
-                   <h2>Activity Feed</h2>
-                   <?php echo $activityfeed; ?>
-                </div>
-                <?php endif; ?>
-               </td>
-               <td style="width:26px;"></td>
-               <td>
-                <div id="Notes">
-                	
-					<?php echo $this->beex->view_notes($notes, $item->id, $owner); ?>
-
-                </div>
-				<div id="Proof" style="display:none;">
-                    <?php if($owner) echo $this->load->view("media_form", array('new'=>1, 'item'=>'', 'message'=>'', 'itemtype'=>'challenge', 'itemid'=>$item->id, 'galleryid'=>$this->MItems->getProofGalleryId($item->id, 'challenge')), true); ?>
-                     
-                    <?php echo $this->gallery->view_proof_gallery($item->id, $owner); ?>
-                </div>
-               </td>
-              </tr>
-             </tbody>
-            </table>
-         </div>
-        </div>
-    </div>
+	<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-bottom.gif">
 </div>
 
+
+<!-- The Activity Feed -->
+
+
+<div id="TheJourney">
+	<img src="<?php echo base_url(); ?>images/backgrounds/proof-top.png" class="block" />
+	<div id="JourneyInfo">
+   		<h2 class="title">The Journey</h2>
+		<?php if($owner) : ?>
+		<div class="write_buttons">
+			<img id="new_note" class="rollover" src="<?php echo base_url(); ?>images/buttons/new-note-off.png">
+			<!--<img id="new_proof" class="rollover" src="<?php echo base_url(); ?>images/buttons/add-proof-off.png">-->
+		</div>
+		<?php endif;?>
+       	
+
+
+		<div id="Buttons">
+			<div class="selected_top challenge_feed_button" id="feed_button_all"><p>All Activity</p></div>
+			<div class="button" id="feed_button_note"><p>Notes</p></div>
+			<div class="button" id="feed_button_donation"><p>Donations</p></div>
+			<div class="button" id="feed_button_proof"><p>Proof</p></div>
+		</div>
+	
+		<div id="Feed" class="feed">
+			<img class="block" src="<?php echo base_url(); ?>images/backgrounds/activity-top.png" />
+			<div id="FeedWrapper">
+				<div id="FeedContent">
+					
+					<?php
+					if($owner) :
+						$note_form_data['id'] = 'new';
+						$note_form_data['item_id'] = $item->item_id;
+						
+						echo $this->load->view('pieces/note_form', $note_form_data, true);
+					
+			  			echo $this->load->view("media_form", array('new'=>1, 'edit' => 0, 'item'=>'', 'message'=>'', 'itemtype'=>'challenge', 'itemid'=>$item->id, 'galleryid'=>$this->MItems->getProofGalleryId($item->id, 'challenge')), true);
+					endif;
+					?>			
+					<?php echo ($activityfeed) ? $activityfeed : ''; ?>
+					<h2 class="none_box"><?php echo (!$activityfeed) ? 'No activity' : ''; ?></h2>
+					<?php if($this->MItems->noProof($item->id)) : ?>
+						<div class="proof_graphic">
+							<h3>The Proof</h3>
+							<p class="proof_description"><?php echo $item->proof_description; ?></p>
+							<img src='<?php echo base_url(); ?>images/graphics/proof-bg.png' />
+							<p>Proof will be posted when the challenge is complete.</p>
+						</div>
+					<?php endif;?>
+				</div>
+			</div>
+			<img src="<?php echo base_url(); ?>images/backgrounds/activity-bottom.png" />
+		</div>
+		
+		<div style="clear:both;"></div>
+    </div>
+	<img src="<?php echo base_url(); ?>images/backgrounds/proof-bottom.png" />
+</div>
+	
 <div style="clear:both;"></div>
 
 </div>
-
 
 
 

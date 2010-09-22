@@ -8,7 +8,7 @@ echo "<h2>".$header['title']."</h2>";
 
 <table>
  <tr>
-  <th>Organization Name</th><th>EIN Number</th><th>Contact Name</th>
+  <th>Organization Name</th><th>EIN Number</th><th>Contact Name</th><th>&nbsp;</th>
  </tr>
  <?php echo $output; ?>
 </table>

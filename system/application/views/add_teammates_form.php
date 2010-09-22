@@ -45,7 +45,7 @@ if($id){
           		<h2 class="title">Add Teammate</h2>
             	<table>
                 	<tr>
-	                	<td colspan=2><h5>Enter the name and email below of the teammate you would like ot invite to this challenge.</h5></td>
+	                	<td colspan=2><h5>Enter the name and email below of the teammate you would like to invite to this challenge.</h5></td>
                     </tr>
                     <tr>
 	                    <td class="label"><label>Name:</label></td>
@@ -87,9 +87,43 @@ if($id){
 
                 </table>
 
-
+				
             </form>
 
+<script>
+
+$(document).ready(function() {
+	
+	$('.delete_teammate').click(function() {
+		var challenge_id = <?php echo $item->id; ?>;
+		var id = $(this).attr('id').substr(16);
+		
+		$.ajax({
+			url: base_url + "ajaxeditor/delete_teammate/" + id + '/' + challenge_id,
+			success: function() {
+				jQuery('#teammate_'+id).remove();
+			}
+		});
+	})
+	
+});
+
+</script>
+			
+			<?php if(isset($teammates)) : ?>
+			<h2>Current Teammates</h2>
+			<div class="teammates">
+			<?php
+			
+				foreach($teammates->result() as $teammate) {
+					
+					echo "<p id='teammate_".$teammate->id."' style='padding:0px 10px;'>".anchor('user/view/'.$teammate->id, $teammate->first_name.' '.$teammate->last_name)." (<span class='delete_teammate' id='delete_teammate_".$teammate->id."'>Remove</span>)</p>";
+					
+				}
+			
+			?>
+			</div>
+			<?php endif; ?>
 
         </div>
     </div>

@@ -1,6 +1,6 @@
 <?php
 
-mail('zkilgore@gmail.com', 'Beex IPN Ran', 'Its run');
+// Test Mail  mail('zkilgore@gmail.com', 'Beex IPN Ran', 'Its run');
 
 /////////////////////////////////////////////////
 /////////////Begin Script below./////////////////
@@ -118,7 +118,7 @@ $auction_buyer_id  = $_POST['auction_buyer_id'];
 $notify_email =  "zkilgore@gmail.com";         //email address to which debug emails are sent to
 $DB_Server = "internal-db.s85554.gridserver.com"; //your MySQL Server
 $DB_Username = "db85554"; //your MySQL User Name
-$DB_Password = "Bulld0zer"; //your MySQL Password
+$DB_Password = "newkids22"; //your MySQL Password
 $DB_DBName = "db85554_beexmaster"; //your MySQL Database Name
 
 
@@ -186,9 +186,9 @@ if ($nm == 0){
      $result = mysql_query($strQuery) or die("Default - donors, Query failed:<br>" . mysql_error() . "<br>" . mysql_errno());
 	 
 	 
-	 $activity_result = mysql_query("insert into activity(type, piece_id, item_type, item_id, created) values ('donation', '".mysql_insert_id()."', 'challenge', '".$item_number."', '".date('Y-m-d H:i:s')."');");
+	 $activity_result = mysql_query("insert into newactivity(type, piece_id, item_id, created) values ('donation', '".mysql_insert_id()."', '".$item_number."', '".date('Y-m-d H:i:s')."');");
 	
-		mail('zkilgore@gmail.com', 'Activity insert worked', mysql_info());
+		// Activity Mail mail('zkilgore@gmail.com', 'Activity insert worked', mysql_info());
 																																															
     }
 	
@@ -201,7 +201,8 @@ if ($nm == 0){
 
     // send an email in any case
  echo "Verified";
-     mail($notify_email, "VERIFIED IPN", "$res\n $req\n $strQuery\n $struery\n  $strQuery2");
+     // IPN Verified 
+	mail($notify_email, "VERIFIED IPN", "$res\n $req\n $strQuery\n $struery\n  $strQuery2");
 }
 else {
 // send an email

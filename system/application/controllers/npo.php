@@ -9,11 +9,12 @@ class Npo extends Controller {
 		parent::Controller();
 		$this->load->helper('form');
 		$this->load->model('MNpos');
-		$header['title'] = "Nonprofit Organization Database";
+		$this->load->model('MCaptcha');
+		$header['title'] = "Organization Database";
 		$data['header'] = $header;
 		$data['message'] = '';
 		$data['edit'] = '';
-		$this->data['header']['title'] = 'Non-Profit Organizations';
+		$this->data['header']['title'] = 'Organizations';
 		$this->data['data']['message'] = '';
 		$this->data['data']['item'] = '';
 		$this->data['data']['username'] = $this->session->userdata('username');
@@ -30,7 +31,7 @@ class Npo extends Controller {
 		$browser = $this->MItems->getNPO();
 		
 		$data['browser'] = $browser;
-		$data['header']['title'] = "Non-Profits";
+		$data['header']['title'] = "Organizations";
 		
 		$this->load->view('npos', $data);
 	}
@@ -40,6 +41,9 @@ class Npo extends Controller {
 		$header['title'] = "Nonprofit Organization Registration Form";
 		$data['message'] = '';
 		$data['header'] = $header;
+		$data['new'] = true;
+		$data['edit'] = true;
+		$data['edit_id'] = 'add';
 		$this->load->view('npoform', $data);
 	}
 	
@@ -53,7 +57,7 @@ class Npo extends Controller {
 					$npo = $result->row();
 					$userdata = array('npo_logged_in'=>true, 'npo_id'=>$npo->id, 'npo_username'=>$npo->contact_firstname);
 					$this->session->set_userdata($userdata);
-					redirect('/npo/view/'.$npo->id, 'refresh');
+					redirect('/npo/edit/'.$npo->id, 'refresh');
 				}
 				else {
 					$data['message'] = 'There was a problem with your information. Please try again.';	
@@ -61,7 +65,7 @@ class Npo extends Controller {
 			}
 			else {
 				if($_POST['admin_password'] == 'peterson') {
-					$userdata = array('logged_in'=>true, 'npo_id'=>0, 'admin'=>true);
+					$userdata = array('npo_logged_in'=>true, 'npo_id'=>0, 'npo_admin'=>true);
 					$this->session->set_userdata($userdata);
 					redirect('/npo/viewall', 'refresh');
 				}
@@ -71,7 +75,7 @@ class Npo extends Controller {
 
 			}
 		}
-		$this->load->view('login.php', $data);
+		$this->load->view('npologin.php', $data);
 	}
 	
 	function logout() {
@@ -99,7 +103,7 @@ class Npo extends Controller {
 		$npos = $this->MNpos->getNpos();
 		$output = "";
 		foreach($npos->result() as $row) {
-			$output .= "<tr><td>".anchor('npo/view/'.$row->id, $row->name)."</td><td>".$row->ein."</td><td>".$row->contact_firstname." ".$row->contact_lastname."</td></tr>";
+			$output .= "<tr><td>".anchor('npo/view/'.$row->id, $row->name)."</td><td>".$row->ein."</td><td>".$row->contact_firstname." ".$row->contact_lastname."</td><td>".anchor('npo/edit/'.$row->id,"Edit")."</tr>";
 		}
 		
 		$data['output'] = $output;
@@ -114,21 +118,41 @@ class Npo extends Controller {
 		
 		$data['npo_id'] = $id;
 		
+		$data['npo'] = $this->MItems->getNPO($id)->row();
 		$data['browser'] = $this->MItems->getChallenge($id, 'challenge_npo');
 		$data['clusters'] = $this->MItems->getCluster($id, 'cluster_npo');
 		$this->load->view('npo', $data);
 	}
 	
+	function widget() {
+		
+		$data = $this->data;
+		$id = $this->uri->segment(3);
+		
+		if($npo = $this->MItems->getNPO($id)) {
+			if($npo->num_rows()) {
+				//real npo
+				$data['type'] = 'npo';
+				$data['npo_id'] = $id;
+				$this->load->view('widgets/create', $data);
+			}
+		}
+		
+	}
+	
 	function edit() {
 		$data = $this->data;
-		if(($npo_id = $this->session->userdata('npo_id')) || $this->session->userdata('admin')) {
-			if($this->session->userdata('npo_logged_in')) {
+		if(($npo_id = $this->session->userdata('npo_id')) || $this->session->userdata('npo_admin') || $this->session->userdata('super_user')) {
+			if($this->session->userdata('npo_logged_in') || $this->session->userdata('super_user')) {
 				
 				if(!$npo_id) {
 					$npo_id = $this->uri->segment(3);	
 				}
 				
-				$data['edit'] = $this->uri->segment(4,0);
+				//$data['edit'] = $this->uri->segment(4,0);
+				$data['edit'] = true;
+				$data['new'] = false;
+				$data['edit_id'] = $npo_id;
 				$npo = $this->MNpos->getNpo($npo_id);
 				$data['npo'] = $npo->row();
 				
@@ -137,7 +161,7 @@ class Npo extends Controller {
 					$data['tags'] = $this->processTags($this->MNpos->getTags($npo_id));
 				}
 				
-				$this->load->view('npoview.php', $data);
+				$this->load->view('npoform', $data);
 			}
 			else {
 				redirect('/npo/login', 'refresh');
@@ -148,65 +172,14 @@ class Npo extends Controller {
 		}
 	}
 	
-	function update() {
-		$npo_id = $this->uri->segment(3);
-		$data = $this->data;
-		$header['title'] = "BeExtrarodinary Non Profit Database - Add NPO";
-		$data['header'] = $header;
-		
-		$this->load->library('form_validation');
-		
-		$this->form_validation->set_rules('ein', 'EIN Number', 'trim|required');
-		$this->form_validation->set_rules('name', 'Organization Name', 'trim|required');
-		$this->form_validation->set_rules('address_street', 'Mailing Address', 'trim|required');
-		$this->form_validation->set_rules('address_city', 'City', 'trim|required');
-		$this->form_validation->set_rules('address_state', 'State', 'trim|required');
-		$this->form_validation->set_rules('address_zip', 'Zip', 'trim|required');
-		$this->form_validation->set_rules('admin_email', 'Administrator Email', 'trim|required|valid_email|requiredmatches[admin_emailconf]');
-		$this->form_validation->set_rules('admin_password', 'Administrator Password', 'trim|requiredmatches[admin_passconf]|md5');
-		$this->form_validation->set_rules('admin_passconf', 'Admin Password Confirmation', 'trim');
-		$this->form_validation->set_rules('contact_firstname', 'Contact First Name', 'trim|required');
-		$this->form_validation->set_rules('contact_lastname', 'Contact Last Name', 'trim|required');
-		$this->form_validation->set_rules('contact_email', 'Contact Email', 'trim|required|valid_email|requiredmatches[contact_emailconf]');
-		$this->form_validation->set_rules('contact_phone', 'Contact Phone Number', 'trim|required');
-		
-		if ($this->form_validation->run() == FALSE)
-		{
-			$data['message'] = "Please fill out all the required fields.";
+	function captcha_check() {
+		if(strcasecmp($this->session->userdata('captchaWord'), $this->input->post('captcha')) == 0) {
+		    return true;
 		}
 		else {
-			unset($_POST['admin_emailconf']);
-			unset($_POST['contact_emailconf']);
-			unset($_POST['admin_passconf']);
-			
-			if(!$_POST['admin_password']) {
-				unset($_POST['admin_password']);	
-			}
-			
-			$tags = $_POST['causetags'];
-			unset($_POST['causetags']);
-			
-			if($_FILES['logo']['name']) {
-				print_r($_FILES['logo']);
-				$_POST['logo'] = $this->beex->do_upload($_FILES, 'logo', './media/npos/');	
-			}
-			
-			if($this->MNpos->updateNpo($npo_id, $_POST)) {
-				$this->MNpos->deleteTags($npo_id);
-				$this->MNpos->addTags($tags, $npo_id);
-				$data['message'] = $_POST['name']." has successfully been updated.";
-			}
-			else {
-				$data['message'] = "We're sorry, there has been a problem processing your request.";
-			}
-			
-			$npo = $this->MNpos->getNpo($npo_id);
-			$data['npo'] = $npo->row();
-			
-			$data['tags'] = $this->processTags($this->MNpos->getTags($npo_id));
+			$this->form_validation->set_message('captcha_check', 'You have entered an incorrect security code.');
+		    return false;
 		}
-		
-		$this->load->view('npoview.php', $data);
 	}
 	
 	function process() {
@@ -217,54 +190,120 @@ class Npo extends Controller {
 		
 		$this->load->library('form_validation');
 		
+		//Required Fields
 		$this->form_validation->set_rules('ein', 'EIN Number', 'trim|required');
 		$this->form_validation->set_rules('name', 'Organization Name', 'trim|required');
 		$this->form_validation->set_rules('address_street', 'Mailing Address', 'trim|required');
 		$this->form_validation->set_rules('address_city', 'City', 'trim|required');
 		$this->form_validation->set_rules('address_state', 'State', 'trim|required');
 		$this->form_validation->set_rules('address_zip', 'Zip', 'trim|required');
-		$this->form_validation->set_rules('admin_email', 'Administrator Email', 'trim|required|valid_email|requiredmatches[admin_emailconf]');
-		if($_POST['admin_password'] || $npo_id == 'add') {
-			$this->form_validation->set_rules('admin_password', 'Administrator Password', 'trim|requiredmatches[admin_passconf]|md5');
-			$this->form_validation->set_rules('admin_passconf', 'Admin Password Confirmation', 'trim|required');
+		$this->form_validation->set_rules('paypal_email', 'Paypal Email', 'trim|required|valid_email');
+		
+		
+		if($npo_id == 'add') {
+			$this->form_validation->set_rules('admin_email', 'Administrator Email', 'trim|valid_email');
+			$this->form_validation->set_rules('admin_emailconf', 'Administrator Email Confirmation', 'trim|required|matches[admin_email]|valid_email');
+			$this->form_validation->set_rules('captcha', 'Security Code', 'required|callback_captcha_check');
 		}
-		$this->form_validation->set_rules('contact_firstname', 'Contact First Name', 'trim|required');
-		$this->form_validation->set_rules('contact_lastname', 'Contact Last Name', 'trim|required');
-		$this->form_validation->set_rules('contact_email', 'Contact Email', 'trim|required|valid_email|requiredmatches[contact_emailconf]');
-		$this->form_validation->set_rules('contact_phone', 'Contact Phone Number', 'trim|required');
+		else {
+			$this->form_validation->set_rules('admin_email', 'Administrator Email', 'trim|required|valid_email');
+		}
+		/*Passwords defunct 
+		if($this->input->post('admin_password') || $npo_id == 'add') {
+			$this->form_validation->set_rules('admin_password', 'BEEx Password', 'trim|required|md5');
+			$this->form_validation->set_rules('admin_passconf', 'BEEx Password Confirmation', 'trim|required|matches[admin_password]');
+		}
+		*/
+		$this->form_validation->set_rules('contact_firstname', 'Your First Name', 'trim|required');
+		$this->form_validation->set_rules('contact_lastname', 'Your Last Name', 'trim|required');
+		
+		$this->form_validation->set_rules('contact_phone', 'Organization Phone Number', 'trim|required');
+		$this->form_validation->set_rules('contact_title', 'Your Title', 'trim|required');
+				
+		//Optional Fields
+		$this->form_validation->set_rules('cuasetags', 'Cause Tags', 'trim');
+		$this->form_validation->set_rules('website', 'Website', 'trim');
+		$this->form_validation->set_rules('facebook_link', 'Facebook Address', 'trim');
+		$this->form_validation->set_rules('twitter_link', 'Twitter Address', 'trim');
+		$this->form_validation->set_rules('rss_feed', 'RSS Feeds', 'trim');
+		$this->form_validation->set_rules('mission_statement', 'What We Do', 'trim');
+		$this->form_validation->set_rules('about_us', 'History', 'trim');
 		
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['message'] = "Please fill out all the required fields.";
+			if($npo_id == 'add') {
+				$data['new'] = true;		
+			}
+			else {
+				$data['new'] = false;
+			}
+			$data['tags'] = $_POST['causetags'];
+			$data['edit'] = true;
+			$data['edit_id'] = $npo_id;
+			$this->load->view('npoform.php', $data);
+			
 		}
 		else {
 			unset($_POST['admin_emailconf']);
 			unset($_POST['contact_emailconf']);
 			unset($_POST['admin_passconf']);
+			unset($_POST['captcha']);
+			unset($_POST['x']);
+			unset($_POST['y']);
 			
 			$tags = $_POST['causetags'];
 			unset($_POST['causetags']);
 			
+			/*
 			if($_FILES['logo']['name']) {
 				print_r($_FILES['logo']);
-				$_POST['logo'] = $this->beex->do_upload($_FILES, 'logo', './media/npos/');	
+				$this->load->library('Beex_image');
+				$_POST['logo'] = $this->beex_image->do_upload($_FILES, 'logo', './media/npos/');	
+			}
+			*/
+			
+			if($pic = $this->session->userdata('npo_logo')) {
+				$_POST['logo'] = $pic;
+			}
+			elseif($npo_id == 'add') {
+				$_POST['logo'] = '';
+			}
+			else {
+				
 			}
 			
 			if($npo_id == 'add') {
+				
+				$_POST['created'] = date('Y-m-d H:i:s');
+				
 				if($npo_id = $this->MNpos->addNpo($_POST)) {
 					$this->MNpos->addTags($tags, $npo_id);
-					$data['message'] = $_POST['name']." has successfully been added to the BeExtraordinary NPO Database.";
+					if(isset($_POST['logo']) && $_POST['logo']) {
+						$this->beex_image->process_media('media/npos/', $_POST['logo'], 'media/npos/'.$npo_id.'/');
+					}
+					
+					$this->beex_email->generate_new_npo_email($_POST['admin_email']);
+						
+					$data['message'] = $_POST['name']." has successfully applied to BEEx.org. If you're application is approved we'll contact you within 5 business days and activate your account.  Once activated you'll be able to edit elements of your profile.";
+					
+					
+					
 				}
 				else {
 					$data['message'] = "We're sorry, there has been a problem processing your request.";
 				}
 				
-				$this->load->view('npoform.php', $data);
+				
 			}
 			else {
 				if($this->MNpos->updateNpo($npo_id, $_POST)) {
 					$this->MNpos->deleteTags($npo_id);
 					$this->MNpos->addTags($tags, $npo_id);
+					if(isset($_POST['logo']) && $_POST['logo']) {
+						$this->beex_image->process_media('media/npos/', $_POST['logo'], 'media/npos/'.$npo_id.'/');
+						$this->session->unset_userdata('npo_logo');
+					}
 					$data['message'] = $_POST['name']." has successfully been updated.";
 				}
 				else {
@@ -275,85 +314,16 @@ class Npo extends Controller {
 				$data['npo'] = $npo->row();
 			
 				$data['tags'] = $this->processTags($this->MNpos->getTags($npo_id));
+				
 			}
 			
-			$this->load->view('npoview.php', $data);
-		}
-	}
-	
-	function add() {
-		
-		$header['title'] = "BeExtrarodinary Non Profit Database - Add NPO";
-		$data['header'] = $header;
-		
-		$this->load->library('form_validation');
-		
-		$this->form_validation->set_rules('ein', 'EIN Number', 'trim|required');
-		$this->form_validation->set_rules('name', 'Organization Name', 'trim|required');
-		$this->form_validation->set_rules('address_street', 'Mailing Address', 'trim|required');
-		$this->form_validation->set_rules('address_city', 'City', 'trim|required');
-		$this->form_validation->set_rules('address_state', 'State', 'trim|required');
-		$this->form_validation->set_rules('address_zip', 'Zip', 'trim|required');
-		$this->form_validation->set_rules('admin_email', 'Administrator Email', 'trim|required|valid_email|requiredmatches[admin_emailconf]');
-		$this->form_validation->set_rules('admin_password', 'Administrator Password', 'trim|requiredmatches[admin_passconf]|md5');
-		$this->form_validation->set_rules('admin_passconf', 'Admin Password Confirmation', 'trim|required');
-		$this->form_validation->set_rules('contact_firstname', 'Contact First Name', 'trim|required');
-		$this->form_validation->set_rules('contact_lastname', 'Contact Last Name', 'trim|required');
-		$this->form_validation->set_rules('contact_email', 'Contact Email', 'trim|required|valid_email|requiredmatches[contact_emailconf]');
-		$this->form_validation->set_rules('contact_phone', 'Contact Phone Number', 'trim|required');
-		
-		if ($this->form_validation->run() == FALSE)
-		{
-			$data['message'] = "Please fill out all the required fields.";
-		}
-		else {
-			unset($_POST['admin_emailconf']);
-			unset($_POST['contact_emailconf']);
-			unset($_POST['admin_passconf']);
+			$data['tags'] = $tags;
 			
-			$tags = $_POST['causetags'];
-			unset($_POST['causetags']);
+			$data['new'] = false;
+			$data['edit'] = true;
+			$data['edit_id'] = $npo_id;
 			
-			if($_FILES['logo']['name']) {
-				print_r($_FILES['logo']);
-				$_POST['logo'] = $this->beex->do_upload($_FILES, 'logo', './media/npos/');	
-			}
-			
-			// Not approved yet
-			$_POST['approved'] = 0;
-			
-			
-			if($npo_id = $this->MNpos->addNpo($_POST)) {
-				$this->MNpos->addTags($tags, $npo_id);
-				$data['message'] = $_POST['name']." has successfully been added to the BeExtraordinary NPO Database.";
-			}
-			else {
-				$data['message'] = "We're sorry, there has been a problem processing your request.";
-			}
-		}
-		
-		$this->load->view('npoform.php', $data);
-	}
-	
-	function do_upload($files)
-	{
-		$config['upload_path'] = '/beex/media/npos/';
-		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size']	= '100';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
-		
-		$this->load->library('upload', $config);
-		
-		if ( ! $this->upload->do_upload())
-		{
-			$error = array('error' => $this->upload->display_errors());
-			print_r($error);
-		}	
-		else
-		{
-			$data = $this->upload->data('file_name');
-			return $data['file_name'];
+			$this->load->view('npoform.php', $data);
 		}
 	}
 	

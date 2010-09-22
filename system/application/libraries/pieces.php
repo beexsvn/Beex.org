@@ -11,13 +11,13 @@ class Pieces {
 		$CI->config->item('base_url');	
 	}
 	
-	function miniProfile($user_id, $thin = true) {
+	function miniProfile($user_id, $thin = true, $cluster = false) {
 		
 		$CI =& get_instance();
 	
 		$data['profile'] = $CI->MItems->getUser(array('users.id'=>$user_id))->row();
 		$data['num_active'] = $CI->MItems->getChallenge(array('challenges.user_id'=>$user_id, 'challenges.active'=>1))->num_rows();
-		
+		$data['cluster'] = $cluster;
 	
 		$data['num_complete'] = $CI->MItems->getChallenge(array('challenges.user_id'=>$user_id, 'challenges.active'=>0))->num_rows();
 		
@@ -51,7 +51,7 @@ class Pieces {
 		$CI =& get_instance();
 		
 		$teammates = $CI->MItems->get('teammates', array('challenge_id' => $challenge_id));
-		
+		$data['teammates'] = array();
 		if($teammates->num_rows()) {
 			
 			foreach($teammates->result() as $row) {

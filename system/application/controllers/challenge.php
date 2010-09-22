@@ -24,6 +24,8 @@ class challenge extends Controller {
 		
 		$browser = $this->MItems->getChallenge('', '', '', '', 5);
 		
+		$data['featured'] = $this->MItems->getChallenge(array('featured'=>'1'), '', '', '', 5);
+		
 		$data['browser'] = $browser;
 		$data['header']['title'] = "Challenges";
 		
@@ -32,10 +34,13 @@ class challenge extends Controller {
 		
 	} 
 	
+	/* Function for setting up different editor pages (Challenge editor, Adding Teammates, etc) */
+	
 	function editor($eid = '', $etype = '', $iid = '', $itype = '', $message = '') {
 		
 		if($id = ($iid) ? $iid : $this->uri->segment(3)) {
 			
+			// Make sure user owns challenges
 			if($this->madmins->verifyUser($this->session->userdata('user_id'),$id, 'challenge')) {
 			
 				$data = $this->data;
@@ -48,10 +53,15 @@ class challenge extends Controller {
 						$data['data']['item'] = $this->MItems->getChallenge($id);
 						$data['data']['new'] = false;
 						$data['data']['edit'] = true;
+						if(isset($data['data']['item']->row()->cluster_id) && $c_id = $data['data']['item']->row()->cluster_id) {
+							$data['data']['cluster'] = $this->MItems->getCluster($c_id)->row();
+						}
+						$data['data']['join'] = false;
 						
 						break;
 				
 					case 'teammates':
+						$data['data']['teammates'] = $this->MItems->getTeammates($id);
 						$data['data']['item'] = $this->MItems->getChallenge($id)->row();
 						break;
 						
@@ -63,6 +73,7 @@ class challenge extends Controller {
 				$data['data']['message'] = ($message) ? $message : '';
 				$data['type'] = $type;
 				$data['id'] = $id;
+
 				
 				$this->load->view('challenge_editor', $data);
 				
@@ -71,15 +82,49 @@ class challenge extends Controller {
 		
 			else {
 			
-				echo "Not allowed here";
+				$this->view($id);
 				//Not allowed to view this
 			
 			}
 		}
 	}
 	
+	/* Delete: Sets up the view asking if user wants to remove the challenge */
+	function delete() {
+		$id = $this->uri->segment(3);
+		
+		// Verify that the user owns the challenge
+		if($this->madmins->verifyUser($this->session->userdata('user_id'), $id, 'challenge')) {
+			$data = $this->data;
+			$data['id'] = $id;
+			$this->load->view('challenge_delete', $data);
+		}
+		else {
+			$this->view();
+		}
+	}
+	
+	/* Challenge Delete: Deletes the challenge */
+	function challenge_delete() {
+		$id = $this->uri->segment(3);
+		
+		// Verify that the user owns the challenge they are deleting
+		if($this->madmins->verifyUser($this->session->userdata('user_id'), $id, 'challenge')) {
+			$this->MItems->delete("challenges", $id);
+			redirect('user/view/'.$this->session->userdata('user_id'), 'refresh');
+		}
+		else {
+			$this->view();
+		}
+	}
+	
+	
+	/* Set up the challenge page view */
 	function view() {
-		$this->load->library('gallery');
+		
+		/* Plus 1 to the page count */
+		$this->mstat->addStat();
+		
 		
 		$data = $this->data;
 		
@@ -87,64 +132,204 @@ class challenge extends Controller {
 		
 		$item = $this->MItems->getChallenge($id);
 		
-		$data['item'] = $item->row();
+		if($item->num_rows()) {
+			$data['item'] = $item->row();
+			
+			/* Get challenge owners profile data */
+			$profile = $this->MItems->get('profiles', $data['item']->user_id, 'user_id');
+			
+			/* Set the data to pass to the view */
+			$data['activityfeed'] = $this->beex->processActivityFeed('challenge', $data['item']->item_id, $profile->row());
+			$data['profile'] = $profile->row();
+			$data['header']['title'] = "BEEx.org Challenge - ".$data['item']->challenge_title;
+			$data['owner'] = $this->madmins->verifyUser($this->session->userdata('user_id'), $id, 'challenge');
+			
+			
+			$this->load->view('challenge', $data);
+		}
+		else {
+			$this->load->view('framework/error', $data);
+		}
+	}
+	
+	/* Start A Challenge: Fucntion to set up the view for starting a challenge */
+	function start_a_challenge() {
 		
-		$profile = $this->MItems->get('profiles', $data['item']->user_id, 'user_id');
+		$vars = $this->uri->uri_to_assoc();
 		
-		$data['activityfeed'] = $this->beex->processActivityFeed('challenge', $data['item']->id, $profile->row());
-		
-		$gallery = $this->MItems->getGallery($data['item'], 'challenge');
-		@$data['media'] = $this->MItems->get('media', $gallery->id, 'gallery_id');
-		if(!$video = $data['item']->challenge_video) {
-			@$video = $this->MItems->getVideo($gallery->id);
-			@$video = $video->link;
+		if(element('from_widget', $vars)) {
+			if($cd = $this->session->userdata('temp_challenge_declaration')) {
+				$_POST['challenge_declaration'] = $cd;
+			}
+			elseif($cd = $this->input->post('challenge_declaration')) {
+				$this->session->set_userdata('temp_challenge_declaration', $cd);
+			}
+		}
+		else {
+			$this->session->set_userdata('temp_challenge_declaration', '');
 		}
 		
-		$proof = $this->MItems->getGallery($data['item'], 'challenge', 'proof');
-		
-		$data['notes'] = $this->MItems->getNotes($id);
-		
-		$data['gallery_id'] = ($gallery) ? $gallery->id : '';
-		$data['proof_id'] = ($proof) ? $proof->id : '';
-		$data['video'] = $video;
-		$data['profile'] = $profile->row();
-		$data['sponsor'] = 'Test Sponsor';
-		$data['header']['title'] = "BEEx.org Challenge - ".$data['item']->challenge_title;
-		$data['owner'] = $this->madmins->verifyUser($this->session->userdata('user_id'), $id, 'challenge');
-		
-		
-		$this->load->view('challenge', $data);
-	}
-	
-	function cluster_challenge() {
-		
-		$data = $this->data;
-		
-		$id = $this->uri->segment(3,0);
-				
-		$item = $this->MItems->get('clusters', $id, 'id');
-		$data['item'] = $item->row();
-		
-		$profile = $_POST['name'];
-		
-		$video = $data['item']->cluster_video;
-		
-		$data['notes'] = $this->MItems->getNotes('');
-		
-		$data['video'] = $video;
-		$data['profile'] = $profile;
-		$data['sponsor'] = 'JP Morgan Chase';
-		$this->load->view('cluster_challenge', $data);	
-	}
-	
-	function start_a_challenge() {
 		$data = $this->data;
 		$data['header']['title'] = 'Start a challenge';
 		$data['data']['item'] = '';
 		$data['data']['new'] = true;
+		$data['data']['help_copy'] = "Reference the help editor below if you're confused by a field.";
+		$data['data']['help_title'] = 'Start a Challenge';
+		
+		$this->session->set_userdata('edit_id', '');
+		
 		$this->load->view('start_a_challenge', $data);	
 	}
 	
+	
+	function add_teammates() {
+		$id = $this->uri->segment(3);
+		
+		$challenge = $this->MItems->getChallenge($id)->row();
+		
+		$message = 'Please enter your teammates email';
+		
+		if($email = $this->input->post('email')) {
+			
+			if($this->MItems->isTeammate($this->MUser->get_user_by_email($email), $id)) {
+				$message = 'This user is already a teammate for this challenge';
+				
+			}
+			else {
+				$this->add_teammate($_POST, array('id'=>$challenge->id, 'title'=>$challenge->challenge_title));
+				$message = 'Teammmate has been successfully invited';
+			}
+		}
+		
+	 	$this->editor('', '', $id, 'teammates', $message);
+	}
+	
+	function add_teammate($teammate, $challenge) {
+
+		$item = array();
+
+		if(!($user_id = $this->MUser->get_user_by_email($teammate['email']))) {
+				
+				$password = generate_password();
+				
+				$user_id = $this->MItems->add('users', array('email'=>$teammate['email'], 'password'=>md5($password), 'created' => date('Y-m-d H:i:s'), 'official' => 0));
+				$this->MItems->add('profiles', array('user_id'=>$user_id, 'first_name'=>$teammate['name'], 'last_name' => ' ', 'created' => date("Y-m-d H:i:s")));
+				
+				$item['password'] = $password;
+
+		}
+
+		$this->MItems->add('teammates', array('user_id'=>$user_id, 'challenge_id'=>$challenge['id']));
+		$item['personal'] = array('name' => $teammate['name']);
+		$item['challenge'] = $challenge;
+		
+		
+		//beex_mail($teammate['email'], 'teammate', 'folks@beex.org', $item);
+		$this->beex_email->generate_teammate_invite_email($teammate['email'], $item);
+
+	}
+	
+	// Add Note: Function that processes adding the note to a challenge */
+	function add_note() {
+		
+		$data = $this->data;
+		
+		$item_id = $this->uri->segment(3);
+		$note_id = $this->uri->segment(4, 'add');
+		
+		//Process special fields
+		$_POST['created'] = date("Y-m-d H:i:s");
+		$_POST['item_id'] = $item_id;
+		
+		unset($_POST['x'], $_POST['y']);
+		
+		
+		//Process Images
+		if($_FILES['note_image']['name']) {
+			$_POST['note_image'] = $this->beex->do_upload($_FILES, 'note_image', './media/notes/');					
+		}
+		
+		//Get rid of empty values
+		foreach($_POST as $key => $val) {
+			if(!$val) {
+				unset($_POST[$key]);	
+			}
+		}
+		
+		if($note_id == 'add') {
+			if($note_id = $this->MItems->add('notes', $_POST)) {
+				$this->MItems->addActivity('note', $note_id, $item_id);
+			}
+			else {
+				$data['message'] = "We're sorry, there has been a problem processing your request.";
+			}
+		}
+		else {
+			
+			if($this->MItems->update('notes', $note_id, $_POST)) {
+				$data['message'] = 'Update Successful';
+			}
+			else {
+				
+				$data['message'] = 'Update Failed';
+			}
+			
+		}
+		
+		$challenge_id = $this->MItems->getChallenge(array('challenges.item_id'=>$item_id))->row()->id;
+		
+		redirect('challenge/view/'.$challenge_id, 'refresh');
+		
+	}
+	
+	/* Add Reply: Function that adds a reply to a note to the database */ 
+	function add_reply() {
+		
+		
+		
+		$data = $this->data;
+
+		$challenge_id = $this->uri->segment(3);
+		$note_id = $this->uri->segment(4);
+
+		/* Temporarily turn this function off 
+
+		//Process special fields
+		$_POST['created'] = date("Y-m-d H:i:s");
+		$_POST['note_id'] = $note_id;
+
+		//Get rid of empty values
+		foreach($_POST as $key => $val) {
+			if(!$val) {
+				unset($_POST[$key]);	
+			}
+		}
+		
+		if($note_id == 'add') {
+			if($reply_id = $this->MItems->add('note_replies', $_POST)) {
+				$this->MItems->addActivity('reply', $reply_id, 'challenge', $challenge_id);
+			}
+			else {
+				$data['message'] = "We're sorry, there has been a problem processing your request.";
+			}
+		}
+		else {
+
+			if($this->MItems->update('notes', $note_id, $_POST)) {
+				$data['message'] = 'Update Successful';
+			}
+			else {
+
+				$data['message'] = 'Update Failed';
+			}
+
+		}
+		*/
+		redirect('challenge/view/'.$challenge_id, 'refresh');
+	
+	}
+	
+	/* Edit a challenge: Function to set up the editing of a challenge. DEFUNCT */
 	function edit_a_challenge() {
 		$id = $this->uri->segment(3);
 		$data = $this->data;
@@ -155,21 +340,7 @@ class challenge extends Controller {
 		$this->load->view('edit_a_challenge', $data);	
 	}
 	
-	function addUpdate() {
-		
-		
-		
-	}
-	
-	function process_user($email = '', $password = '') {
-		if($this->session->userdata('logged_id')) {
-			return $this->session->userdata['user_id'];	
-		}
-		else {
-			return $this->MUser->login($email, $password);	
-		}
-	}
-	
+	/* Blurb Check: Function to check length of blurb for form validation */
 	function blurb_check($str) {
 		
 		if(strlen($str) > 120) {
@@ -181,6 +352,7 @@ class challenge extends Controller {
 		}
 	}
 	
+	/* Goal Check: Function to validate that goal is a number */
 	function goal_check($str) {
 		
 		if(!is_numeric($str)) {
@@ -190,6 +362,7 @@ class challenge extends Controller {
 		else return true;
 	}
 	
+	/* Cluster Check: Function to make sure that the cluster code the user enters is valid */
 	function cluster_check($str) {
 		
 		if(!($this->MItems->getCluster($str)->num_rows() > 0)) {
@@ -198,8 +371,18 @@ class challenge extends Controller {
 		}
 		else return true;
 	}
+		
+	/* DEFUNCT Process User: Get the user id for the challenge. */
+	function process_user($email = '', $password = '') {
+		if($this->session->userdata('logged_id')) {
+			return $this->session->userdata['user_id'];	
+		}
+		else {
+			return $this->MUser->login($email, $password);	
+		}
+	}
 							   
-	
+	/* Process defunct, now challenges are add in controller Ajax.php */
 	function process() {
 		
 		$data = $this->data;
@@ -394,161 +577,28 @@ class challenge extends Controller {
 			$this->load->view('edit_a_challenge', $data);
 		}
 	}
-	
-	function generate_password ($length = 8)
-	{
-
-	  // start with a blank password
-	  $password = "";
-
-	  // define possible characters
-	  $possible = "0123456789bcdfghjkmnpqrstvwxyz"; 
-
-	  // set up a counter
-	  $i = 0; 
-
-	  // add random characters to $password until $length is reached
-	  while ($i < $length) { 
-
-	    // pick a random character from the possible ones
-	    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
-
-	    // we don't want this character if it's already in the password
-	    if (!strstr($password, $char)) { 
-	      $password .= $char;
-	      $i++;
-	    }
-
-	  }
-
-	  // done!
-	  return $password;
-
-	}
-	
-	function add_teammates() {
-		$id = $this->uri->segment(3);
 		
-		$challenge = $this->MItems->getChallenge($id)->row();
-		
-		if($_POST['email']) {
-			$this->add_teammate($_POST, array('id'=>$challenge->id, 'title'=>$challenge->challenge_title));
-		}
-		
-	 	$this->editor('', '', $id, 'teammates', 'Teammmate has been successfully invited');
-	}
 	
-	function add_teammate($teammate, $challenge) {
-
-		$item = array();
-
-		if(!($user_id = $this->MUser->get_user_by_email($teammate['email']))) {
-				
-				$password = $this->generate_password();
-				
-				$user_id = $this->MItems->add('users', array('email'=>$teammate['email'], 'password'=>md5($password), 'created' => date('Y-m-d H:i:s'), 'official' => 0));
-				$this->MItems->add('profiles', array('user_id'=>$user_id, 'first_name'=>$teammate['name'], 'last_name' => ' ', 'created' => date("Y-m-d H:i:s")));
-				
-				$item['password'] = $password;
-
-		}
-
-		$this->MItems->add('teammates', array('user_id'=>$user_id, 'challenge_id'=>$challenge['id']));
-		$item['message'] = '';
-		$item['name'] = $teammate['name'];
-		$item['challenge'] = $challenge;
-		
-		beex_mail($teammate['email'], 'teammate', 'folks@beex.org', $item);
-
-	}
-	
-	function add_note() {
+	/* Cluster Challnege now defunct */
+	function cluster_challenge() {
 		
 		$data = $this->data;
 		
-		$challenge_id = $this->uri->segment(3);
-		$note_id = $this->uri->segment(4, 'add');
-		
-		//Process special fields
-		$_POST['created'] = date("Y-m-d H:i:s");
-		$_POST['challenge_id'] = $challenge_id;
-		
-		
-		//Process Images
-		if($_FILES['note_image']['name']) {
-			$_POST['note_image'] = $this->beex->do_upload($_FILES, 'note_image', './media/notes/');					
-		}
-		
-		//Get rid of empty values
-		foreach($_POST as $key => $val) {
-			if(!$val) {
-				unset($_POST[$key]);	
-			}
-		}
-		
-		if($note_id == 'add') {
-			if($note_id = $this->MItems->add('notes', $_POST)) {
-				$this->MItems->addActivity('note', $note_id, 'challenge', $challenge_id);
-			}
-			else {
-				$data['message'] = "We're sorry, there has been a problem processing your request.";
-			}
-		}
-		else {
-			
-			if($this->MItems->update('notes', $note_id, $_POST)) {
-				$data['message'] = 'Update Successful';
-			}
-			else {
+		$id = $this->uri->segment(3,0);
 				
-				$data['message'] = 'Update Failed';
-			}
-			
-		}
-		redirect('challenge/view/'.$challenge_id, 'refresh');
+		$item = $this->MItems->get('clusters', $id, 'id');
+		$data['item'] = $item->row();
 		
-	}
-	
-	
-	function add_reply() {
+		$profile = $_POST['name'];
 		
-		$data = $this->data;
-
-		$challenge_id = $this->uri->segment(3);
-		$note_id = $this->uri->segment(4);
-
-		//Process special fields
-		$_POST['created'] = date("Y-m-d H:i:s");
-		$_POST['note_id'] = $note_id;
-
-		//Get rid of empty values
-		foreach($_POST as $key => $val) {
-			if(!$val) { 
-				unset($_POST[$key]);	
-			}
-		}
-
-		if('add' == 'add') {
-			if($reply_id = $this->MItems->add('note_replies', $_POST)) {
-				$this->MItems->addActivity('reply', $reply_id, 'challenge', $challenge_id);
-			}
-			else {
-				$data['message'] = "We're sorry, there has been a problem processing your request.";
-			}
-		}
-		else {
-
-			if($this->MItems->update('notes', $note_id, $_POST)) {
-				$data['message'] = 'Update Successful';
-			}
-			else {
-
-				$data['message'] = 'Update Failed';
-			}
-
-		}
-		redirect('challenge/view/'.$challenge_id, 'refresh');
-	
+		$video = $data['item']->cluster_video;
+		
+		$data['notes'] = $this->MItems->getNotes('');
+		
+		$data['video'] = $video;
+		$data['profile'] = $profile;
+		$data['sponsor'] = 'JP Morgan Chase';
+		$this->load->view('cluster_challenge', $data);	
 	}
 	
 }

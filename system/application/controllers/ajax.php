@@ -10,80 +10,88 @@ class Ajax extends Controller {
 		$this->data['data']['message'] = '';
 		$this->data['data']['item'] = '';
 	}
-
-	function challenge_what() {
-		$challenge_info_post = $_POST;
-		$challenge_info = $this->session->userdata("challenge_info");
-		foreach($challenge_info_post as $key=>$val) {
-			$challenge_info[$key] = $val;
-		}
-		$this->session->set_userdata("challenge_info", $challenge_info);
-		$this->session->set_userdata("challenge_creation_step", "when_where");
-		echo json_encode(array('success' => true));  // or we could do some error validation, whatevs
-				
-		return;
-	}
-	
-	function challenge_when_where() {
-		$challenge_info_post = $_POST;
-		$challenge_info = $this->session->userdata("challenge_info");
-		foreach($challenge_info_post as $key=>$val) {
-			$challenge_info[$key] = $val;
-		}
-		$this->session->set_userdata("challenge_info", $challenge_info);
-		$this->session->set_userdata("challenge_creation_step", "why");
-		echo json_encode(array('success' => true));  // or we could do some error validation, whatevs
-		return;		
-	}
-	
-	function challenge_why() {
-		$challenge_info_post = $_POST;
-		$challenge_info = $this->session->userdata("challenge_info");
-		foreach($challenge_info_post as $key=>$val) {
-			$challenge_info[$key] = $val;
-		}
-		$this->session->set_userdata("challenge_info", $challenge_info);
-//		$this->session->unsetset_userdata("challenge_creation_step");// wtf? buggy
-	
 		
+	function process_challenge() {
 		
-		$_POST = $challenge_info; 
 		$edit_id = $this->session->userdata('edit_id');
 		
+		$challenge_info_post = $_POST;
+		foreach($challenge_info_post as $key=>$val) {
+			$challenge_info[$key] = $val;
+		}
+		
+		//Process image
+		if($image_name = $this->session->userdata('challenge_image')) {
+			if($image_name == 'NULL' && $edit_id) {
+				$this->db->update('challenges', array('challenge_image' => ''), array('id'=>$edit_id));
+			}
+			elseif($image_name == 'NULL') {
+				$challenge_info['challenge_image'] = NULL;				
+			}
+			else {
+				$challenge_info['challenge_image'] = $image_name;
+			}
+		}
+		
+		$this->session->unset_userdata('challenge_image');
+		
+		//$this->session->set_userdata("challenge_info", $challenge_info);
+//		$this->session->unsetset_userdata("challenge_creation_step");// wtf? buggy
+		
+		//Store this for later
+		$this->session->set_userdata("modified_challenge", $challenge_info);
+		
+		$_POST = $challenge_info;
+		//print_r($_POST);
+		
+		
+		
+		//Clear session variable
+		$this->session->unset_userdata('challenge_info');
+		
+		if(!$edit_id) {
+			$_POST['created'] = date("Y-m-d H:i:s");
+		}
 				
-		$_POST['user_id'] = $this->session->userdata['user_id'];
+		$_POST['user_id'] = $this->session->userdata('user_id');
+	
 		
 		// Process Teammate 
-		if(@$_POST['teammate_email']) {
-			$teammate = array('name'=>@$_POST['teammate_name'], 'email'=>$_POST['teammate_email']);
-			unset($_POST['teammate_email'], $_POST['teammate_name']);
+		if(isset($_POST['partner_bool']) && $_POST['partner_bool'] == 'yes') {
+			$teammate = array('name'=>@$_POST['partner_name'], 'email'=>$_POST['partner_email']);
 		}
 
-
-
+ 
 		// these fields do not yet exist in the db...
-		unset($_POST['proof_description']);
+		
 		unset($_POST['partner_bool']);
 		unset($_POST['partner_name']);
 		unset($_POST['partner_email']);
 		
 		// Process Special Fields
-		$_POST['challenge_completion'] = ($_POST['challenge_completion']) ? date('Y-m-d', strtotime($_POST['challenge_completion'])) : '';
-		$_POST['challenge_fr_completed'] = ($_POST['challenge_fr_completed']) ? date('Y-m-d', strtotime($_POST['challenge_fr_completed'])) : '';
-		$_POST['challenge_proof_upload'] = ($_POST['challenge_proof_upload']) ? date('Y-m-d', strtotime($_POST['challenge_proof_upload'])) : '';
-
-		foreach($_POST as $key => $val) {
-			if(!$val) {
-				unset($_POST[$key]);	
+		$_POST['challenge_completion'] = ($this->input->post('challenge_completion')) ? date('Y-m-d', strtotime($_POST['challenge_completion'])) : '';
+		$_POST['challenge_fr_completed'] = ($this->input->post('challenge_fr_completed')) ? date('Y-m-d', strtotime($_POST['challenge_fr_completed'])) : '';
+		$_POST['challenge_proof_upload'] = ($this->input->post('challenge_proof_upload')) ? date('Y-m-d', strtotime($_POST['challenge_proof_upload'])) : '';
+		
+		
+		if(!$edit_id || true) {		
+			foreach($_POST as $key => $val) {
+				if(!$val) {
+					if($edit_id) :  $_POST[$key] = NULL; else : unset($_POST[$key]); endif;	
+				}
 			}
 		}
-		
 
 		
 		if(isset($edit_id) && $edit_id != '') {
 
-			unset($_POST['user_id']);		
+			unset($_POST['user_id']);
+			
 			$this->MItems->update('challenges', $edit_id, $_POST);
+			if(isset($challenge_info['challenge_image']) && $challenge_info['challenge_image']) {
+				$this->beex_image->process_media('media/challenges/', $challenge_info['challenge_image'], 'media/challenges/'.$edit_id.'/');
+				$this->session->unset_userdata('challenge_image');
+			}
 			$ret['challenge_id'] = $edit_id;
 			$ret['success'] = true;
 			$this->session->unset_userdata('edit_id');
@@ -92,11 +100,30 @@ class Ajax extends Controller {
 
 		}
 		elseif($challenge_id = $this->MItems->add('challenges', $_POST)) {
+			
+			$new_item_id = $this->MItems->process_new_item($challenge_id, 'challenge', $_POST['created']);
+			
 			$data['message'] = $_POST['challenge_title']." has successfully been created.";
 			$this->MItems->add('teammates', array('user_id'=>$_POST['user_id'], 'challenge_id'=>$challenge_id));
-			if(@$teammate) {
+			if(isset($teammate)) {
 				$this->add_teammate($teammate, array('id'=>$challenge_id, 'name'=>$_POST['challenge_title']));
 			}
+			
+			$this->beex_email->generate_new_challenge_email($_POST['user_id'], array('id'=>$challenge_id));
+			
+			$ret['challenge_image'] = '';
+			if(isset($challenge_info['challenge_image']) && $challenge_info['challenge_image']) {
+				$this->beex_image->process_media('media/challenges/', $challenge_info['challenge_image'], 'media/challenges/'.$challenge_id.'/');
+				$ret['challenge_image'] = $challenge_info['challenge_image'];
+				$this->session->unset_userdata('challenge_image');
+			}
+			
+			/* Add Cluster Activity */
+			if(isset($_POST['cluster_id'])) {
+				
+				$this->MItems->addActivity('join', $challenge_id, $new_item_id);
+			}
+			
 			$ret['challenge_id'] = $challenge_id;			
 		}
 		else {
@@ -105,115 +132,195 @@ class Ajax extends Controller {
 		}
 
 		$data['data']['new'] = true;
-
 		$ret['success'] = true;
 		echo json_encode($ret);
 		return;		
 	}
 	
+	function add_teammate($teammate, $challenge) {
+
+		$item = array();
+
+		if(!($user_id = $this->MUser->get_user_by_email($teammate['email']))) {
+				
+				$password = generate_password();
+				
+				$user_id = $this->MItems->add('users', array('email'=>$teammate['email'], 'password'=>md5($password), 'created' => date('Y-m-d H:i:s'), 'official' => 0));
+				$this->MItems->add('profiles', array('user_id'=>$user_id, 'first_name'=>$teammate['name'], 'last_name' => ' ', 'created' => date("Y-m-d H:i:s")));
+				
+				$item['password'] = $password;
+
+		}
+
+		$this->MItems->add('teammates', array('user_id'=>$user_id, 'challenge_id'=>$challenge['id']));
+		
+		$this->beex_email->generate_new_challenge_email($user_id, array('id'=>$challenge['id']), true);
+
+	}
 	
-	function image_upload() {
+	/* Reset Image: Function that resets the start challenge/cluster images */
+	function reset_image() {
 		
-		$filename = strip_tags($_REQUEST['filename']);
-		$maxSize = strip_tags($_REQUEST['maxSize']);
-		$maxW = strip_tags($_REQUEST['maxW']);
-		$fullPath = strip_tags($_REQUEST['fullPath']);
-		$relPath = strip_tags($_REQUEST['relPath']);
-		$colorR = strip_tags($_REQUEST['colorR']);
-		$colorG = strip_tags($_REQUEST['colorG']);
-		$colorB = strip_tags($_REQUEST['colorB']);
-		$maxH = strip_tags($_REQUEST['maxH']);
+		//Reset the session variable that stores the val
+		$this->session->set_userdata($_POST['type'], 'NULL');
+		$ret['success'] = true;
+		echo json_encode($ret);
+		return;
 		
+	}
+	
+	/* New Ajax Upload: Function for file uploading for any item creation on site */
+	function new_ajax_upload($for = 'challenges', $fromcluster = false) {
+		
+		
+		$filename = 'uploadfile';
+		$foldername = $for;
 		
 		$filesize_image = $_FILES[$filename]['size'];
-		if($filesize_image > 0){			
-			$upload_result = $this->beex->do_upload($_FILES, 'filename', './media/challenges/');
-			$upload_filepath = base_url() . 'media/challenges/' . $upload_result;
+		
+		if($filesize_image > 4000000) {
+			
+			$ret['success'] = false;
+			$ret['error'] = "The file is too big to upload";
+			
+		}
+		elseif((strpos($_FILES[$filename]['type'], 'image') !== FALSE) && $filesize_image > 0) {
+			
+			// Check for the special case of cluster_ch
+			if($foldername == 'cluster_ch') {
+				$foldername = 'cluster';
+				$fromcluster = true;
+			}
+			
+			//Add an 's' to the folder name as thats the way it's coming in
+			$foldername .= 's';
+			
+			// Use the Beex library function do_upload to process the file to the server and get the appropriate return data
+			$upload_result = $this->beex->do_upload($_FILES, $filename, './media/'. $foldername .'/');
+			$upload_filepath = base_url() . 'media/'.$foldername.'/' . $upload_result;
 			$upload_metadata = $this->upload->data();
 
 			$width = $upload_metadata['image_width'];
 			$height = $upload_metadata['image_height'];
-			$challenge_info = $this->session->userdata("challenge_info");
-			$challenge_info['challenge_image'] = $upload_result;
-			$this->session->set_userdata("challenge_info", $challenge_info);			
-			echo <<<IMG
-				<img src="{$upload_filepath}">
-IMG;
 			
-/*
-** LIGHTBOX CODE **
-
-			echo <<<POPUP
-<a href="javascript:void(0)" onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'"><img src="{$upload_filepath}"></a>
-			<div id="light" class="white_content" style="height:{$height};width:{$width}"><a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"><img src="{$upload_filepath}"></a></div>
-			<div id="fade" class="black_overlay"></div>			
-			<script type="text/javascript">
-			$("#light").height({$height});
-			$("#light").width({$width});
-			$("#light").click(function() {
-				document.getElementById('light').style.display='none';
-				document.getElementById('fade').style.display='none';
-			});		
-			</script>
-POPUP;
-*/
-			$imgUploaded = true;
+			if($foldername == 'challenges') {		
+				
+				$this->beex_image->process_media('media/challenges/', $upload_result, 'media/challenges/', 310, 222, true);	
+				$this->session->set_userdata("challenge_image", $upload_result);
+				$result = base_url().'media/challenges/sized_'.$upload_result;
+				$ret['start'] = true;
+						
+			}
+			elseif($foldername == 'clusters') {
+				$this->beex_image->process_media('media/'.$foldername.'/', $upload_result, 'media/'.$foldername.'/', 310, 222, true);				
+				if(!$fromcluster) {
+					$this->session->set_userdata("cluster_image", $upload_result);
+				}
+				else {
+					$this->session->set_userdata("cluster_ch_image", $upload_result);
+				}
+				
+				$result = base_url().'media/'.$foldername.'/sized_'.$upload_result;
+				$ret['start'] = true;
+			}
+			elseif($foldername == 'profiles') {
+				$this->beex_image->crop_square('media/profiles/', $upload_result, 'media/profiles/', 134);
+				$this->session->set_userdata('profile_picture', $upload_result);
+				$result = base_url().'media/profiles/cropped134_'.$upload_result;
+				$ret['start'] = false;
+				
+			}
+			
+			elseif($foldername == 'npos') {
+				$this->beex_image->crop_square('media/npos/', $upload_result, 'media/npos/', 134);
+				$this->session->set_userdata('npo_logo', $upload_result);
+				$result = base_url().'media/npos/cropped134_'.$upload_result;
+				$ret['start'] = false;
+			}
+						
+			$ret['file'] = $result;
+			$ret['success'] = true;
+			
+			
 		}
 		else {
-			$imgUploaded = false;
+			
+			$ret['success'] = false;
+			$ret['error'] = "There has been a problem with your upload";
+			
 		}
-
-
+		
+		echo json_encode($ret);
+		
 	}
 	
 	
-
+	/* Login User: Function for processing logins with javascript */
 	function login_user() {
-		/* Only called in context of challenge creation */		
+		
+		// Try to log in the user	
 		if($result = $this->MUser->validate_user($_POST['email'], $_POST['password'])) {
 		
 			$user = $result->row();
-
-			$userdata = array('logged_in'=>true, 'user_id'=>$user->id, 'username'=>$user->email);
-			if($_POST['email'] == 'zkilgore@gmail.com' || $_POST['email'] == 'devin@beex.org' || $_POST['email'] == 'matt@beex.org') {
-				$userdata['super_user'] = true;	
+			if($user->official) {
+				$userdata = array('logged_in'=>true, 'user_id'=>$user->id, 'username'=>$user->email);
+				if($_POST['email'] == 'zkilgore@gmail.com' || $_POST['email'] == 'devinbalkind@gmail.com' || $_POST['email'] == 'devin@beex.org' || $_POST['email'] == 'matt@beex.org') {
+					$userdata['super_user'] = true;	
+				}
+				$this->session->set_userdata($userdata);
+				//$this->MItems->update('users', array('id'=>$user->id), array('official'=>'1'));
+				
+				// User exists and is logged in
+				echo json_encode(array('success'=>true));
 			}
-			$userdata['challenge_creation_step'] = 'what';
-			$this->session->set_userdata($userdata);			
-			$this->MItems->update('users', array('id'=>$user->id), array('official'=>'1'));
-			echo json_encode(array('success'=>true));
+			
+			else {
+				// User exists but is not official yet, set up javascript to redirect to enter code page
+				echo json_encode(array('success'=>false, 'nocode'=>$user->id));
+			}
 						
 		}
 
 		else {
+			// User could not be logged in. Either doesn't exitst or incorrect information
 			echo json_encode(array('success'=>false, 'errors' => 'There was a problem with your information. Please try again.'));
 		}
 		
 	}
 
-	
+	/* Create User: Function to create a user when that user is starting a challenge/cluster */
 	function create_user() {
-		/* Only called in the context of challenge creation. */
+		
+		// Make sure that name is set and if is set up the profile info
+		if(isset($_POST['legal_name'])) {
+			$full_name = $_POST['legal_name'];
+			$full_name_words = split(' ', $full_name);
+			$profile['last_name'] = array_pop($full_name_words);  
+			$profile['first_name'] = join(' ', $full_name_words);			
+		}
 
-		$full_name = $_POST['legal_name'];
-		$full_name_words = split(' ', $full_name);
-		// these variables are actually part of the profiles table..
-//		$user['last_name'] = array_pop($full_name_words);  
-//		$user['first_name'] = join(' ', $full_name_words);
- 
+		// Set up user array to add to the database
 		$user['created'] = date("Y-m-d H:i:s");
 		$user['email'] = $_POST['email'];
 		$user['password'] = md5($_POST['password']);
 		$user['official'] = 1;
 		
+		
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('email', 'Email Address', 'trim|required|valid_email|callback_username_check');
 		if ($this->form_validation->run() == FALSE) {
+			$this->form_validation->set_error_delimiters('', '<br />');
 			echo json_encode(array('success'=>false, 'errors' => validation_errors()));
 			return;
 		}
 		else {
 			$id = $this->MItems->add('users', $user);
+			
+			
+			$profile['created'] = $user['created'];
+			$profile['user_id'] = $id;
+			$this->MItems->add('profiles', $profile);
+			
 			$userdata = array('logged_in'=>true, 'user_id'=>$id, 'username'=>$_POST['email'], 'challenge_creation_step'=> 'what');		
 			$this->session->set_userdata($userdata);
 			echo json_encode(array('success'=>true));
@@ -221,10 +328,10 @@ POPUP;
 		
 		
 	}
-
+	
+	// Username Check: Callback function for username creation
 	function username_check($str)
 	{
-
 		if ($this->MUser->checkUsername($str))
 		{
 			$this->form_validation->set_message('username_check', 'This email is already in the system');
@@ -234,97 +341,28 @@ POPUP;
 		{
 			return TRUE;
 		}
-
 	}
 	
-	
+	// Delete Note: Function for deleting a note 
 	function delete_note($id) {
 		
 		$this->MItems->delete('notes', $id);
 		
 	}
 	
+	// Delete Proof: Function for deleting a proof
+	function delete_proof($id) {
+		
+		$this->MItems->delete('media', $id);
+	
+	}
+	
+	// Delete Note Reply: Function for deleting a note reply
 	function delete_note_reply($id) {
 		
 		$this->MItems->delete('note_replies', $id);
 		
-	} 
-	
-	function cluster_validate() {
-
-		   if(!ctype_digit($_POST['cluster_code'])) {
-				   echo json_encode('false');
-				   return false;
-		   }
-
-		   $str = $_POST['cluster_code'] / 3459;
-		   if(!($this->MItems->getCluster($str)->num_rows() > 0)) {
-				   echo json_encode('false');
-				   return false;
-		   }
-		   else {
-
-				   $item =  $this->MItems->getCluster($str);
-				   $cluster = $item->row();
-				   foreach($cluster as $key=>$value) {
-						   if(substr($key,0,10) == 'cluster_ch') {
-								   $key = substr($key,11);
-								   if($key == 'address') {
-										   $key = 'address1';
-								   }
-								   $ret[$key] = $value;
-						   }
-				   }
-
-				   $challenge_info = $this->session->userdata("challenge_info");
-				   $challenge_info['cluster_id'] = $str;
-				   $this->session->set_userdata($challenge_info);
-
-				   echo json_encode($ret);
-
-				   return true;
-		   }
-
-       }
-	
-	// function get_browsers() {
-	// 	
-	// 	if($_POST['type'] == 'challenges') {
-	// 		if($_POST['sort'] == 'featured') {
-	// 			echo $this->~->create_browser($this->MItems->getChallenge(1, 'featured', 'challenges.created', 'desc', 5), 'challenges');
-	// 		}
-	// 		elseif($_POST['sort'] == 'ending') {
-	// 			echo $this->beex->create_browser($this->MItems->getChallenge(date('Y-m-d'), 'challenge_completion >', 'challenge_completion', 'asc', 5), 'challenges');
-	// 		}
-	// 		elseif($_POST['sort'] == 'new') {
-	// 			echo $this->beex->create_browser($this->MItems->getChallenge('', '', 'challenges.created', 'desc', 5), 'challenges');
-	// 		}
-	// 		else {
-	// 			echo $this->beex->create_browser($this->MItems->getChallenge('', '', 'challenges.created', 'asc', 5), 'challenges');
-	// 		}
-	// 			
-	// 	}	
-	// 	
-	// 	if($_POST['type'] == 'clusters') {
-	// 		if($_POST['sort'] == 'featured') {
-	// 			echo $this->beex->create_browser($this->MItems->getCluster(1, 'clusters.featured', 'clusters.created', 'desc', 5), 'clusters');
-	// 		}
-	// 		else {
-	// 			echo $this->beex->create_browser($this->MItems->getCluster('', '', 'clusters.created', 'asc', 5), 'clusters');
-	// 		}
-	// 			
-	// 	}	
-	// 	
-	// 	if($_POST['type'] == 'users') {
-	// 		if($_POST['sort'] == 'popular') {
-	// 			$browser = $this->MItems->get('profiles', '', '', 'created', 'desc');
-	// 		}
-	// 		else {
-	// 			$browser = $this->MItems->get('profiles', '', '', 'created', 'desc');
-	// 		}
-	// 	}
-	// }
-	// 
+	}
 }
 
 ?>

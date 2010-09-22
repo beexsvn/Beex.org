@@ -1,7 +1,7 @@
 
-<div class="Team" id="Team">
-  	<div id="teamname">Teammates</div>
+<div id="Teammates">
+	<p><span class="orange uppercase">Teammates</span></p>
 	<?php foreach($teammates as $teammate) : ?>
-    <p class="teammate" style="font-size:10px; text-align:center; margin:0px 4px 4px;"><?php echo anchor('user/view/'.$teammate->id, $teammate->first_name.' '.$teammate->last_name); ?></p>
+    <p class="teammate"><?php echo anchor('user/view/'.$teammate->id, $teammate->first_name.' '.$teammate->last_name); ?></p>
     <?php endforeach; ?>
 </div>

@@ -2,61 +2,38 @@
 $this->load->view('framework/header', $header);
 ?>
 
-<div id="challenge">
+<div id="Challenges" class="featured_page">
 
-<div id="LeftColumn">
-	<div class="tout" id="StartACluster" style="margin:15px 0;">
-    	<?php echo anchor('challenge/start_a_challenge', '<img src="/beex/images/buttons/start-challenge.gif">'); ?>
-        
-    </div>
-</div>
+	<div id="LeftColumn">
+		<div class="tout" id="GettingStarted">
+    	
+			<h3>Declare</h3>
+			<p>an action you'll perform if a certain amount of money is raised for the organization of your choice.</p>
+			
+			<h3>Ask</h3>
+			<p>your Friends to help you raise money and awareness.</p>
+			
+			<h3>Thank</h3>
+			<p>your donors by posting notes, pictures, videos and proof that you performed your challenge.</p>
+			
+			
+	        <div class="buttons">
+				<?php echo anchor('challenge/start_a_challenge', 'Start', array('class'=>'button left', 'id'=>"StartChallenge")); ?>
+				<?php echo anchor('http://learn.beex.org/?page_id=44#What_is_a_challenge', 'Learn', array('class'=>'button right', 'id'=>'LearnChallenge', 'target'=>'_blank')); ?>
+			</div>
+	    </div>
+	</div>
 
-<div id="RightColumn">
-<div id="BrowserModule" class="module">
-	<h1 class="title">Challenges</h1>
-	<div id="Featuredchallenges" class="featuredbox">
-		<?php $this->beex->create_featured($browser, 'challenges'); ?>  
-    </div>
-    	
-        <?php //Put Search Bar here ?>
-        
-      
-    	
-        <h2 class="title" style="position:relative;">
-        	Browse Challenges
-        	<div class="tabs" style="float:none; position:absolute; right:0px; top:0px;"><a id="browse_popular" class="browser_button button">Popular</a><a id="browse_raised" class="browser_button button">Most Raised</a><a id="browse_ending" class="browser_button button">Ending Soon</a><a id="browse_new" class="browser_button button">New</a></div></h2>
-    	
-        <div class="Browser BigBrowser" id="Browser">
-	        <?php $this->beex->create_browser($browser, 'challenges'); ?>
-        	
-        </div>
-    </div>
-    
-    
-</div>
+	<div id="RightColumn">
+		<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-top.gif">
+		<?php $this->beex->create_featured($featured, 'challenges'); ?>  
+		<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-bottom.gif">
+     
+	</div>
 
-<div style="clear:both;"></div>
+	<div style="clear:both;"></div>
 
 </div>
-
-<script type="text/javascript">
-jQuery(document).ready(function(){
-	
-	jQuery(".browser_button").click(function() {
-		var id = $(this).attr('id').substring(7);
-		
-		jQuery.ajax({
-			 type: "POST",
-			 url: "ajax/get_browsers",
-			 data: "type=challenges&sort="+id,
-			 success: function(html){
-				jQuery("#Browser").html(html);
-			 }
-		});
-				
-	});
-});
-</script>
 
 <?php
 $this->load->view('framework/footer');

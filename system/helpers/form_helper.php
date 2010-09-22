@@ -101,6 +101,7 @@ if ( ! function_exists('form_open_multipart'))
  * @param	string
  * @return	string
  */
+/*
 if ( ! function_exists('form_hidden'))
 {
 	function form_hidden($name, $value = '')
@@ -121,6 +122,41 @@ if ( ! function_exists('form_hidden'))
 		return $form;
 	}
 }
+*/
+	function form_hidden($name, $value = '')
+    {
+        if ( ! is_array($name))
+        {
+             $extra = '';
+                     if(is_array($value))
+                     {
+						foreach($value as $item => $val) {
+							if($item == 'value')
+								$val = form_prep($val);
+							$extra .= "$item='".$val."' ";
+							
+						}
+						
+                     }
+                     return '<input type="hidden" name="'.$name.'" '.$extra.' />';
+        }
+
+        $form = '';
+
+        foreach ($name as $name => $value)
+        {
+            $form .= "\n";
+                        $extra = '';
+                        if(is_array($value))
+                        {
+                            $value = $value[0];
+                            $extra = ' '.$value[1];
+                        }
+            $form .= '<input type="hidden" name="'.$name.'" value="'.form_prep($value).'"'.$extra.' />';
+        }
+
+        return $form;
+    }
 
 // ------------------------------------------------------------------------
 

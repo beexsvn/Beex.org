@@ -1,69 +1,34 @@
 <div class="MiniProfile" id="MiniNPO">
+    <h2>Organization</h2>
+	<div class="info">
+    	<div class='image'>
+       		<?php if($npo->logo) : ?>
+				<div class='picture'>
+				<?php get_item_image('npos', $npo->id, $npo->logo, 'cropped120', 'npologo'); ?>
+				</div>
+        	<?php else: ?>
+        		<?php display_default_image('npo'); ?>
+        	<?php endif; ?>
+			<?php echo anchor('npo/view/'.$npo->id, '<img class="border" src="'.base_url().'images/tout-image-border.png" />'); ?>
+		</div>
+		<p><?php echo anchor('npo/view/'.$npo->id, $npo->name, array('class'=>'namelink')); ?></p>
 
-    <h2><?php echo $npo->name; ?>
+		<p class="header">Address:</p>
+		<p class="answer"><?php echo (($npo->address_city) ? $npo->address_city.', ' : '').(($npo->address_state) ? $npo->address_state : ''); ?></p>
 
-         <?php if($npo->id== @$data['npo_id']) :
-
-                    echo anchor('npo/edit/'.$npo->id, "Edit NPO", array('style'=>'float:right;'));
-
-                endif;
-
-        ?>
-
-
-
-    </h2>
-
-    <table border='0' cellpadding="0" cellspacing="0">
-
-     <tr>
-
-        <td class="leftcol" style="width:130px;">
-
-
-
-            <div class='image'>
-
-                <?php if($npo->logo) : ?>
-
-                    <img src="<?php echo base_url(); ?>/media/npos/<?php echo $npo->logo; ?>" />
-				<?php else : ?>
-                	<img src="<?php echo base_url(); ?>/images/imagedefault.gif" />
-                <?php endif; ?>
-
-            </div>
-
-            <p>Location</p>
-
-            <p><a><?php echo $npo->address_city.', '.$npo->address_state; ?></a></p>
+		<?php if($npo->website) : ?>
+		<p class="header">Website:</p>
+		<p class="answer"><?php echo link_to_long(prep_url($npo->website)); ?></p>
+		<?php endif; ?>
+	</div>
+	<img class="block" src="<?php echo base_url(); ?>images/backgrounds/left-tout-bottom-filled.png" />
 
 
+	<div id="Buttons" class="MiniProfileButtons">
+		<div id="feed_button_about" class="selected"><p>About</p></div>
+		<div id="feed_button_clusters" class="button"><p>Clusters</p></div>
+		<div id="feed_button_challenges" class="button"><p>Challenges</p></div>
+	</div>
 
-            <p style="margin-top:15px;">Category</p>
-
-            <p><a><?php echo $npo->category; ?></a></p>
-
-
-
-            <p style="margin-top:15px;">Website</p>
-
-            <p><a><?php echo link_to_long(prep_url($npo->website)); ?></a></p>
-
-
-        </td>
-
-        <td class="rightcol">
-
-            <p><b>What we do:</b> <?php echo $npo->mission_statement; ?></p>
-
-            <p><b>History:</b> <?php echo $npo->about_us; ?></p>
-
-
-
-        </td>
-
-     </tr>
-
-    </table>
-
+	<img src="<?php echo base_url(); ?>images/backgrounds/left-tout-bottom-totally-filled.png">
 </div>

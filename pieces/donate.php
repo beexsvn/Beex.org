@@ -1,20 +1,36 @@
 <?php
 
-function db_connect() {
+
+$DB_HOST = "internal-db.s85554.gridserver.com";
+$DB_USER = "db85554";
+$DB_PASS = "newkids22";
+$DB_DB = "db85554_beexmaster";
+
+/*
+$DB_HOST = 'localhost';
+$DB_USER = "root";
+$DB_PASS = "root";
+$DB_DB = "beex";
+*/
+//$base_url = 'http://localhost:8888/beex/';
+//$base_url = 'http://sandbox.beex.org/';
+$base_url = 'http://www.beex.org/';
+
+function db_connect($db_host, $db_user, $db_pass, $db_db) {
 	
-	$mydb = mysql_connect("internal-db.s85554.gridserver.com", "db85554", "Bulld0zer") or die(mysql_error());
+	$mydb = mysql_connect($db_host, $db_user, $db_pass) or die(mysql_error());
 	
-	mysql_select_db("db85554_beexmaster", $mydb) or die(mysql_error());
+	mysql_select_db($db_db, $mydb) or die(mysql_error());
 	
 	return $mydb;
 }
 
-$mydb = db_connect();
+$mydb = db_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_DB);
 
 $id = $_GET['challenge_id']; 
 //$name = $_GET['challenge_name'];
 
-$query = "SELECT challenges.challenge_title AS name, profiles.first_name, profiles.last_name, npos.paypal_email, npos.name AS nponame, npos.id FROM challenges, npos, profiles WHERE npos.id = challenges.challenge_npo AND challenges.user_id = profiles.user_id AND challenges.id = '".$id."';";
+$query = "SELECT challenges.challenge_title AS name, profiles.first_name, profiles.last_name, npos.paypal_email, npos.name AS nponame, npos.id FROM challenges, npos, profiles WHERE npos.id = challenges.challenge_npo AND challenges.user_id = profiles.user_id AND challenges.item_id = '".mysql_real_escape_string($id)."';";
 
 $result = mysql_query($query, $mydb);
 
@@ -26,39 +42,60 @@ mysql_close($mydb);
 
 ?>
 
+<script type="text/javascript" language="javascript">
+
+function swapGraphic(state) {
+	
+	if(state == 'on') {
+		document.getElementById('ac1').src = "<?php echo $base_url; ?>images/backgrounds/give/donate-on.png";
+	}
+	else {
+		document.getElementById('ac1').src = "<?php echo $base_url; ?>images/backgrounds/give/donate-off.png";
+	}
+	
+}
+
+</script>
+
 
 <style>
 
+*:focus {outline: none;}
 
-.orangetitle {width:100%; padding:5px 0px; background-color:orange; text-transform:uppercase; color:#fff; margin:0px 0px 25px;}
-p {margin:5px 10px; color:#605f5f; font:12px Verdana, Geneva, sans-serif;}
-textarea {width:90%;}
-.donatebuttoncntr {background-color:#5f5f5f; padding:10px 0; text-align:center;}
+h2 {font:20px 'Arial Rounded MT Bold', 'Arial Black', Arial, sans-serif; color:#5C6771; margin:0 0 10px; padding:0;}
+p {margin:10px 0px; color:#5C6771; font:12px Verdana, Arial, sans-serif;}
+div {font:12px Verdana, Arial, sans-serif; color:#5C6771;}
 
+.input_textarea {background-image:url('<?php echo $base_url; ?>images/backgrounds/give/textarea.png'); width:271px; height:61px; background-position:center top; background-repeat:no-repeat;}
+.input_textarea textarea {width:260px; height:51px; font:11px verdana, arial, sans-serif; border:none; margin:5px 6px;}
+
+.input_text {background-image:url('<?php echo $base_url; ?>images/backgrounds/give/input.png'); width:133px; height:20px; background-position:center top; background-repeat:no-repeat; padding-left:4px;}
+.input_text input {height:12px; border:none; margin:4px 6px 4px 0; width:113px;}
+
+.donatebuttoncntr {text-align:center; padding-top:12px; border-top:1px solid #CCC;}
 </style>
 
- 
- 
-<div style="text-align:right;">
 
-<h2 class='orangetitle'>Donation Box</h2>
+
+<div style="width:324px; text-align:left;">
+
+<h2>Give Box</h2>
 
 <!--<form id="DonateForm" target="paypal" class="add_form" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">-->
-<form id="DonateForm" target="paypal" class="add_form" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<form id="DonateForm" target="paypal" class="add_form" action="https://www.paypal.com/cgi-bin/webscr" method="post" onSubmit='parent.$.fn.ceebox.closebox();'>
 
 
     <p>How much would you like to donate to the challenge <b><?php echo $info['name']; ?></b>, benefitting the nonprofit <?php echo $info['nponame']; ?>?</p>
 
-    <p><i>(ex. $22.50)</i> $<input type="text" id="pp_item_price1" name="amount" value=""></p>
+	<p><span style="float:left">(ex. $22.50)</span> <div class="input_text" style="float:left; margin-left:5px;">$ <input type="text" id="pp_item_price1" name="amount" value=""></div></p>
 
-    <p style="margin-top:17px;">Would you like to leave a comment?</p>
+    <p style="padding-top:17px; clear:both;">Leave a Comment:</p>
 
-    <textarea name="os0"></textarea><br>
+    <div class="input_textarea"><textarea name="os0"></textarea></div>
 
-    <p style="margin-top:15px;">Check below to donate anonymously</p>
-    <p><input name="os1" type="checkbox" value="Yes" /></p>
+    <p style="padding-top:15px;">Check here to donate anonymously <input name="os1" type="checkbox" value="Yes" /></p>
 	
-    <div class="donatebuttoncntr"><input id="ac1" class="add_to_cart_button" type="image" value="Donate" src="/images/buttons/donateformbutton.gif" /></div>
+    <div class="donatebuttoncntr"><input id="ac1" class="add_to_cart_button rollover" type="image" value="Donate" src="<?php echo $base_url; ?>images/backgrounds/give/donate-off.png" onmouseover="swapGraphic('on');" onmouseout="swapGraphic('off');" /></div>
     <input type="hidden" name="add" value="1">
     <input type="hidden" name="cmd" value="_xclick">
     <input type="hidden" name="business" value="<?php echo $info['paypal_email']; ?>">
@@ -73,6 +110,8 @@ textarea {width:90%;}
     <input type="hidden" name="rm" value="2" />
     <input type="hidden" name="notify_url" value="http://www.beex.org/process_ipn.php" />
 	<input type="hidden" name="shipping" value="0.00"> 
+	
+	<span style="font-size:10px; text-align:center; padding-top:4px; display:block;">(You will be redirected to the organizations Paypal page)</span>
 
 
 </form>

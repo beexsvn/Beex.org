@@ -27,7 +27,7 @@ class MAdmins extends Model{
 		if($q->num_rows() > 0) {
 			return true;
 		}
-		elseif($this->session->userdata('super_user')) {
+		elseif($this->session->userdata('super_user') != '') {
 			return true;	
 		}
 		

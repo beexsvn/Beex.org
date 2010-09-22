@@ -39,7 +39,7 @@
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'email', 'session', 'Beex', 'Pieces');
+$autoload['libraries'] = array('database', 'email', 'session', 'Beex', 'Pieces', 'Beex_email', 'Beex_image');
 
 
 /*
@@ -51,7 +51,7 @@ $autoload['libraries'] = array('database', 'email', 'session', 'Beex', 'Pieces')
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'form', 'beexfunctions', 'beexdisplayfunctions');
+$autoload['helper'] = array('url', 'form', 'beexfunctions', 'beexdisplayfunctions', 'array');
 
 
 /*
@@ -79,7 +79,7 @@ $autoload['plugin'] = array();
 |
 */
 
-$autoload['config'] = array();
+$autoload['config'] = array('facebook');
 
 
 /*
@@ -108,7 +108,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('mitems', 'MUser', 'madmins');
+$autoload['model'] = array('mitems', 'MUser', 'madmins', 'mstat');
 
 
 
