@@ -567,6 +567,9 @@ class User extends Controller {
 		$this->form_validation->set_rules('gender', 'Gender', 'trim');
 		$this->form_validation->set_rules('whycare', 'Why are you here?', 'trim');
 		$this->form_validation->set_rules('blurb', 'Blurb', 'trim');
+		$this->form_validation->set_rules('upsets', 'What upsets you?', 'trim');
+		$this->form_validation->set_rules('joy', 'What brings you joy?', 'trim');
+		
 				
 
 		if ($this->form_validation->run() == FALSE)

@@ -10,11 +10,11 @@ class Npo extends Controller {
 		$this->load->helper('form');
 		$this->load->model('MNpos');
 		$this->load->model('MCaptcha');
-		$header['title'] = "Organization Database";
+		$header['title'] = "Nonprofit Organization Database";
 		$data['header'] = $header;
 		$data['message'] = '';
 		$data['edit'] = '';
-		$this->data['header']['title'] = 'Organizations';
+		$this->data['header']['title'] = 'Non-Profit Organizations';
 		$this->data['data']['message'] = '';
 		$this->data['data']['item'] = '';
 		$this->data['data']['username'] = $this->session->userdata('username');
@@ -119,7 +119,7 @@ class Npo extends Controller {
 		$data['npo_id'] = $id;
 		
 		$data['npo'] = $this->MItems->getNPO($id)->row();
-		$data['browser'] = $this->MItems->getChallenge($id, 'challenge_npo');
+		$data['browser'] = $this->MItems->getChallenge(array('challenge_npo'=>$id, 'cluster_id'=>NULL));
 		$data['clusters'] = $this->MItems->getCluster($id, 'cluster_npo');
 		$this->load->view('npo', $data);
 	}
@@ -142,6 +142,33 @@ class Npo extends Controller {
 	
 	function edit() {
 		$data = $this->data;
+		$npo_id = $this->uri->segment(3);
+		
+		if($this->MNpos->valid_npo_admin($npo_id, $this->session->userdata('user_id')) || $this->session->userdata('super_user')) {
+				
+							
+				//$data['edit'] = $this->uri->segment(4,0);
+				$data['edit'] = true;
+				$data['new'] = false;
+				$data['edit_id'] = $npo_id;
+				$npo = $this->MNpos->getNpo($npo_id);
+				$data['npo'] = $npo->row();
+				
+				$data['tags']= '';
+				if($tags = $this->MNpos->getTags($npo_id)) {
+					$data['tags'] = $this->processTags($this->MNpos->getTags($npo_id));
+				}
+				
+				$this->load->view('npoform', $data);
+		}
+		else {
+			redirect('user/login', 'refresh');
+		}
+	}
+	/*
+	function edit() {
+		$data = $this->data;
+		
 		if(($npo_id = $this->session->userdata('npo_id')) || $this->session->userdata('npo_admin') || $this->session->userdata('super_user')) {
 			if($this->session->userdata('npo_logged_in') || $this->session->userdata('super_user')) {
 				
@@ -164,13 +191,14 @@ class Npo extends Controller {
 				$this->load->view('npoform', $data);
 			}
 			else {
-				redirect('/npo/login', 'refresh');
+				redirect('user/login', 'refresh');
 			}
 		}
 		else {
-			redirect('/npo/login', 'refresh');
+			redirect('user/login', 'refresh');
 		}
 	}
+	*/
 	
 	function captcha_check() {
 		if(strcasecmp($this->session->userdata('captchaWord'), $this->input->post('captcha')) == 0) {
@@ -208,12 +236,10 @@ class Npo extends Controller {
 		else {
 			$this->form_validation->set_rules('admin_email', 'Administrator Email', 'trim|required|valid_email');
 		}
-		/*Passwords defunct 
-		if($this->input->post('admin_password') || $npo_id == 'add') {
+		/*if($this->input->post('admin_password') || $npo_id == 'add') {
 			$this->form_validation->set_rules('admin_password', 'BEEx Password', 'trim|required|md5');
 			$this->form_validation->set_rules('admin_passconf', 'BEEx Password Confirmation', 'trim|required|matches[admin_password]');
-		}
-		*/
+		}*/
 		$this->form_validation->set_rules('contact_firstname', 'Your First Name', 'trim|required');
 		$this->form_validation->set_rules('contact_lastname', 'Your Last Name', 'trim|required');
 		
@@ -287,6 +313,15 @@ class Npo extends Controller {
 						
 					$data['message'] = $_POST['name']." has successfully applied to BEEx.org. If you're application is approved we'll contact you within 5 business days and activate your account.  Once activated you'll be able to edit elements of your profile.";
 					
+					$data['fresh_org'] = true;
+					
+					
+					$toaddress = 'zkilgore@gmail.com';
+					$subject = 'A new Organization has registered';
+					$message = 'Organization Name: '.$this->input->post('name').'
+Administrative Contact: '.$this->input->post('admin_email');
+					
+					mail('zkilgore@gmail.com', $subject, $message);
 					
 					
 				}

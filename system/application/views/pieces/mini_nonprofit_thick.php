@@ -1,5 +1,5 @@
 <div class="MiniProfile" id="MiniNPO">
-    <h2>Organization</h2>
+    <h2>ORGANIZATION</h2>
 	<div class="info">
     	<div class='image'>
        		<?php if($npo->logo) : ?>
@@ -26,8 +26,8 @@
 
 	<div id="Buttons" class="MiniProfileButtons">
 		<div id="feed_button_about" class="selected"><p>About</p></div>
-		<div id="feed_button_clusters" class="button"><p>Clusters</p></div>
-		<div id="feed_button_challenges" class="button"><p>Challenges</p></div>
+		<div id="feed_button_clusters" class="button"><p>Activity</p></div>
+		<div id="feed_button_challenges" class="button"><p>Supporters</p></div>
 	</div>
 
 	<img src="<?php echo base_url(); ?>images/backgrounds/left-tout-bottom-totally-filled.png">

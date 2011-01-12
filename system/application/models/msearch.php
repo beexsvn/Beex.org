@@ -20,7 +20,7 @@ class MSearch extends Model {
 	//Search the challenges table
 	function getChallengeResults($term, $cluster_id = '') {
 		
-		$this->db->select('challenges.*, profiles.*, npos.name');
+		$this->db->select('challenges.*, profiles.*, npos.name, challenges.created AS challenge_created');
 		$this->db->from('challenges');
 		
 		$this->db->join('profiles', 'profiles.user_id = challenges.user_id');
@@ -32,6 +32,24 @@ class MSearch extends Model {
 		}
 		
 		$this->db->where("(MATCH (challenge_title, challenge_declaration, challenge_location, challenge_address1, challenge_address2, challenge_city, challenge_state, challenge_zip, challenge_blurb, challenge_description, challenge_whydo, challenge_whycare) AGAINST ('".addslashes($term)."') OR MATCH(profiles.first_name, profiles.last_name) AGAINST ('".addslashes($term)."'))$cluster_query", NULL, FALSE);
+		
+		
+		
+		return $this->db->get();
+		
+	}
+	
+	//Search the clusters table
+	function getClustersInResults($term) {
+		
+		$this->db->select('clusters.*, clusters.id AS theid, profiles.*, npos.name');
+		$this->db->from('clusters');
+		
+		$this->db->join('profiles', 'profiles.user_id = clusters.user_id');
+		$this->db->join('npos', 'npos.id = clusters.cluster_npo');
+		
+		
+		$this->db->where("(MATCH (cluster_title, cluster_blurb, cluster_description, cluster_location, cluster_link) AGAINST ('".addslashes($term)."') OR MATCH(profiles.first_name, profiles.last_name) AGAINST ('".addslashes($term)."'))", NULL, FALSE);
 		
 		
 		
@@ -63,7 +81,7 @@ class MSearch extends Model {
 		$this->db->select('npos.*');
 		$this->db->from('npos');
 		
-		$this->db->where("(MATCH (name, address_street, address_city, address_state, address_zip, website, contact_firstname, contact_lastname, contact_title, contact_email, contact_phone, about_us, mission_statement, blurb) AGAINST ('".addslashes($term)."'))", NULL, FALSE);
+		$this->db->where("(MATCH (name, address_street, address_city, address_state, address_zip, website, contact_firstname, contact_lastname, contact_title, contact_email, contact_phone, about_us, mission_statement, blurb) AGAINST ('".addslashes($term)."')) AND approved=1", NULL, FALSE);
 		
 		
 		

@@ -10,7 +10,7 @@ if($edit_id != 'add') {
 	$item = $this->MItems->getNPO($edit_id, 'id', '', '', '', '', 0)->row();
 }
 
-if($message) {
+if($message && !isset($fresh_org)) {
 
 	echo "<p class='message'>".$message."<span class='val_errors'>";
 
@@ -18,6 +18,20 @@ if($message) {
 
 	echo "</span></p>";
 
+}
+
+if(isset($fresh_org)) {
+	?>
+<script>
+$(document).ready(function() {
+	var message = '<h2 style=\'padding:5px 24px; text-align:center;\'>You have successfully applied to BEEx.org. If you\'re application is approved we\'ll contact you within 5 business days and activate your account.  Once activated you\'ll be able to edit elements of your profile.</h2>\
+			<img style="text-align:center; margin:0px auto; width:95px; display:block;" onClick="$.fn.ceebox.closebox()" onMouseover="this.src=\''+true_base_url+'images/buttons/reg-next-on.png\'" onMouseout="this.src=\''+true_base_url+'images/buttons/reg-next-off.png\'" src="'+true_base_url+'images/buttons/reg-next-off.png" class="rollover" />';
+		
+			$.fn.ceebox.popup(message, {borderColor:'#DBE7E6', borderWidth:'18px', width:600, height:370, boxColor:"#ffffff", titles:false, padding:0});
+			seen_message = true;
+});
+</script>
+	<?php
 }
 
 if($this->session->userdata('user_id')) {
@@ -94,8 +108,6 @@ if($this->session->userdata('user_id')) {
 	$name = 'category';
 	$value = ($new) ? set_value($name) : @$item->$name;
 	$category_cell = generate_input($name, 'dropdown', $edit, $value, $cats);
-
-
 
 
 	$name = 'address_street';
@@ -285,7 +297,7 @@ $(document).ready(function() {
 				</div>
 				
 				<div class="form_element">
-					<label>Paypal Email:<span class='required'>*</span></label>
+					<label>Paypal Email:<span class='required'>*</span><br><span class="small">Email address for the organization's Paypal Account.</span></label>
 					<div class="input_text"><?php echo $paypal_email_cell; ?></div>
 				</div>
 				
@@ -410,6 +422,92 @@ $(document).ready(function() {
 					<label>Confirm Code:<span class="required">*</span></label>
 					<div class="input_text"><input type="text" name="captcha"></div>
 				</div>
+				<?php endif; ?>
+				
+				<style>
+				.current_levels {color:#5C6772; margin-bottom:20px;}
+				.current_levels div {font-size:12px;}
+				.form_element #subscription_input_text, .form_element #subscription_input_name {background-image:url('<?php echo base_url(); ?>images/backgrounds/text-input-small.png'); width:129px;}
+				#subscription_input_text input, #subscription_input_name input {width:90%;}
+				</style>
+				<!-- Subscription Information -->
+				<?php if($edit_id != 'add') : ?>
+				<h2>Subscription Information</h2>
+				<h3>Current Levels</h3>
+				<div class="current_levels">
+				<?php
+					$i = 1;
+					if($levels = $this->MNpos->get_levels($edit_id)) {
+						
+						foreach($levels as $level) {
+							
+							echo "<div id='subscription_level".$level->id."'>".$level->name.": $".$level->amount." <a class='subscription_delete' id='delete_subscription".$level->id."'>(remove level)</a></div>";
+							$i++;
+						}
+						
+					}
+				?>
+				</div>
+				<h3>New Level:</h3>
+				<div class="form_element">
+					<label>Amount:</label>
+					<div class="input_text" id="subscription_input_text"><input id="subscription_level_amount" type="text" /></div>
+					
+				</div>
+				<div class="form_element">
+					<label>Name:</label>
+					<div class="input_text" id="subscription_input_name"><input id="subscription_level_name" type="text" /></div>
+					<a class="subscription_level_add" id="slevel_add_<?php echo $edit_id; ?>">Add</a>
+				</div>
+				<p>The duration of the subscription will be 12 months</p>
+				
+<script>
+$(document).ready(function() {
+	
+	$(".subscription_level_add").click(function() {
+		
+		var id = $(this).attr('id').substr(11);
+		var amount = $("#subscription_level_amount").val();
+		var name = $("#subscription_level_name").val();
+		
+		if(amount == parseFloat(amount)) {
+			if(name) {
+				$.ajax({
+					'data':'name='+name,
+					'type':'post',
+					'url':base_url+'ajaxnpo/add_level/'+id+"/"+amount,
+					'success': function(ret) {
+				
+						$(".current_levels").append('<div>'+name+': $'+amount+"</div>");
+						$("#subscription_level_amount").val('');
+						$("#subscription_level_name").val('');
+				
+					}
+				});
+			}
+			else {
+				alert("You must enter a subscription level name");
+			}
+		}
+		else {
+			alert('You must enter a valid amount to set a subscription level');
+		}
+		
+	});	
+	
+	$(".subscription_delete").click(function() {
+		var id = $(this).attr('id').substr(19);
+		alert(id);
+		$.ajax({
+			'url':base_url+'ajaxnpo/remove_level/'+id,
+			'success': function(ret) {
+				$("#subscription_level"+id).remove();
+			}
+		});
+	});
+	
+})
+</script>
 				<?php endif; ?>
 			</div>
 

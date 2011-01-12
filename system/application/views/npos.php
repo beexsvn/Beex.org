@@ -27,7 +27,7 @@ $this->load->view('framework/header', $header);
 	<div class="rc_cntr">
 		<img class="block" src="<?php echo base_url(); ?>images/backgrounds/npos-top.png" />
 		<div class="npo_cntr">
-			<h1 class="title">Organizations</h1>
+			<h1 class="title">Nonprofits</h1>
 		    
 			<div class="Browser" id="Browser" style="margin-top:25px;">
 			        <?php $this->beex->create_browser($browser, 'npos'); ?>

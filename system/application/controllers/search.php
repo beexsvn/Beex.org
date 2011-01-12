@@ -26,7 +26,7 @@ class Search extends Controller {
 		$data = $this->data;
 		
 		if($searchterm = $this->input->post('searchterm')) {
-			
+						
 			$searchresults = $this->MSearch->getResults($searchterm);
 			
 			if($searchresults['challenges']->num_rows()){
@@ -43,8 +43,13 @@ class Search extends Controller {
 			$data['results'] = $searchresults;
 			$data['term'] = $searchterm;
 			
-			$this->load->view('searchresults', $data);
 		}
+		else {
+			$data['results'] = '';
+			$data['term'] = '';
+		}
+		
+		$this->load->view('searchresults', $data);
 	}
 
 

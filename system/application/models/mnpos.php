@@ -69,6 +69,41 @@ class MNpos extends Model {
 			}
 		}
 	}
+	
+	function valid_npo_admin($npo_id, $user_id) {
+		if($result = $this->db->get_where('npos', array('user_id'=>$user_id, 'id'=>$npo_id))) {
+			return ($result->num_rows()) ? true : false;
+		}
+	}
+	
+	function get_levels($id) {
+		$this->db->order_by("amount");
+		$levels = $this->db->get_where('subscription_levels', array('npo_id'=>$id, 'active'=>1));
+		
+		if($levels->num_rows()) {
+			return $levels->result(); 
+		}
+		return false;
+	}
+	
+	function add_level($id, $amount, $name) {
+		$data = array(
+			'npo_id' => $id,
+			'amount' => $amount,
+			'name' => $name,
+			'created' => date('Y-m-d H:i:s'),
+			'active' => 1
+		);
+		
+		$this->db->insert('subscription_levels', $data);
+	}
+	
+	function remove_level($id) {
+
+		$this->db->update('subscription_levels', array('active'=>0), array('id'=>$id));
+		echo $this->db->last_query();
+	}
+	
 }
 
 ?>

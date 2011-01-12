@@ -108,6 +108,7 @@ $(document).ready(function() {
 		}
 	}
 	
+	
 	$(".help_title:not(#challenge_template)").click(function() {
 		changeMenuItem($(this));
 	});
@@ -133,10 +134,9 @@ $(document).ready(function() {
 		
 		if(new_cluster && !seen_message) {
 			var message = '<h2 style=\'padding:5px 24px; text-align:center;\'>\
-			Now that you\'re done with the description, you must create the \'challenge template.\'  This is where you create the conditions people must meet to join your cluster.<br><br>\
-			Every challenge in your cluster will share the fields that you fill out in the template.<br><br>\
-			If you fill out the fundraising end date in the challenge template, every challenge in your cluster will automatically have that same end date.<br><br>\
-			The people who join your cluster will be able to fill out every field that you leave blank.</h2>\
+			In the next section, you set the conditions people must meet to join your cluster by filling out fields that every challenge within your cluster will share.  Challenger can fill out the fields you leave blank.\
+			<br /><br />\
+			For example: If you fill out the fundraising end date in the challenge template, every challenge in your cluster will automatically have that same end date.</h2>\
 			<img style="text-align:center; margin:0px auto; width:95px; display:block;" onClick="$.fn.ceebox.closebox()" onMouseover="this.src=\''+true_base_url+'images/buttons/reg-next-on.png\'" onMouseout="this.src=\''+true_base_url+'images/buttons/reg-next-off.png\'" src="'+true_base_url+'images/buttons/reg-next-off.png" class="rollover" />';
 		
 			$.fn.ceebox.popup(message, {borderColor:'#DBE7E6', borderWidth:'18px', width:600, height:370, boxColor:"#ffffff", titles:false, padding:0});
@@ -162,6 +162,11 @@ $(document).ready(function() {
 	$("#create_widgets").click(function() {
 		$(".cluster_form_tab").hide();
 		$("#ClusterWidgets").show();
+	});
+	
+	$("#cluster_challengers").click(function() {
+		$(".cluster_form_tab").hide();
+		$("#ClusterChallengers").show();
 	});
 	
 	var processCluster = function() { // last step.. fin!
@@ -218,6 +223,10 @@ $(document).ready(function() {
 		}
 		if(cluster_ch_description == inputs['cluster_ch_description']) {
 			cluster_ch_description = '';	
+		}
+		
+		if(cluster_ch_completion == inputs['cluster_ch_completion']) {
+			cluster_ch_completion = '';	
 		}
 		
 		if(cluster_goal == inputs['cluster_goal']) {

@@ -39,12 +39,6 @@ function fbAddNote(el, mess, title, proof) {
 
 	return false;
 }
-
-/* Show expand the first note in the feed */
-$(document).ready(function() {
-	expandFirstNote();
-});
-
 </script>
 
 <?php endif; ?>
@@ -118,26 +112,12 @@ $(document).ready(function() {
         
         
     </div>
-   	<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-bottom.gif">
-</div>
-
-<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>beex_scripts/in_page_search.js"></script>
-<script language="javascript" type="text/javascript">
-
-jQuery(document).ready(function() {
-	shrinkFeed('join');
-});
-
-</script>
-
-<div id="TheJourney" name="TheJourney">
-	<img src="<?php echo base_url(); ?>images/backgrounds/proof-top.png" />
+	
 	<div id="JourneyInfo">
-   		<h2 class="title">The Cluster</h2>
 		
 		<?php if($owner) : ?>
 		<div class="write_buttons">
-			<img id="new_note" class="rollover" src="<?php echo base_url(); ?>images/buttons/new-note-off.png">
+			<img class="new_note rollover" src="<?php echo base_url(); ?>images/buttons/new-note-off.png">
 		</div>
 		<?php endif; ?>
 		
@@ -192,8 +172,18 @@ jQuery(document).ready(function() {
 		
 		<div style="clear:both;"></div>
     </div>
-	<img src="<?php echo base_url(); ?>images/backgrounds/proof-bottom.png" />
+	
+   	<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-bottom.gif">
 </div>
+
+<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>beex_scripts/in_page_search.js"></script>
+<script language="javascript" type="text/javascript">
+
+jQuery(document).ready(function() {
+	shrinkFeed('join');
+});
+
+</script>
 
 <div style="clear:both;"></div>
 

@@ -26,7 +26,7 @@ $this->load->view('framework/header', $header);
 					if($org_id = $this->MItems->does_user_have_organizations($profile->user_id)) {
 						echo anchor('npo/edit/'.$org_id, '<img id="edit_organization_button" class="rollover float_left" style="margin-left:10px;" src="'.base_url().'images/buttons/edit-organization-off.png" />');
 					}
-					
+									
 			}
 			
 		?>
@@ -36,7 +36,7 @@ $this->load->view('framework/header', $header);
 	</div>
 	
 	<div class="feed">
-		<img class="block" src="<?php echo base_url(); ?>images/backgrounds/activity-top.png" />
+		<img class="block" src="<?php echo base_url(); ?>images/backgrounds/activity-top-profile.png" />
 		<div id="FeedWrapper" class="feed_wrapper">
 			<div id="FeedContent">
 				<div class="challenges section">
@@ -53,7 +53,7 @@ $this->load->view('framework/header', $header);
 				<div class="clusters section" style="display:none;">
 					<?php
 						if($clusters->num_rows()) {
-							$this->beex->create_browser($clusters, 'clusters', 'cluster');
+							$this->beex->create_browser($clusters, 'clusters', 'cluster', false, false, false, false);
 						}
 						else {
 							echo "<h2>No Clusters</h2>";
@@ -78,7 +78,7 @@ $this->load->view('framework/header', $header);
 				
 			</div>
 		</div>
-		<img src="<?php echo base_url(); ?>images/backgrounds/activity-bottom.png" />
+		<img src="<?php echo base_url(); ?>images/backgrounds/activity-bottom-profile.png" />
 	</div>
     
  

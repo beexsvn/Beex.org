@@ -2,7 +2,10 @@
 	<h2>Challenger</h2>	
 	<div class="info">
     	<div class='image'>
-		
+			
+			<?php if($this->session->userdata('user_id') == $profile->user_id) :
+				echo anchor("gallery/crop/".$user_id, "Edit Picture", array('class'=>'jcrop_pop', 'rel'=>'iframe'));
+			endif; ?>
 			<?php echo anchor('user/view/'.$profile->user_id, (($profile->profile_pic) ? '<img src="'.base_url().'/media/profiles/'.$profile->user_id.'/cropped120_'.$profile->profile_pic.'" />' : display_default_image('profile')), array('class'=>'picture')); ?>
 			<?php echo anchor('user/view/'.$profile->user_id, '<img class="border" src="'.base_url().'images/tout-image-border.png" />'); ?>
 	    </div>

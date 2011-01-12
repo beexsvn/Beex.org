@@ -146,7 +146,7 @@ else {
 	
  </div>	
 	
-  <?php echo anchor("site/", '<img id="Logo" target="_parent" src="'.base_url().'/images/logo.png" />'); ?>
+  <?php echo anchor("site/", '<img id="Logo" src="'.base_url().'/images/logo.png" />', array('target'=>'_parent')); ?>
 	<div class="bee_tail"></div>
   <form id="SearchForm" method="POST" action="<?php echo base_url(); ?>/index.php/search/">
 	<div class="search_bg">
@@ -202,15 +202,15 @@ else {
 
   <div id="Menu">
 
-  	<?php echo anchor('challenge/', 'Challenges', array('class'=>"tab tab rollover_css")); ?>
+  	<?php echo anchor('challenge/', 'Challenges', array('class'=>"tab", 'target'=>"_parent")); ?>
 
-    <?php echo anchor('cluster/', 'Clusters', array('class'=>"tab tab")); ?>
+    <?php echo anchor('cluster/', 'Clusters', array('class'=>"tab", 'target'=>"_parent")); ?>
 
     <?php //echo anchor('user/', 'People', array('class'=>"tab tab3")); ?>
 
-    <?php echo anchor('npo/', 'Organizations', array('class'=>"tab tab4")); ?>
+    <?php echo anchor('npo/', 'Organizations', array('class'=>"tab", 'target'=>"_parent")); ?>
 
-   	<a href="http://learn.beex.org" class="tab">Learn</a>
+   	<a href="http://learn.beex.org/index.php?option=com_content&view=category&layout=blog&id=1&Itemid=33" class="tab" target="_parent">Learn</a>
 
   </div>
 

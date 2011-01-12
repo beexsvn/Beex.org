@@ -170,12 +170,12 @@ class Ajax extends Controller {
 	}
 	
 	/* New Ajax Upload: Function for file uploading for any item creation on site */
-	function new_ajax_upload($for = 'challenges', $fromcluster = false) {
+	function new_ajax_upload($for = 'challenges', $fromcluster = false, $update = false) {
 		
 		
 		$filename = 'uploadfile';
 		$foldername = $for;
-		
+				
 		$filesize_image = $_FILES[$filename]['size'];
 		
 		if($filesize_image > 4000000) {
@@ -224,20 +224,30 @@ class Ajax extends Controller {
 				$ret['start'] = true;
 			}
 			elseif($foldername == 'profiles') {
-				$this->beex_image->crop_square('media/profiles/', $upload_result, 'media/profiles/', 134);
-				$this->session->set_userdata('profile_picture', $upload_result);
-				$result = base_url().'media/profiles/cropped134_'.$upload_result;
+				if($update) {
+					$this->beex_image->process_media('media/profiles/', $upload_result, 'media/profiles/'.$update.'/', 300, 300, true);
+					$this->beex_image->crop_square('media/profiles/', $upload_result, 'media/profiles/'.$update.'/', 120);
+					$this->MItems->update('profiles', array('user_id'=>$update), array('profile_pic'=>$upload_result));
+					$result = base_url().'media/profiles/'.$update.'/sized_'.$upload_result;
+					$ret['short_name'] = "sized_".$upload_result;
+				}
+				else {
+					$this->beex_image->crop_square('media/profiles/', $upload_result, 'media/profiles/', 134);
+					$this->session->set_userdata('profile_picture', $upload_result);
+					$result = base_url().'media/profiles/cropped134_'.$upload_result;
+				}
+				
 				$ret['start'] = false;
 				
 			}
-			
+				
 			elseif($foldername == 'npos') {
 				$this->beex_image->crop_square('media/npos/', $upload_result, 'media/npos/', 134);
 				$this->session->set_userdata('npo_logo', $upload_result);
 				$result = base_url().'media/npos/cropped134_'.$upload_result;
 				$ret['start'] = false;
 			}
-						
+					
 			$ret['file'] = $result;
 			$ret['success'] = true;
 			
@@ -361,6 +371,29 @@ class Ajax extends Controller {
 	function delete_note_reply($id) {
 		
 		$this->MItems->delete('note_replies', $id);
+		
+	}
+	
+	function jcrop_image() {
+		
+		$path = $this->input->post('path');
+		$image = $this->input->post('image');
+		$new_image = substr($this->input->post('image'), 6);
+		
+		$this->load->library('imagemanipulation', array('img'=>'./'.$path.$image), 'image');
+		
+		$this->image;
+		
+		if($this->image->imageok) {
+		    $this->image->setJpegQuality('100');
+		    $this->image->setCrop($this->input->post('x'), $this->input->post('y'), $this->input->post('w'), $this->input->post('h'));
+		    $this->image->resize('120');
+		    $this->image->save('./'.$path.'cropped120_'.$new_image);
+		
+			echo $path.'cropped120_'.$image;
+		} else {
+		   //Throw error as there was a problem loading the image
+		}
 		
 	}
 }

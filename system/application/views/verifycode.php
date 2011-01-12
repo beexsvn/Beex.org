@@ -20,6 +20,9 @@ echo form_open('user/entercode/'.$user_id, $attributes);
 ?>
 
 <p>Please check your email and enter your verification code found in your BEEx registration email. Alternatively you may click the link found in that email.</p>
+
+<p>If you haven't received a confirmation email check your spam or junk mail folder.</p>
+
 <?php $form_data = array('name'=>'code', 'id'=>'code', 'size'=>25); ?>
 <div class="form_element">
 	<label>Verification Code</label>

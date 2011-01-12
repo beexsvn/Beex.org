@@ -1,0 +1,469 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+
+
+body {background-color:#E5E3E3; margin:0; padding:0; font-family:Verdana, Geneva, sans-serif;}
+
+a {color:#000; text-decoration:none; cursor:pointer;}
+a:hover {color:#666;}
+a img {border:0}
+
+.message {background-color:#fff3ce; padding:30px; margin:10px auto; display:block; width:70%; border:4px solid #ffc51c;}
+.message a {color:#1beeee;}
+
+h2 {text-align:center;}
+
+#MainContainer {background-color:#e5e3e3; width:100%;}
+#SubContainer {background-color:#fff; width:934px; margin:0px auto; padding:0px 44px 10px;}
+
+
+#Header {/*background-image:url('/beex/images/header/bg2.png');*/ background-repeat:repeat-x; background-position:center top; width:100%; height:88px;}
+#SubHeader {width:934px; padding:0px 44px; height:88px; margin:0px auto; background-image:url('/beex/images/header/header2.png'); background-repeat:no-repeat; background-color:#F9B606; position:relative;}
+#SubHeader #Logo {margin-top:18px;}
+#SubHeader #Menu {float:right; margin-top:44px;}
+#SubHeader #Menu .tab {background-image:url('/beex/images/header/tab.png'); display:block; width:93px; height:20px; float:left; text-align:center; font:14px "Franklin Gothic Medium", "Franklin Gothic", sans-serif; padding-top:24px; color:#8f8f8f; cursor:pointer;}
+#SubHeader #Menu .tab2 {background-image:url('/beex/images/header/tab2.png');}
+#SubHeader #Menu .tab3 {background-image:url('/beex/images/header/tab3.png');}
+#SubHeader #Menu .tab4 {background-image:url('/beex/images/header/tab4.png');}
+#SubHeader #Menu .tableft {width:114px;}
+#SubHeader #Menu .tabhighlightleft {background-image:url('/beex/images/header/tab-highlight-left.png'); padding-left:21px;}
+#SubHeader #Menu .tabright {background-image:url('/beex/images/header/tab-right.png'); widht:110px;}
+#SubHeader #Menu .tab:hover {color:#EFAB32;}
+
+
+/***********************************************************************************
+
+		Column Widths : Page widths for the columns of the various pages
+
+***********************************************************************************/
+
+#LeftColumn {margin-right:14px; float:left; width:288px;}
+#RightColumn {float:left; width:632px; margin-bottom:14px;}
+
+#ClusterForm #LeftColumn {width:158px; margin-right:14px;}
+#challenge #RightColumn, #Cluster #RightColumn, #People #RightColumn, #NPOS #RightColumn {width:762px;}
+#User #RightColumn, #NPO #RightColumn {width:572px;}
+#challenge #LeftColumn, #Cluster #LeftColumn, #People #LeftColumn, #NPOS #LeftColumn {width:158px; margin-right:14px;}
+#User #LeftColumn, #NPO #LeftColumn	 {width:342px; margin-right:14px;}
+
+
+
+
+
+/***********************************************************************************
+
+		Menus : Styles pertaining to menus
+
+***********************************************************************************/
+
+
+.leftmenu {margin-top:40px;}
+.leftmenu a {color:#EFAB32; padding:4px 2px; display:block; border-bottom:1px dotted #000; font-size:11px; cursor:pointer;}
+.leftmenu a:hover {background-color:#EFAB32; color:#fff;}
+
+#UpperMenu {position:absolute; font:11px Verdana, Geneva, sans-serif; color:#555; top:35px; right:49px; text-transform:uppercase;}
+
+#Footer {background-image:url('/beex/images/footer/bg.png'); width:934px; padding:30px 44px 10px; margin:0px auto; background-repeat:repeat-x; background-position:center top;}
+
+#npoform {}
+#npoform table, table, .itemform table {font:11px Verdana; width:450px; margin:20px auto;}
+#npoform table th, table th, .itemform table th {padding:8px 10px 6px; color:#000; background-color:#F9B606; text-align:left; border-bottom:2px solid #e9ac1a;}
+#npoform table td, table td, .itemform table td {padding:6px 5px; color:#444; vertical-align:top;}
+#npoform table td input, #npoform table td textarea, table td input, table td textarea, .itemform table td textarea {width:80%;}
+#npoform table td .submit, table td .submit, .itemform table td .submit {width:auto; margin:5px auto; display:inline;}
+#npoform table td .cancel_button, table td .cancel_button, .itemform table td .cancel_button {width:auto; margin:5px auto; display:inline;}
+
+.FormBG .itemform table {width:90%; margin:0px auto;}
+
+.itemform table img {max-width:300px;}
+
+table {width:90%; margin:0px auto;}
+
+.editbutton {padding:6px 20px; border:3px solid #ffc51c; margin:5px 0; text-decoration:none; color:#000; text-align:center;}
+.editbutton:hover {background-color:#fff3ce;}
+
+
+h1.title, h2.title {font:39px "Franklin Gothic Book", sans-serif; border-bottom:5px solid #01ffff; width:100%; text-transform:uppercase; margin:0px; color:#999999;}
+h2.title {font-size:30px; text-align:left; margin:0; line-height:30px;}
+#LeftColumn h1.title {font-size:30px;}
+
+
+#RightColumn div {}
+
+
+
+div#BrowserModule {padding:0;}
+#BrowserModule div {border:0;}
+
+#LearnMore h3 {margin:0px;}
+#LearnMore p {margin:0px 0px 5px;}
+
+
+.hl {color:#fb9e00;}
+
+
+#LeftColumn .tout h2 {padding:6px 12px; background-color:#EFAB32; font:20px "Franklin Gothic Book", verdana, sans-serif; text-transform:uppercase; color:#fff;}
+
+
+
+.Browser {background-color:#fff;}
+.Browser .item {width:100%; background-color:#fff; margin:12px auto;}
+.Browser .item {padding:0px; float:left;}
+.Browser .item .image {width:118px; height:110px; float:left;}
+.Browser .item .image img {width:118px; height:110px;}
+.Browser .item .copy {width:376px; height:110px; float:left; background-color:#ffffcc}
+.Browser .item .copy h3 {margin:8px; text-align:center; font:bold 12px Verdana, Geneva, sans-serif; color:#EFAB32;text-transform:uppercase;}
+.Browser .item .copy h3 a {color:#EFAB32;}
+.Browser .item .copy p {margin:10px; text-align:center; color:#4e4b4c; font:12px Verdana, Geneva, sans-serif;}
+.Browser .item .copy .progress {font-size:12px; margin:0px 10px;}
+.Browser .item .donate {width:108px; height:110px; float:left; text-align:center; font:bold 20px Verdana, Geneva, sans-serif; color:#ffff00; background-color:#EFAB32;}
+.Browser .item .donate img {margin-top:9px;}
+
+
+.Browser .person {margin-left:28px; float:left; width:148px;}
+.Browser .person .image, .Browser .person .image img {width:148px; height:148px; position:relative;}
+.Browser .person .namelink {font:bold 10px 	Verdana, Geneva, sans-serif; color:#fff; background-color:#EFAB32; width:100%; text-align:center; position:absolute; z-index:10; bottom:0px; padding:3px 0px; margin:0px; text-transform:uppercase;}
+.Browser .person .namelink a {color:#fff;}
+
+.BigBrowser .item {margin:12px 28px; width:95%;}
+.BigBrowser .item .copy {width:450px;}
+
+#User .Browser {margin-bottom:20px;}
+#User .Browser .item .copy {width:374px;}
+#User .Browser .item .donate {display:none;}
+#User #challengeInfo .startbutton {text-align:center; margin:20px;}
+
+/* Home Page */
+
+#RightColumn .module {background-color:#DBE7E6; padding:15px 13px; margin-bottom:24px; color:#999;}
+
+#LearnMore h3 {color:#999; font:18px "Franklin Gothic Book", verdana, sans-serif; text-transform:uppercase; text-align:center;}
+
+#LearnMore p {text-align:center; font:12px Verdana, Geneva, sans-serif; color:#999;}
+
+#LearnMore a {color:#999; cursor:pointer;}
+
+#LearnMore a:hover {color:#0ef0f9;}
+
+
+
+.featuredbox {background-color:#FFFFCC; padding-bottom:8px;}
+
+
+
+#Featuredchallenges {background-color:#fffdd8; margin:auto; clear:both;} 
+
+.featured_buttons .button {width:16px; height:15px; float:left; margin-right:10px; background-image:url('/beex/images/buttons/featured-off.gif'); cursor:pointer;}
+
+.featured_buttons .on {background-image:url('/beex/images/buttons/featured-on.gif');}
+
+.featured_buttons {margin:0px auto 5px;}
+
+
+#Login, .homeform {background-color:#f6f5c5; padding:15px 15px; margin-top:10px;}
+#Login h2, .homeform h2 {color:#999; font:20px "Franklin Gothic Book", Verdana, Geneva, sans-serif; text-transform:uppercase; text-align:left; margin:0px; padding:0px;}
+#Login label, .homeform label {font:11px Verdana, Geneva, sans-serif; display:block;}
+#Login a, .homeform a  {font:11px Verdana, Geneva, sans-serif; color:#01ffff; display:block; margin-top:10px;}
+
+.start_challenge {margin:10px 0 0 -3px;}
+
+
+
+/* challenge Page */
+
+#challengeInfo {padding:13px; background-color:#DBE7E6;}
+#TheJourney {padding:13px; background-color:#DBE7E6;}
+#TheJourney table td {padding:0;}
+#JourneyInfo {background-color:#fff;}
+.titlebg {background-image:url('/beex/images/backgrounds/h2bg.png'); background-repeat:repeat-x;}
+
+
+.InfoDisplay {width:100%; clear:both;}
+.FormBG, #InfoDisplay, .InfoDisplay {background-color:#ffffcc;}
+#InfoDisplay h2, .InfoDisplay h2 {font:20px verdana; text-transform:uppercase; padding:10px 6px 6px; background-color:#EFAB32; text-align:left; color:#fff; margin:0px;}
+.InfoDisplay table {width:100%;}
+.InfoDisplay table td {padding:0px;}
+
+
+.media {width:400px; margin:13px 0px 13px 13px; height:335px; float:left; background-color:#000; position:relative; text-align:center;}
+.media .donation {position:absolute; bottom:0; background-color:#4c4c4c; width:400px; height:auto;}
+.media .donation .daysleft {position:absolute; right:10px; top:12px; font:12px Verdana, Geneva, sans-serif; color:#999;}
+.media #main_image {max-height:285px; max-width:400px;}
+.fundinfo {margin-top:10px; width:300px;}
+.fundinfo p {font:11px Verdana, Geneva, sans-serif; color:#aeb8b7;}
+
+
+.declaration {background-color:#fff; width:310px; margin:13px 13px 13px 0; height:335px; float:left; position:relative}
+.declaration p {margin:0px; padding:20px; text-align:center; font:18px verdana; color:#4c4a4b;}
+.declaration .hl {font-size:24px; color:#EFAB32;}
+.declaration .hlb {font-size:30px; color:#EFAB32; font-weight:bold;}
+.declaration a {color:#EFAB32;}
+.declaration a:hover {color:#01ffff;}
+
+
+
+.social {width:99%; margin:10px auto; padding:6px 0px; border-top:3px solid #01ffff; clear:both; font-size:11px; color:#999;}
+.social img {margin-left:40px;}
+
+
+.essential {clear:both; width:100%; margin-left:10px; }
+.essential table.whatwherewhen {padding:1%; margin:0; float:left;}
+.essential table td, .essential table th {color:#999999; background-color:inherit; border:none; padding:1px; vertical-align:top; text-align:left;}
+.essential .description, .essential .blurb {font:12px Verdana, Geneva, sans-serif; margin-top:8px; color:#4e4b4c; float:left; width:90%;}
+.essential .blurb {font-weight:bold;}
+
+
+
+/* Progress Bar */
+.progressbar {width:264px; height:24px; background-image:url('/beex/images/assets/progressbar_gray.gif'); overflow:hidden; margin-left:15px; text-align:left;}
+
+#Notes {padding:20px; background-color:#fff;}
+#ActivityFeed {padding:10px 12px 20px; background-color:#ffffcd;}
+#ActivityFeed h2 {color:#999; font:20px "Franklin Gothic Book", Verdana, Geneva, sans-serif; text-transform:uppercase; text-align:left; margin:0px; padding:0px; background-color:inherit;}
+#ActivityFeed a {color:#EFAB32;}
+#ActivityFeed .donationnote {font-style:italic; margin:3px 5px;}
+
+
+/* Mini Profile */
+.MiniProfile, #Team {width:100%; background-color:#f6f5c5; padding-bottom:10px;}
+.MiniProfile h2 {padding:6px 12px; background-color:#EFAB32; font:18px "Franklin Gothic Book", verdana, sans-serif; text-transform:uppercase; color:#fff;}
+.MiniProfile .image {width:120px; height:120px; margin:10px auto 15px;}
+.MiniProfile .image img {width:120px; height:120px;}
+.MiniProfile p {font:12px Verdana, Geneva, sans-serif; color:#504a4e; text-align:center; padding:1px; margin:0px;}
+.MiniProfile p a {color:#fb9d00;}
+.MiniProfile .rightcol p {text-align:left; margin-bottom:10px;}
+.MiniProfile h2 a {color:#fff;}
+.MiniProfile h2 a:hover {color:#01ffff;}
+.MiniProfile h2 small {font-size:10px; font-weight:bold;}
+
+
+
+.Team {margin-top:0;}
+
+.Team #teamname {background-image:url('/beex/images/teamnamebg.png'); height:32px; font-weight:bold; font-size:10px; color:#fff; line-height:30px; text-align:center;}
+
+
+
+
+
+/* Gallery Page */
+
+#Gallery #RightColumn {width:762px;}
+
+#Gallery #LeftColumn {width:158px; margin-right:14px;}
+
+
+
+/* Media Page */
+
+#Media #RightColumn {width:762px;}
+
+#Media #LeftColumn {width:158px; margin-right:14px;}
+
+
+
+
+
+/*Proof*/
+#ProofCountdown {background-color:#fff500; padding:0px 6px; background-image:url('/beex/images/challenge/proofbg.png');}
+#ProofCountdown h3 {font:bold 15px "Franklin Gothic Book", Verdana, Geneva, sans-serif; text-transform:uppercase; text-align:center; color:#231f20; margin:0px; padding:0px;}
+#ProofCountdown p {text-align:center; font-size:15px; color:#999999;}
+#ProofCountdown .big {font:bold 30px 'Franklin Gothic Book', Verdana, Geneva, sans-serif; color:#EFAB32; padding:0px 10px;}
+#ProofBottom {margin:0 0 12px;}
+
+
+
+
+
+/*Title Header */
+
+#TitleHeader {width:100%; background-color:#DBE7E6;}
+
+#TitleHeader h1 {font-size:55px; text-align:center;}
+
+#TitleHeader h1.title {border-bottom-color:#fff;}
+
+
+
+
+
+/* Helper Functions */
+
+.widecol {padding:13px; background-color:#DBE7E6;}
+
+
+
+.tabs {float:right; margin-top:10px;}
+
+.tabs .button {font:11px "Franklin Gothic Book", Verdana, Geneva, sans-serif; text-align:center; background-image:url(/beex/images/buttons/small-bg.gif); width:70px; height:17px; display:block; float:left; color:#a9a9a9; padding-top:3px; cursor:pointer;}
+
+.tabs .selected {color:#efab32;}
+
+.tabs .button:hover {color:#efab32;}
+
+.tabsmain {margin-top:25px;}
+
+
+
+/* Forms */
+
+.form #RightColumn {width:760px; float:right;}
+
+
+
+form {background-color:#fff;}
+
+form th {width:30%;}
+
+form td {color:#666;}
+
+form td.label {width:30%;}
+
+form td textarea {width:80%; height:60px;}
+
+form h5 {font:bold 13px Verdana, Geneva, sans-serif;}
+
+form label {font: 13px Verdana, Geneva, sans-serif;}
+
+form .bigtext {height:100px;}
+
+form .short {width:20%;}
+
+
+
+#Login form {background-color:inherit;}
+
+#Login input {width:94%;}
+
+
+
+.FormBG h2.title {font:20px verdana; text-transform:uppercase; padding:10px 6px 6px; background-color:#EFAB32; text-align:left; color:#fff; margin:0px; width:auto; border:none;}
+
+.FormBG a {color:#01ffff;}
+
+
+
+/* Add Note */
+#add_note textarea, #add_note input {width:100%;}
+#add_note textarea {height:140px;}
+#add_note .submit {width:auto;}
+#add_note .videoembed {height:60px;}
+
+
+
+.note {border-bottom:3px solid #00ffff;}
+.note p {font:10px Verdana, Geneva, sans-serif;}
+.note .title {font-weight:bold;}
+.note .created {color:#ff9900;}
+.note img {max-width:450px;}
+.note .step {float:left; font-size:26px; margin:0px 12px 0px 0px;}
+
+.gallery .note .title {margin-top:0px; font-size:14px;}
+.gallery .note .created {margin-bottom:3px;}
+
+.replies {padding:5px; border-top:1px solid #bfffff; background-color:#bfffff;}
+.replies h4 {padding-top:0px; margin:0px;}
+
+
+
+.gallery {padding:30px; background-color:#fff;}
+
+.gallery .m {width:150px; height:120px; border:1px solid #999; position:relative; margin:8px; float:left;}
+
+.gallery .m .transparent {background-color:#000; opacity:.5; position:absolute; top:0px; left:0px; width:150px; height:120px; display:none;}
+
+.gallery .m img {width:150px; height:120px;}
+
+.gallery .m p {margin:0; padding:0;}
+
+.gallery .m .name {font:bold 10.5px Verdana, Geneva, sans-serif; color:#fff; top:0px; margin:4px; position:absolute;}
+
+.gallery .m .time {font:bold 10.5px Verdana, Geneva, sans-serif; color:#fff; bottom:0px; right:0px; background-color:#ff9900; padding:2px; position:absolute;}
+
+
+
+.gallery .m:hover {border-color:#ff9900;}
+
+.gallery .m:hover .transparent {display:block;}
+
+
+
+.gallery {padding:30px; background-color:#fff;}
+
+.gallery .m {width:150px; height:120px; border:1px solid #999; position:relative; margin:8px; float:left;}
+
+.gallery .m .transparent {background-color:#000; opacity:.5; position:absolute; top:0px; left:0px; width:150px; height:120px; display:none;}
+
+.gallery .m img {width:150px; height:120px;}
+
+.gallery .m p {margin:0; padding:0;}
+
+.gallery .m .name {font:bold 10.5px Verdana, Geneva, sans-serif; color:#fff; top:0px; margin:4px; position:absolute;}
+
+.gallery .m .time {font:bold 10.5px Verdana, Geneva, sans-serif; color:#fff; bottom:0px; right:0px; background-color:#ff9900; padding:2px; position:absolute;}
+
+
+
+.gallery .m:hover {border-color:#ff9900;}
+
+.gallery .m:hover .transparent {display:block;}
+
+
+
+.mediaviewer {padding:30px; background-color:#fff; position:relative;}
+
+
+
+.mediaviewer .leftarrow, .mediaviewer .rightarrow {position:absolute; top:200px;}
+
+.mediaviewer .leftarrow {left:45px;}
+
+.mediaviewer .rightarrow {right:45px;}
+
+.mediaviewer .thumbback {position:absolute; top:375px; right:45px;}
+
+
+ 
+.mediaviewer .img {width:530px; height:420px; position:relative; margin:10px auto;}
+
+.mediaviewer .img img {max-width:530px; max-height:420px; display:block; margin:0px auto;}
+
+.mediaviewer .img .time {position:absolute; right:0px; bottom:0px; background-color:#ff9900; color:#fff; font:bold 36px Verdana, Geneva, sans-serif; display:none; opacity:.6;}
+
+.mediaviewer .img:hover .time {display:block;}
+
+.mediaviewer .caption {font-size:13px; color:#999; width:530px; margin:0px auto;}
+
+
+
+
+
+/* Recently Declared */
+
+.recently_declared {clear:both;}
+
+.recently_declared p {font-size:10px;}
+
+.recently_declared img {width:65px; height:65px; float:left; margin:0px 15px 15px 0px;}
+
+.recently_declared a {color:#12bbaa;}
+
+
+
+/* Helper Styles */
+
+.clearboth {clear:both;}
+
+#ui-datepicker-div {display:none;}
+
+
+
+/* Footer */
+
+.businesslinks {text-align:center; color:#4e4b4c; margin:0px; font-size:9px;}
+
+.businesslinks a {color:#4e4b4c;}
+
+.businesslinks a:hover {text-decoration:underline;}

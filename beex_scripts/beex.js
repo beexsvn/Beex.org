@@ -127,9 +127,13 @@ function shrinkFeed(type) {
 
 jQuery(document).ready(function(){
 	$(".ceebox").ceebox({borderColor:'#DBE7E6', borderWidth:'18px', boxColor:"#ffffff", htmlWidth:360, htmlHeight:360, titles:false, padding:0});
+	$(".subscription_ceebox").ceebox({borderColor:'#DBE7E6', borderWidth:'18px', boxColor:"#ffffff", htmlWidth:360, htmlHeight:460, titles:false, padding:0});
+	
+	$(".jcrop_pop").ceebox({borderColor:'#DBE7E6', borderWidth:'18px', boxColor:"#ffffff", titles:false, htmlHeight:570, htmlWidth:550, html:true});
 	
 	$(".datepicker").datepicker({minDate:0, showButtonPanel: true, onSelect: function() {$(this).removeClass('italic'); $(this).addClass('dark_gray');}});
-	$(".rollover_css").hover(function() {				
+	$(".rollover_css").hover(function() {
+		    var base;
 			var classList = $(this).attr('class').split(/\s+/);		
 			$.each(classList, function(index, item){			
 				if (item.indexOf('background_') === 0) {
@@ -139,7 +143,8 @@ jQuery(document).ready(function(){
 		});			
 		var newbg = 'url("' + true_base_url + 'images/buttons/' + base + '-on.png' + '")';			
 		$(this).css('backgroundImage', newbg);		
-	}, function() {				
+	}, function() {
+		var base;			
 		var classList = $(this).attr('class').split(/\s+/);	
 		$.each(classList, function(index, item){		
 			if (item.indexOf('background_') === 0) {			 
@@ -152,7 +157,7 @@ jQuery(document).ready(function(){
 		$(this).css('backgroundImage', newbg);
 	});
 		
-	jQuery("#new_note").click(function() {
+	jQuery(".new_note").click(function() {
 		jQuery('.form').slideUp();
 		jQuery("#edit_note_form").slideDown();
 		//jQuery("#editor_").ckeditor();
@@ -298,6 +303,11 @@ jQuery(document).ready(function(){
 	
 	/* Proof and Note Javascript */
 	
+	/*
+	
+	Turning off the facebook feature
+	
+	
 	$('.note_form').submit(function() {
 		var note = $(this).find("[name='note']").val();
 		var title = $(this).find("[name='title']").val();
@@ -329,6 +339,34 @@ jQuery(document).ready(function(){
 			else {
 				return true;
 			}
+		}
+		else {
+			$("#proof_errors"+id).html('<p>Title and Note are both required</p>');
+			return false;
+		}
+	});
+	*/
+	
+	$('.note_form').submit(function() {
+		var note = $(this).find("[name='note']").val();
+		var title = $(this).find("[name='title']").val();
+		var id = $(this).attr('id').substr(14);
+		if(note && title) {
+			return true;
+			
+		}
+		else {
+			$("#note_errors"+id).html('<p>Title and Note are both required</p>');
+			return false;
+		}
+	});
+	
+	$('.proof_form').submit(function() {
+		var note = $(this).find("[name='caption']").val();
+		var title = $(this).find("[name='name']").val();
+		var id = $(this).attr('id').substr(15);
+		if(note && title) {
+			return true;
 		}
 		else {
 			$("#proof_errors"+id).html('<p>Title and Note are both required</p>');

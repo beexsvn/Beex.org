@@ -138,12 +138,6 @@ $(document).ready(function() {
 	$.fn.ceebox.popup('<a href="<?php echo base_url(); ?>pieces/donate.php?challenge_id=<?php echo $item->item_id; ?>&challenge_name=<?php echo urlencode($item->challenge_title); ?>">Link</a>', {borderColor:'#DBE7E6', borderWidth:'18px', boxColor:"#ffffff", htmlWidth:360, htmlHeight:360, titles:false, padding:0});
 <?php endif; ?>
 
-	/* Show expand the first note in the feed */
-	$(document).ready(function() {
-		expandFirstNote();
-	});
-
-
 </script>	
 <?php endif; ?>
 
@@ -220,20 +214,12 @@ $(document).ready(function() {
             <div style="clear:both;"></div>
         </div>
     </div>
-	<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-bottom.gif">
-</div>
-
-
-<!-- The Activity Feed -->
-
-
-<div id="TheJourney">
-	<img src="<?php echo base_url(); ?>images/backgrounds/proof-top.png" class="block" />
+	
 	<div id="JourneyInfo">
-   		<h2 class="title">The Journey</h2>
+   		
 		<?php if($owner) : ?>
 		<div class="write_buttons">
-			<img id="new_note" class="rollover" src="<?php echo base_url(); ?>images/buttons/new-note-off.png">
+			<img class="new_note rollover" src="<?php echo base_url(); ?>images/buttons/new-note-off.png">
 			<!--<img id="new_proof" class="rollover" src="<?php echo base_url(); ?>images/buttons/add-proof-off.png">-->
 		</div>
 		<?php endif;?>
@@ -268,7 +254,7 @@ $(document).ready(function() {
 						<div class="proof_graphic">
 							<h3>The Proof</h3>
 							<p class="proof_description"><?php echo $item->proof_description; ?></p>
-							<img src='<?php echo base_url(); ?>images/graphics/proof-bg.png' />
+							<img src='<?php echo base_url(); ?>images/graphics/proof-bg.png' style="width:510px;" />
 							<p>Proof will be posted when the challenge is complete.</p>
 						</div>
 					<?php endif;?>
@@ -279,7 +265,8 @@ $(document).ready(function() {
 		
 		<div style="clear:both;"></div>
     </div>
-	<img src="<?php echo base_url(); ?>images/backgrounds/proof-bottom.png" />
+	
+	<img src="<?php echo base_url(); ?>images/backgrounds/challenge-blue-bottom.gif">
 </div>
 	
 <div style="clear:both;"></div>

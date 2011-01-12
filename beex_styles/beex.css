@@ -169,16 +169,16 @@ h1.awesometitle .cluster_title a:hover {color:#FFC400;}
 #TheJourney {clear:both;}
 #TheJourney h2.title {padding-left:18px; font-size:22px; width:auto;}
 #JourneyInfo {background-color:#DBE7E6; position:relative;}
-#JourneyInfo #Buttons {width:217px; float:left; padding-left:18px;}
-#JourneyInfo #Buttons .button {width:167px; cursor:pointer; margin:18px 0; background:url('../images/buttons/act-button.png') 0 0 no-repeat; height:34px; background-repeat:no-repeat; font:17px/34px 'Arial Rounded MT Bold', 'Arial Black', Arial; color:#fff; text-transform:uppercase;}
-#JourneyInfo #Buttons .button:hover {width:217px; height:34px; margin:18px 0;  background-position:-168px 0; color:#FFC400; line-height:34px;}
-#JourneyInfo #Buttons .button p, #JourneyInfo #Buttons .selected p, #JourneyInfo #Buttons .selected_top p {margin:0; padding:0; width:165px; text-align:center;}
-#JourneyInfo #Buttons .selected {height:38px; margin:16px 0; padding:0; background-position:0 0; background:url('../images/buttons/act-button-long-on.png'); color:#FFC400; line-height:38px; width:223px; z-index:10; font:17px/34px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
-#JourneyInfo #Buttons .selected_top {height:38px; margin:16px 0; padding:0; background-position:0 0; background-image:url('../images/buttons/act-button-longtop-on.png'); color:#FFC400; line-height:38px; width:242px; z-index:10; font:17px/34px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
+#JourneyInfo #Buttons {width:124px; float:left; padding-left:18px;}
+#JourneyInfo #Buttons .button {width:112px; cursor:pointer; margin:18px 0; background:url('../images/buttons/act-button.png') 0 0 no-repeat; height:24px; background-repeat:no-repeat; font:12px/24px 'Arial Rounded MT Bold', 'Arial Black', Arial; color:#fff; text-transform:uppercase;}
+#JourneyInfo #Buttons .button:hover {width:124px; height:24px; margin:18px 0;  background-position:-112px 0; color:#FFC400; line-height:24px;}
+#JourneyInfo #Buttons .button p, #JourneyInfo #Buttons .selected p, #JourneyInfo #Buttons .selected_top p {margin:0; padding:0; width:112px; text-align:center;}
+#JourneyInfo #Buttons .selected {height:28px; margin:16px 0; padding:0; background-position:0 0; background:url('../images/buttons/act-button-long-on.png'); color:#FFC400; line-height:28px; width:129px; z-index:10; font:12px/28px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
+#JourneyInfo #Buttons .selected_top {height:28px; margin:16px 0; padding:0; background-position:0 0; background-image:url('../images/buttons/act-button-longtop-on.png'); color:#FFC400; line-height:28px; width:149px; z-index:10; font:12px/28px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
 
-#JourneyInfo .write_buttons {position:absolute; top:-7px; right:27px;}
+#JourneyInfo .write_buttons {margin-right:30px; text-align:right; padding-top:20px;}
 
-#JourneyInfo #Feed {float:left; width:707px; margin-top:16px;}
+#JourneyInfo #Feed {float:left; width:587px; margin-top:16px;}
 #JourneyInfo #FeedWrapper {border-left:5px solid #FFC400; border-right:5px solid #FFC400; background-color:#fff; padding:0 30px 0 34px; position:relative; min-height:300px; overflow:hidden;}
 #JourneyInfo #FeedContent {position:relative;}
 
@@ -221,11 +221,13 @@ h1.awesometitle .cluster_title a:hover {color:#FFC400;}
 .feed .row .watermark {float:right; margin-left:16px;}
 .feed .row img {max-width:500px;}
 
+.feed .browser_button {font-size:10px;}
+
 .feed .activity_button {cursor:pointer; color:#CC7322; font-style:italic;}
 .feed .activity_button:hover {color:#FFC400;}
 
-#Cluster .feed .row .copy {width:515px;}
-#Cluster .feed .top_row .copy {width:415px;}
+#Cluster .feed .row .copy {width:395px;}
+#Cluster .feed .top_row .copy {width:295px;}
 
 .feed .profile_image {width:45px; height:45px; float:left; margin:8px 5px 0 0; position:relative;}
 .feed .top_row .profile_image {width:87px; height:87px; margin-right:10px;}
@@ -362,10 +364,10 @@ h1.awesometitle .cluster_title a:hover {color:#FFC400;}
 .profile_page .MiniProfile .header {text-transform:uppercase; margin-top:15px;}
 
 .MiniProfileButtons {width:181px; float:left; background-color:#FFC400;}
-.MiniProfileButtons .button {width:167px; cursor:pointer;  margin:18px auto; background:url('../images/buttons/act-button.png') 0 0 no-repeat; height:34px; background-repeat:no-repeat; font:17px/34px 'Arial Rounded MT Bold', 'Arial Black', Arial; color:#fff; text-transform:uppercase;}
+.MiniProfileButtons .button {width:167px; cursor:pointer;  margin:18px auto; background:url('../images/buttons/act-button-profile.png') 0 0 no-repeat; height:34px; background-repeat:no-repeat; font:17px/34px 'Arial Rounded MT Bold', 'Arial Black', Arial; color:#fff; text-transform:uppercase;}
 .MiniProfileButtons .button:hover {height:34px; background-position:-168px 0px; color:#FFC400; line-height:34px;}
 .MiniProfileButtons .button p, .MiniProfileButtons .selected p, .MiniProfileButtons .selected_top p {margin:0; padding:0; width:167px; text-align:center;}
-.MiniProfileButtons .selected {height:38px; margin:16px 0 14px; padding:0; background-position:0 0; background-image:url('../images/buttons/act-button-long-on.png'); color:#FFC400;  width:223px; z-index:10; font:17px/38px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
+.MiniProfileButtons .selected {height:38px; margin:16px 0 14px; padding:0; background-position:0 0; background-image:url('../images/buttons/act-button-long-on-profile.png'); color:#FFC400;  width:223px; z-index:10; font:17px/38px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
 .MiniProfileButtons .selected_top {height:38px; margin:16px 0 14px; padding:0; background-position:0 0; background-image:url('../images/buttons/act-button-longtop-on.png'); color:#FFC400; width:242px; z-index:10; font:17px/38px 'Arial Rounded MT Bold', 'Arial Black', Arial; text-transform:uppercase; position:relative;}
 
 .profile_page .feed_wrapper {background-color:#fff; border-left:5px solid #FFC400; border-right:5px solid #FFC400; padding:10px 27px; min-height:500px;}
@@ -377,6 +379,9 @@ h1.awesometitle .cluster_title a:hover {color:#FFC400;}
 .profile_page .feed .activity {font-size:14px;}
 .profile_page .feed .watermark {margin:10px 0 0 10px;}
 .profile_page .feed .row {border-bottom:1px solid #BEC4C4; padding-bottom:15px;}
+
+.MiniProfile .jcrop_pop {position:absolute; z-index:11; background-color:#FFC400; color:#fff; width:63%; padding:4px 0; font-size:12px; right:6px; bottom:12px;}
+.MiniProfile .jcrop_pop:hover {background-color:#CC7322;}
 
 
 /*****************
@@ -1148,7 +1153,7 @@ fieldset {border:none; padding:0; margin:0;}
 	.white_content {
 		display: none;
 		position: absolute;
-		top: 25%;
+		top: 25   
 		left: 25%;
 		width: 50%; 
 		height: 50%;
@@ -1172,4 +1177,26 @@ fieldset {border:none; padding:0; margin:0;}
 .npo_cntr h1.title {background-color:#fff;}
 
 
-/* Widget Creation */
+/* Cluster Challengers */
+.current_invites {padding-bottom:20px;}
+.current_invites .row {clear:both; color:#5C6771;}
+.current_invites .row div {float:left; font-size:12px;}
+.current_invites .row .med {width:50%;}
+h3 {clear:both;}
+#invite_challengers {width:70%; height:60px; color:#5C6771;}
+#ClusterChallengers p {color:#5C6771; font-size:12px;}
+#ClusterChallengers .InfoDisplay {padding:0 3% 25px; width:94%; float:left;}
+#ClusterChallengers textarea {border:1px solid #BEC4C4; margin:5px 0px; }
+#ClusterChallengers .copy {width:600px;}
+
+
+
+.profile_page .smaller .activity {font:12px verdana, arial, sans-serif; margin:2px 0 1px;}
+.profile_page .feed .smaller {border-bottom:none;}
+.profile_page .smaller .profile_image {
+    height: 70px;
+    margin-right: 10px;
+    width: 70px;
+	margin-left:45px;
+}
+.profile_page .smaller .watermark {height:60px;}

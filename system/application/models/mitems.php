@@ -274,7 +274,7 @@ class MItems extends Model {
 		return $this->db->get();
 
 	}
-
+		
 
 	/* Teammates Functions */
 	function hasTeammates($id) {
@@ -345,8 +345,6 @@ class MItems extends Model {
 		return $this->db->get();
 	}
 	
-	
-
 	function getClustersByUser($id = '', $key='clusters.id', $order='', $order_way='', $limit='', $offset='') {
 
 		$this->db->select('clusters.*, profiles.*, clusters.id AS theid');
@@ -391,6 +389,27 @@ class MItems extends Model {
 			return $row->cluster_title;
 		}
 		else return false;
+		
+	}
+	
+	function get_cluster_invites($cluster_id, $type = false) {
+		
+		$this->db->select('*');
+		$this->db->from('cluster_invites');
+		$this->db->where('cluster_id', $cluster_id);
+		
+		if($type) {
+			
+			
+		}
+		
+		$result = $this->db->get();
+		if($result->num_rows()) {
+			return $result->result();	
+		}
+		else {
+			return false;
+		}
 		
 	}
 
@@ -542,6 +561,17 @@ class MItems extends Model {
 		return $this->db->get();
 	}
 	
+	function getSupporters($id = '') {
+		$this->db->select('*');
+		$this->db->from('donors');
+		
+		$this->db->where('itemnumber', $id);
+		$this->db->where('itemname !=', 'NULL');
+		$this->db->where('quantity', '');
+		
+		return $this->db->get();
+		
+	}	
 	
 	function does_user_have_organizations($user_id) {
 		$npos = $this->getNPO(array('npos.user_id'=>$user_id));

@@ -70,6 +70,29 @@ class Beex {
 		return $npo->name;
 
 	}
+	
+	function getDonatedAmount($cluster_id, $type) {
+		
+		$CI =& get_instance();
+		
+		if($type == 'cluster') {
+			$donations = $CI->MItems->getDonations($cluster_id, 'cluster');
+		}
+		else {
+			$donations = $CI->MItems->getDonations($CI->MItems->get_item_id('challenge', $cluster_id), 'itemnumber');
+		}
+		
+		$total = 0;
+		
+		if($donations->num_rows()) {
+			foreach($donations->result() as $donation) {
+				$total += $donation->mc_gross;
+			}
+		}
+		
+		return $total;
+	}
+	
 
 	function processProgressBar($type, $id, $view = 'full') {
 
@@ -383,7 +406,7 @@ class Beex {
 		$output = '';
 		$output .= "<div class='profile_image'>";
 		$output .= "<img class='picture' src='".$src."' />";
-		$output .= anchor($folder.'/view/'.$id, '<img class="border" src="'.base_url().'images/tout-image-border.png" />');
+		$output .= anchor($folder.'/view/'.$id, '<img class="border" src="'.base_url().'images/tout-image-border.png" />', 'target="_blank"');
 		$output .= "</div>";
 		
 		return $output;
@@ -522,48 +545,53 @@ class Beex {
 		
 	}
 
-	function create_browser($result, $table, $folder = 'profile', $widget = false) {
+	function create_browser($result, $table, $folder = 'profile', $widget = false, $from_cluster = false, $small = false, $from_npo = true) {
 		$i = 0;
 		foreach($result->result() as $item) {
 			
 			if($table == 'challenges') {
-
+				
 				$pronoun = 'I';
 				$CI =& get_instance(); 
 				$pronoun = $CI->MItems->hasTeammates($item->id);
 				$profile = $CI->MItems->getUserByChallenge($item->id)->row();
 				
-				if($profile) :
+				if($profile) {
 			
-				if($folder == 'profile') {
-					$image_name = $profile->profile_pic;
-					$link_id = $profile->user_id;
-				}
-				else {
-					$link_id = $item->id;
-					if($item->challenge_video) {
-						$image_name = get_video_thumbnail($item->challenge_video);
+					if($folder == 'profile') {
+						$image_name = $profile->profile_pic;
+						$link_id = $profile->user_id;
 					}
 					else {
-						$image_name = $item->challenge_image;
+						$link_id = $item->id;
+						if($item->challenge_video) {
+							$image_name = get_video_thumbnail($item->challenge_video);
+						}
+						else {
+							$image_name = $item->challenge_image;
+						}
 					}
-				}
-			
 				
 				?>
 				
-				<div class='row join<?php if($widget) echo " widget".$i; ?>' id="join<?php echo $item->id; ?>">
-				
-					<?php if(!$widget) : ?><img class='watermark' src='<?php echo base_url(); ?>images/glyphs/join.png'><? endif; ?>
+				<div class='row join<?php if($widget) echo " widget".$i; ?><?php if($small) echo ' smaller'; ?>' id="join<?php echo $item->id; ?>">
+					
+					<?php /*if(!($widget || $from_cluster)) : ?>
+						<img class='watermark' src='<?php echo base_url(); ?>images/glyphs/join.png'>
+					<? endif; */?>
+					
 					<?php echo $this->displayProfileImage($link_id, $image_name, $folder); ?>
 					<div class="float_left copy">
-						<?php echo anchor('challenge/view/'.$item->id, $item->challenge_title, "class='activity orange bold' style='display:inline-block;'"); ?>
+						<?php echo anchor('challenge/view/'.$item->id, $item->challenge_title, "class='activity orange bold' style='display:inline-block;' target='_parent'"); ?>
 						<?php if(!$widget) : ?>
-							<?php if($CI->session->userdata('user_id') == $item->user_id) echo anchor('challenge/editor/'.$item->id.'/edit', "&lt;edit&gt;", 'style="font-size:10px;"') ?>
+							<?php if($CI->session->userdata('user_id') == $item->user_id) echo anchor('challenge/editor/'.$item->id.'/edit', "&lt;edit&gt;", 'class="browser_button"'); ?>
 						<?php endif; ?>
-						<p class="activity"><?php echo anchor('user/view/'.$profile->user_id, $profile->first_name.' '.$profile->last_name); ?> will <?php echo anchor('challenge/view/'.$item->id, $item->challenge_declaration); ?> if $<?php echo $item->challenge_goal; ?> is raised for <?php echo anchor('npo/view/'.$item->challenge_npo, $item->name); ?></p>
+						<?php if($from_cluster) : ?>
+							<a class="deactivate_challenge browser_button" id="deactivate_<?php echo $item->id; ?>">&lt;deactivate from cluster&gt;</a>
+						<?php endif; ?>
+						<p class="activity"><?php echo anchor('user/view/'.$profile->user_id, $profile->first_name.' '.$profile->last_name, "target='_parent'"); ?> will <?php echo anchor('challenge/view/'.$item->id, $item->challenge_declaration, "target='_parent'"); ?> if $<?php echo $item->challenge_goal; ?> is raised for <?php echo anchor('npo/view/'.$item->challenge_npo, $item->name, 'target="_parent"'); ?></p>
 						<?php if($widget) : ?>
-							<?php echo anchor('challenge/view/'.$item->id.'/give', '<img class="give_button" src="'.base_url().'images/buttons/widget-give.png">', array('target="_blank"')); ?>
+							<?php echo anchor('challenge/view/'.$item->id.'/give', '<img class="give_button" src="'.base_url().'images/buttons/widget-give.png">', 'target="_blank"'); ?>
 						<?php endif;?>
 						<p class='activity raised_goal'>Raised: $<?php echo number_format($CI->MItems->amountRaised($item->item_id), 2); ?> | Goal: $<?php echo number_format($item->challenge_goal); ?></p>
 						<p class="date"><?php echo date('m.d.Y', strtotime($item->challenge_created)); ?> at <?php echo date('H:i', strtotime($item->challenge_created)) ; ?></p>					
@@ -572,9 +600,10 @@ class Beex {
 					<div style='clear:both;'></div>
 				</div>
 				
-			
+				
 				<?php
-				endif; 
+				}
+			
 			}
 
 			elseif($table == 'clusters') {
@@ -584,9 +613,12 @@ class Beex {
 					$link_id = $profile->user_id;
 				}
 				else {
-					$link_id = $item->id;
+					$link_id = $item->theid;
 					$image_name = $item->cluster_image;
 				}
+				$CI =& get_instance(); 
+				
+				$challenges = $CI->MItems->getChallenge(array('cluster_id'=>$item->theid));
 				
 				?>
 				<div class='row'>
@@ -600,6 +632,40 @@ class Beex {
 						<p class='activity raised_goal'>Raised: $0 | Goal: $<?php echo $item->cluster_goal; ?></p>	
 						<?php echo anchor('cluster/joina/'.$item->theid, '<img class="rollover" src="'.base_url().'images/buttons/join-browse-off.png" />'); ?>
 						<p class="date"><?php echo date('m.d.Y', strtotime($item->created)); ?> at <?php echo date('H:i', strtotime($item->created)) ; ?></p>
+
+						<div style='clear:both;'></div>
+					</div>
+					<div style='clear:both;'></div>
+					<?php
+						if($from_npo) {
+						$this->create_browser($challenges, 'challenges', 'profile', false, false, true);
+						} 					
+					?>
+				</div>
+				<?php
+				
+				
+			}
+			
+			elseif($table == 'nposearch') {
+				
+				?>
+				<div class='row'>
+					
+					<img class='watermark' src='<?php echo base_url(); ?>images/glyphs/npo.png'>
+					
+					<div class='profile_image'>
+			       		<?php if($item->logo) : ?>
+							<?php get_item_image('npos', $item->id, $item->logo, 'cropped120', 'picture'); ?>
+			        	<?php else: ?>
+			        		<?php display_default_image('npo'); ?>
+			        	<?php endif; ?>
+						<?php echo anchor('npo/view/'.$item->id, '<img class="border" src="'.base_url().'images/tout-image-border.png" />'); ?>
+					</div>
+					
+					<div class="float_left copy">
+						<?php echo anchor('npo/view/'.$item->id, $item->name, "class='activity orange bold'"); ?>
+						<p class="activity"><?php echo $item->blurb; ?></p>
 
 						<div style='clear:both;'></div>
 					</div>

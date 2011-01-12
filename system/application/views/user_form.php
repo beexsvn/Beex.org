@@ -55,11 +55,11 @@ $password_conf_cell = generate_input($name, 'password', $edit, $value);
 
 $name = 'first_name';
 $value = ($new) ? set_value($name) : @$item->$name;
-$first_name_cell = generate_input($name, 'input', $edit, $value);
+$first_name_cell = generate_input($name, 'input', $edit, $value, '', '', '', array('maxlength'=>17));
 
 $name = 'last_name';
 $value = ($new) ? set_value($name) : @$item->$name;
-$last_name_cell = generate_input($name, 'input', $edit, $value);
+$last_name_cell = generate_input($name, 'input', $edit, $value, '', '', '', array('maxlength'=>17));
 
 
 $name = 'profile_pic';
@@ -512,7 +512,11 @@ endif;
 		
 		<div class="form_element">
 			<label>Profile Picture<br /><span class="small">(4 MB maximum size)</span></label>
+			<?php if($new) : ?>
 			<div class="input_picture"><div id="upload_profile" class="upload_button ajax_upload">Upload File</div><span id="status_profile" class="ajax_upload_status"></span></div>
+			<?php else: ?>
+				<div class="input_picture"><?php echo anchor("gallery/crop/".$user_id, "Edit Picture", array('class'=>'jcrop_pop upload_button', 'rel'=>'iframe')); ?></div>
+			<?php endif; ?>
 		</div>
 		
 		<div class="form_element">

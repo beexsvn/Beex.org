@@ -27,6 +27,8 @@ inputs['proof_description'] = '* Insert proof description (120 characters max)..
 inputs['challenge_video'] = 'Paste video link...';
 inputs['challenge_completion'] = 'Click to pick date...'
 
+var code_validated = false;
+
 $(document).ready(function() {
 	
 	$("input, textarea, select").focus(buzzy_the_paper_clip);
@@ -103,6 +105,12 @@ $(document).ready(function() {
 			validation_errors = true;
 		}
 		
+		
+		if(cluster_id && !code_validated) {
+			$("error_field").append("<p>You must enter the appropriate cluster code to join this cluster</p>");
+			validation_errors = true;
+		}
+		
 		if(challenge_description == inputs['challenge_description']) {
 			challenge_description = '';
 		}
@@ -110,6 +118,7 @@ $(document).ready(function() {
 		if(challenge_video == inputs['challenge_video']){
 			challenge_video = '';
 		}
+		
 		
 		
 		if(validation_errors) {
@@ -300,6 +309,31 @@ $(document).ready(function() {
 			$("#partner_errors").html('');
 			$(".partner_info_cntr").show();
 		}
+	});
+	
+	$("#cluster_invite_code_submit").click(function() {
+		var code = $("#cluster_invite_code").val();
+		var cluster_id = $("#cluster_id").val();
+		if(code) {
+			$.ajax({
+				url: base_url + "ajaxcluster/check_code",
+				type: 'post',
+				data: "code="+code+"&cluster_id="+cluster_id,
+				success: function(ret) {
+					
+					if(ret == 'success') {
+						code_validated = true;
+						$("#ClusterInvite").hide();
+						$("#ChallengeForm").show();
+					}
+					else {
+						$("#cluster_code_errors").text(ret);
+					}
+					
+				}
+			});
+		}
+		
 	});
 	
 });

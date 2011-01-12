@@ -1,6 +1,7 @@
 <?php
 
-// Test Mail  mail('zkilgore@gmail.com', 'Beex IPN Ran', 'Its run');
+// Test Mail 
+mail('zkilgore@gmail.com', 'Beex IPN Ran', 'Its run');
 
 /////////////////////////////////////////////////
 /////////////Begin Script below./////////////////

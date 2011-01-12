@@ -1,5 +1,5 @@
 <div class="MiniProfile" id="MiniNPO">
-    <h2>ORGANIZATION</h2>
+    <h2>Organization</h2>
 	<div class="info">
     	<div class='image'>
        		<?php if($npo->logo) : ?>

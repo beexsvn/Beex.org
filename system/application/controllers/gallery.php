@@ -298,6 +298,22 @@ class Gallery extends Controller {
 		
 	}
 	
+	function crop($id, $type = 'profile') {
+		
+		if($type == 'profile') {
+			
+			$user = $this->MItems->getUser($id);
+			
+			$data = array('id'=>$id, 'type'=>$type, 'image'=>$user->row()->profile_pic);
+			$this->load->view('utility/crop',$data); 
+			
+		}
+		
+		
+	}
+	
+	
+	
 }
 
 ?>
